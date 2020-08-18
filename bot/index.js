@@ -13,17 +13,19 @@ class Custom extends Client {
   constructor (options) {
     super(options);
 
-    this.path = __dirname;
     this.config = require("../config.json");
+    this.dev = true;
+    if (this.config.devmode === false) {
+      this.dev = false;
+      //sentry.init({ dsn: this.config.keys.sentry });
+    }
+
+    this.path = __dirname;
     this.logger = require("./util/logger");
     this.util = new (require("./util/util"))(this);
     this.messageUtil = new (require("./util/messageUtil"))(this);
-    this.dev = false;
-    
-    if (this.config.devmode === true) {
-      this.dev = true;
-    }
-
+    this.db = new (require("./util/redis"))(this)
+  
     // Create collections to store loaded commands and aliases in
     this.commands = new Collection();
     this.aliases = new Collection();
@@ -37,20 +39,35 @@ class Custom extends Client {
   }
 }
 
-// Initialize client
-const client = new Custom();
-/* Enable this later
-if (client.dev !== true) {
-  sentry.init({ dsn: client.config.keys.sentry });
-}
-*/
+// Initialization function, so we can use async/await
+const init = async () => {
+  // Initialize client
+  const client = new Custom();
 
-client.commandHandler.loadAll();
-client.eventHandler.loadAll();
+  // Initialize Redis database
+  await client.db.init();
 
-if (client.dev === true) {
-  client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
-  client.login(client.config.devtoken);
-} else {
-  client.login(client.config.token);
+  await client.commandHandler.loadAll();
+  await client.eventHandler.loadAll();
+
+  if (client.dev === true) {
+    client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
+    client.login(client.config.devtoken);
+  } else {
+    client.login(client.config.token);
+  }
 }
+
+init();
+
+// Catch exceptions/rejections and give more details on the stack trace
+process.on("uncaughtException", (err) => {
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./")
+	console.error("Uncaught Exception: ", errorMsg)
+	process.exit(1)
+});
+
+process.on("unhandledRejection", err => {
+	console.error("Uncaught Promise Error: ", err)
+});
+
