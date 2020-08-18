@@ -2,6 +2,8 @@
   "token": "Production Token",
   "devtoken": "Development Token",
   "ownerIDs": ["owner","ids"],
+  "defaultPrefix": "!!",
+  "devmode": false,
   "db": "redis",
   "redis": {
     "host": "127.0.0.1",
