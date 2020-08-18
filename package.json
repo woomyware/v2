@@ -1,0 +1,24 @@
+{
+  "name": "woomy",
+  "version": "2.0.0",
+  "description": "beta",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mudkipscience/woomy-v2.git"
+  },
+  "author": "Emily J. (mudkipscience)",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mudkipscience/woomy-v2/issues"
+  },
+  "homepage": "https://github.com/mudkipscience/woomy-v2#readme"
+}

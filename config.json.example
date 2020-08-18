@@ -1,0 +1,35 @@
+{
+  "token": "Production Token",
+  "devtoken": "Development Token",
+  "ownerIDs": ["owner","ids"],
+  "db": "redis",
+  "redis": {
+    "host": "127.0.0.1",
+    "port": "6389",
+    "password": ""
+  },
+  "lavalinkNodes": [
+    {
+      "name": "localhost",
+      "host": "localhost",
+      "port": 2333,
+      "auth": ""
+    }
+  ],
+  "keys": {
+    "top": "top.gg API key",
+    "sentry": "sentry.io API key"
+  },
+  "endpoints": {
+    "invidious": "invidious.snopyta.org"
+  },
+  "defaultUserData": {
+    "blacklisted": false
+  },
+  "defaultMemberData": {
+    "blacklisted": false
+  },
+  "defaultGuildData": {
+    "prefix": "~"
+  }
+}
