@@ -6,6 +6,7 @@ if (Number(process.version.slice(1).split(".")[0]) < 12) {
 
 // Load up the discord.js library
 const { Collection, Client } = require("discord.js");
+const sentry = require("@sentry/node");
 
 // Our custom client, extends the standard Discord client with things we will need.
 class Custom extends Client {
@@ -13,11 +14,15 @@ class Custom extends Client {
     super(options);
 
     this.path = __dirname;
-    this.dev = true;
     this.config = require("../config.json");
     this.logger = require("./util/logger");
     this.util = new (require("./util/util"))(this);
     this.messageUtil = new (require("./util/messageUtil"))(this);
+    this.dev = false;
+    
+    if (this.config.devmode === true) {
+      this.dev = true;
+    }
 
     // Create collections to store loaded commands and aliases in
     this.commands = new Collection();
@@ -34,12 +39,17 @@ class Custom extends Client {
 
 // Initialize client
 const client = new Custom();
+/* Enable this later
+if (client.dev !== true) {
+  sentry.init({ dsn: client.config.keys.sentry });
+}
+*/
 
 client.commandHandler.loadAll();
 client.eventHandler.loadAll();
 
 if (client.dev === true) {
-  client.logger.warn("Development mode is on.");
+  client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
   client.login(client.config.devtoken);
 } else {
   client.login(client.config.token);
