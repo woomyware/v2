@@ -3,6 +3,7 @@ class Util {
     this.client = client;
   }
 
+  // Simple check to see if someone is a developer or not
   isDeveloper (userID) {
     let isDev = false;
     const developers = this.client.config.ownerIDs;
@@ -17,6 +18,7 @@ class Util {
     return isDev;
   }
 
+  // Cleans output and removes sensitive information, used by eval
   async clean (text) {
     if (text && text.constructor.name == "Promise")
       text = await text;
@@ -30,6 +32,13 @@ class Util {
 
     return text;
   }
+
+  // Return random integer between two given integers
+  intBetween (min, max) {
+    return Math.round((Math.random() * (max - min))+min);
+  }
+
+
 }
 
 module.exports = Util;
