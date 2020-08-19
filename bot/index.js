@@ -44,11 +44,13 @@ const init = async () => {
   // Initialize client
   const client = new Custom();
 
-  // Initialize Redis database
-  await client.db.init();
-
+  // Load all commands/events
   await client.commandHandler.loadAll();
   await client.eventHandler.loadAll();
+
+  // Connect to Redis database
+  await client.db.init();
+  client.logger.info("Connected to Redis.")
 
   if (client.dev === true) {
     client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
