@@ -21,10 +21,11 @@ class Custom extends Client {
     }
 
     this.path = __dirname;
+    this.package = require("../package.json")
     this.logger = require("./util/logger");
     this.util = new (require("./util/util"))(this);
     this.messageUtil = new (require("./util/messageUtil"))(this);
-    this.db = new (require("./util/redis"))(this)
+    this.db = new (require("./util/redis"))(this);
   
     // Create collections to store loaded commands and aliases in
     this.commands = new Collection();
@@ -44,13 +45,15 @@ const init = async () => {
   // Initialize client
   const client = new Custom();
 
+  client.logger.info(`Initializing Woomy v${client.package.version}`)
+
   // Load all commands/events
   await client.commandHandler.loadAll();
   await client.eventHandler.loadAll();
 
   // Connect to Redis database
   await client.db.init();
-  client.logger.info("Connected to Redis.")
+  client.logger.info("Connected to Redis DB.")
 
   if (client.dev === true) {
     client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
