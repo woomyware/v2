@@ -2,7 +2,7 @@ const { createLogger, format, transports, addColors } = require("winston");
 const { combine, timestamp, printf, colorize } = format;
 
 const fmt = printf(({ level, message, timestamp }) => {
-  return `${timestamp} - ${level}: ${message}`;
+  return timestamp + ' ' + level + ' ' + message;
 });
 
 const customLevels = {
@@ -16,12 +16,12 @@ const customLevels = {
   },
 
   colours: {
-    debug: "magenta",
-    cmd: "white",
-    info: "cyan",
-    ready: "green",
-    warn: "yellow",
-    error: "red"
+    debug: "black magentaBG",
+    cmd: "black whiteBG",
+    info: "black cyanBG",
+    ready: "black greenBG",
+    warn: "black yellowBG",
+    error: "black redBG"
   }
 };
 
