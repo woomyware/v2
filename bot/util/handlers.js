@@ -31,7 +31,7 @@ class CommandHandler {
     }
   }
 
-  unload (name) {
+  loadCategory () {
 
   }
 
@@ -48,6 +48,18 @@ class CommandHandler {
         }
       });
     });
+  }
+
+  unload (name) {
+
+  }
+
+  unloadCategory () {
+
+  }
+
+  unloadAll () {
+    
   }
 }
 
