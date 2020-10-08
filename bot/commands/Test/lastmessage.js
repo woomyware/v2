@@ -9,7 +9,7 @@ class Lastmessage extends Command {
   }
 
   async run (message, args, level) { // eslint-disable-line no-unused-vars
-    const lastMsg = await message.util.getLastMessage(message.channel);
+    const lastMsg = await this.client.functions.getLastMessage(message.channel);
     message.channel.send(lastMsg);
   }
 }

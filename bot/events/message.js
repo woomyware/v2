@@ -35,8 +35,6 @@ module.exports = class {
     while (args[0] &&args[0][0] === "-") {
       message.flags.push(args.shift().slice(1));
     }
-    
-    message.util = this.client.messageUtil;
 
     cmd.run(message, args, data);
     this.client.logger.cmd(`Command ran: ${message.content}`);
