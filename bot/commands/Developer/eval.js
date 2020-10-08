@@ -16,14 +16,14 @@ class Eval extends Command {
     const code = args.join(" ");
     try {
       const evaled = eval(code);
-      const clean = await this.client.util.clean(evaled);
+      const clean = await this.client.functions.clean(evaled);
       const MAX_CHARS = 3 + 2 + clean.length + 3;
       if (MAX_CHARS > 2000) {
         message.channel.send({ files: [new Discord.MessageAttachment(Buffer.from(clean), "output.txt")] });
       }
       message.channel.send(`\`\`\`js\n${clean}\n\`\`\``);
     } catch (err) {
-      const e = await this.client.util.clean(err);
+      const e = await this.client.functions.clean(err);
       const MAX_CHARS = 1 + 5 + 1 + 3 + e.length + 3;
       console.log(MAX_CHARS);
       if (MAX_CHARS > 2000) {

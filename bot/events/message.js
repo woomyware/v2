@@ -23,7 +23,7 @@ module.exports = class {
     const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
     if (!cmd) return;
 
-    if (cmd && cmd.conf.devOnly && this.client.util.isDeveloper(message.author.id) !== true) {
+    if (cmd && cmd.conf.devOnly && this.client.functions.isDeveloper(message.author.id) !== true) {
       return message.channel.send("devs only!");
     }
     if (cmd && !message.guild && cmd.conf.guildOnly) {

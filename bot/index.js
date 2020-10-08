@@ -23,8 +23,7 @@ class Custom extends Client {
     this.path = __dirname;
     this.package = require("../package.json")
     this.logger = require("./util/logger");
-    this.util = new (require("./util/util"))(this);
-    this.messageUtil = new (require("./util/messageUtil"))(this);
+    this.functions = new (require("./util/functions"))(this);
     this.db = new (require("./util/redis"))(this);
   
     // Create collections to store loaded commands and aliases in
