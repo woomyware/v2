@@ -31,10 +31,6 @@ class CommandHandler {
     }
   }
 
-  loadCategory () {
-
-  }
-
   loadAll () {
     const commandDirectories = fs.readdirSync("./commands/");
     this.client.logger.debug(`Found ${commandDirectories.length} command directories.`);
@@ -50,16 +46,43 @@ class CommandHandler {
     });
   }
 
-  unload (name) {
+  async unload (name, category) {
+    const path = this.client.path + "/commands/" + category + "/" + name + ".js";
 
-  }
+    let command;
 
-  unloadCategory () {
+    if (this.client.commands.has(name)) {
+      command = this.client.commands.get(name);
+    } else if (this.client.aliases.has(name)) {
+      command = this.client.commands.get(this.client.aliases.get(name));
+    };
 
+    if (!command) {
+      return `\`${name}\` does not exist as a command or an alias.`
+    }
+
+    this.client.logger.debug(`Unloading command ${category}/${name}`);
+
+    if (command.shutdown) {
+      await command.shutdown(this.client)
+    }
+    delete require.cache[require.resolve(path)];
+    return false;
   }
 
   unloadAll () {
-    
+    const commandDirectories = fs.readdirSync("./commands/");
+    this.client.logger.debug(`Found ${commandDirectories.length} command directories.`);
+    commandDirectories.forEach((dir) => {
+      const commandFiles = fs.readdirSync("./commands/" + dir + "/");
+      commandFiles.filter((cmd) => cmd.split(".").pop() === "js").forEach((cmd) => {
+        cmd = cmd.substring(0, cmd.length - 3);
+        const resp = this.unload(cmd, dir);
+        if (resp) {
+          this.client.logger.error(resp);
+        }
+      });
+    });
   }
 }
 
