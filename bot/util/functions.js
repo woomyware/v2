@@ -1,4 +1,4 @@
-class Util {
+class Functions {
   constructor (client) {
     this.client = client;
   }
@@ -41,4 +41,4 @@ class Util {
 
 }
 
-module.exports = Util;
+module.exports = Functions;
