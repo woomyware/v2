@@ -2,7 +2,7 @@ const { createLogger, format, transports, addColors } = require("winston");
 const { combine, timestamp, printf, colorize } = format;
 
 const fmt = printf(({ level, message, timestamp }) => {
-  return timestamp + ' ' + level + ' ' + message;
+  return '[' + timestamp + '] ' + level + ' ' + message;
 });
 
 const customLevels = {
