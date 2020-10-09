@@ -44,6 +44,7 @@ class CommandHandler {
         }
       });
     });
+    this.client.logger.info(`Loaded a total of ${this.client.commands.size} commands.`)
   }
 
   async unload (name, category) {
