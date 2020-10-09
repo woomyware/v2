@@ -25,10 +25,6 @@ class Redis {
 		this.guildGetAllAsync = promisify(this.guild.hgetall).bind(this.guild)
 		this.memberGetAllAsync = promisify(this.member.hgetall).bind(this.member)
 		this.userGetAllAsync = promisify(this.user.hgetall).bind(this.user)
-
-		this.guildSetAsync = promisify(this.guild.hset).bind(this.guild)
-		this.memberSetAsync = promisify(this.member.hset).bind(this.member)
-		this.userSetAsync = promisify(this.user.hset).bind(this.user)
 	};
 
 	async guildGet (id, key) {
@@ -46,10 +42,22 @@ class Redis {
 	}
 
 	async guildSet (id, key, newValue) {
+		const oldValue = this.client.db.guildGetAsync(id, key);
+
+		if (oldValue === newValue) {
+			return 'This setting already has that value!'
+		};
+
+		if (!this.client.config.defaultGuildData[key]) {
+			return 'I couldn\'t find this setting, so it probably doesn\'t exist. Check for typos!'
+		};
+
 		if (newValue === this.client.config.defaultGuildData[key]) {
-			
-		}
-	}
+			this.client.db.guildDeleteKey(id, key); // Delete duplicates and use defaults in config file
+		} else {
+			this.client.db.guild.hset(id, key, newValue);
+		};
+	};
 
 	async memberGet (id, key) {
 		let result = await this.client.db.memberGetAsync(id, key);
@@ -79,7 +87,7 @@ class Redis {
 		return result;
 	}
 
-  // Deletes specified guild entry
+  // Deletes all data associated with a guild
   async guildDelete (id) {
     this.guild.del(id)
     var { keysMatching } = await generators.using(this.member)
@@ -87,7 +95,11 @@ class Redis {
     for await (const key of keysMatching(id + '-*')) {
       this.member.del(key)
     }
-  }
+	}
+	
+	async guildDeleteKey (id, key) {
+			this.guild.hdel(id, key)
+	}
 
   // Deletes specified user. If deleteAll, also delete their member entries in guilds
   async userDelete (id, deleteAll) {
