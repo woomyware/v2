@@ -1,6 +1,20 @@
+const { MessageEmbed } = require('discord.js')
+
 class Functions {
   constructor (client) {
     this.client = client;
+  }
+
+  userError (channel, cmd, error) {
+    const embed = new MessageEmbed()
+    embed.setColor('#EF5350')
+    embed.setTitle(cmd.help.name + ':' + cmd.help.category.toLowerCase())
+    embed.setDescription(error)
+    embed.addField('**Usage**', cmd.help.usage)
+    embed.setFooter(`Run 'help ${cmd.help.name}' for more information.`)
+    channel.send(embed).then(msg => {
+      msg.delete({ timeout: 60000 })
+    })
   }
 
   // Simple check to see if someone is a developer or not
@@ -14,7 +28,6 @@ class Functions {
       }
     });
 
-    console.log(isDev);
     return isDev;
   }
 
