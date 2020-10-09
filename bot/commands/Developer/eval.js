@@ -25,7 +25,6 @@ class Eval extends Command {
     } catch (err) {
       const e = await this.client.functions.clean(err);
       const MAX_CHARS = 1 + 5 + 1 + 3 + e.length + 3;
-      console.log(MAX_CHARS);
       if (MAX_CHARS > 2000) {
         return message.channel.send({ files: [new Discord.MessageAttachment(Buffer.from(e), "error.txt")] });
       }
