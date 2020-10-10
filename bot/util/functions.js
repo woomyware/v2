@@ -19,17 +19,11 @@ class Functions {
 
   // Simple check to see if someone is a developer or not
   isDeveloper (userID) {
-    let isDev = false;
-    const developers = this.client.config.ownerIDs;
-
-    developers.forEach(devID => {
-      if (devID === userID) {
-        isDev = true;
-      }
-    });
-
-    return isDev;
-  }
+    if (this.client.config.ownerIDs.includes(userID)) {
+      return true;
+    };
+    return false;
+  };
 
   // Cleans output and removes sensitive information, used by eval
   async clean (text) {
