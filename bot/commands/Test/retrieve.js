@@ -15,9 +15,17 @@ class Retrieve extends Command {
 			return message.channel.send('Invalid database. Valid databases: `guild`, `member`, `user`');
 		}
 
-		let res = data[args[0]][args[1]];
-		if (!res) return message.channel.send('Invalid key. Check for typing errors and try again.');
-		message.channel.send('```' + res + '```')
+		if (!args[1]) {
+			message.channel.send(
+				`\`\`\`js
+				${JSON.stringify(data[args[0]])}
+				\`\`\``
+			);
+		} else {
+			let res = data[args[0]][args[1]];
+			if (!res) return message.channel.send('Invalid key. Check for typing errors and try again.');
+			message.channel.send('```' + res + '```');
+		}
   }
 }
 
