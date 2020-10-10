@@ -1,94 +1,110 @@
-const redis = require('redis')
+/* 
+ * - All get/set functions will return nothing if the key is not found in the database.
+ * - If you want to delete a key, use hdelAsync. Writing extended functions for deleting keys is pointless.
+ * - Member key names are formatted as "guildID-userID". Use this.member.del(guildId + '-' + id) to delete member data.
+ */
+
+const { promisifyAll } = require('bluebird');
+const redis = promisifyAll(require('redis'));
 const generators = require('redis-async-gen');
-const { data } = require('./logger');
-const { promisify } = require('util');
 
 class Redis {
 	constructor(client) {
 		this.client = client;
-	}
-
-	init () {
-		const conf = this.client.config.redis
 
 		// Create redis client
-		this.global = redis.createClient(conf)
+		this.global = redis.createClient(this.client.config.redis)
 		this.guild = this.global.duplicate({ db: 1 })
 		this.member = this.global.duplicate({ db: 2 })
 		this.user = this.global.duplicate({ db: 3 })
 
-		// Promises
-		this.guildGetAsync = promisify(this.guild.hget).bind(this.guild)
-		this.memberGetAsync = promisify(this.member.hget).bind(this.member)
-		this.userGetASync = promisify(this.user.hget).bind(this.user)
+		// Monitor for events emitted by Redis client
+		this.global.on('ready', () => {
+			this.client.logger.info('Connected to Redis DB.');
+		});
 
-		this.guildGetAllAsync = promisify(this.guild.hgetall).bind(this.guild)
-		this.memberGetAllAsync = promisify(this.member.hgetall).bind(this.member)
-		this.userGetAllAsync = promisify(this.user.hgetall).bind(this.user)
-	};
+		this.global.on('reconnecting', () => {
+		this.client.logger.info('Attempting to reconnect to Redis DB...');
+		});
 
-	async guildGet (id, key) {
-		let result = await this.client.db.guildGetAsync(id, key);
+		this.global.on('error', (err) => {
+			this.client.logger.error('Redis error: ' + err);
+		});
 
-		if(result === null) {
-			result = this.client.config.defaultGuildData[key]
-
-			if (!result) {
-				throw new Error('The key provided is invalid. Please check for typing errors.')
-			}
-		}
-
-		return result;
+		this.global.on('warning', (warn) => {
+			this.client.logger.warn('Redis warning: ' + warn);
+		});
 	}
 
-	async guildSet (id, key, newValue) {
-		const oldValue = this.client.db.guildGetAsync(id, key);
+	async getGuildKey (id, key) {
+		let result = await this.guild.hgetAsync(id, key);
 
-		if (oldValue === newValue) {
-			return 'This setting already has that value!'
-		};
+		// Return value in config if no override is found in the database
+		if(result === null) result = this.client.config.defaultGuildData[key];
 
-		if (!this.client.config.defaultGuildData[key]) {
-			return 'I couldn\'t find this setting, so it probably doesn\'t exist. Check for typos!'
-		};
+		return result;
+	};
 
-		if (newValue === this.client.config.defaultGuildData[key]) {
-			this.client.db.guildDeleteKey(id, key); // Delete duplicates and use defaults in config file
+	async getMemberKey (id, key) {
+		let result = await this.member.hgetAsync(id, key);
+
+		if(result === null) result = this.client.config.defaultMemberData[key];
+
+		return result;
+	};
+
+	async getUserKey (id, key) {
+		let result = await this.user.hgetAsync(id, key);
+
+		if(result === null) result = this.client.config.defaultUserData[key];
+
+		return result;
+	};
+
+	async setGuildKey (id, key, newValue) {
+		const def = this.client.config.defaultGuildData[key];
+
+		if (!def) return;
+		
+		if(def === newValue) {
+			await this.guild.hdel(id, key); // If new value matches the default, delete the override.
 		} else {
-			this.client.db.guild.hset(id, key, newValue);
+			await this.guild.hsetAsync(id, key, newValue);
 		};
+
+		return true;
 	};
 
-	async memberGet (id, key) {
-		let result = await this.client.db.memberGetAsync(id, key);
+	async setMemberKey (id, key, newValue) {
+		const def = this.client.config.defaultMemberData[key];
 
-		if(result === null) {
-			result = this.client.config.defaultMemberData[key]
+		if (!def) return;
+		
+		if(def === newValue) {
+			await this.member.hdel(id, key);
+		} else {
+			await this.member.hsetAsync(id, key, newValue);
+		};
 
-			if (!result) {
-				throw new Error('The key provided is invalid. Please check for typing errors.')
-			}
-		}
+		return true;
+	};
 
-		return result;
-	}
+	async setUserKey (id, key, newValue) {
+		const def = this.client.config.defaultUserData[key];
 
-	async userGet (id, key) {
-		let result = await this.client.db.userGetAsync(id, key);
+		if (!def) return;
+		
+		if(def === newValue) {
+			await this.user.hdel(id, key);
+		} else {
+			await this.user.hsetAsync(id, key, newValue);
+		};
 
-		if(result === null) {
-			result = this.client.config.defaultUserData[key]
+		return true;
+	};
 
-			if (!result) {
-				throw new Error('The key provided is invalid. Please check for typing errors.')
-			}
-		}
-
-		return result;
-	}
-
-  // Deletes all data associated with a guild
-  async guildDelete (id) {
+  // Deletes all data associated with a guild, INCLUDING MEMBER DATA
+  async purgeGuild (id) {
     this.guild.del(id)
     var { keysMatching } = await generators.using(this.member)
     // eslint-disable-next-line no-unused-vars
@@ -96,27 +112,16 @@ class Redis {
       this.member.del(key)
     }
 	}
-	
-	async guildDeleteKey (id, key) {
-			this.guild.hdel(id, key)
-	}
 
-  // Deletes specified user. If deleteAll, also delete their member entries in guilds
-  async userDelete (id, deleteAll) {
+  // Deletes all data associated with a user, INCLUDING MEMBER DATA
+  async purgeUser (id) {
 		this.user.del(id)
-		if (deleteAll) {
-			var { keysMatching } = await generators.using(this.member)
-			// eslint-disable-next-line no-unused-vars
-			for await (const key of keysMatching('*-' + id)) {
-				this.member.del(key)
-			}
+		var { keysMatching } = await generators.using(this.member)
+		// eslint-disable-next-line no-unused-vars
+		for await (const key of keysMatching('*-' + id)) {
+			this.member.del(key)
 		}
-  }
-
-  // Deletes member of user in specified guild
-  async memberDelete (guildId, id) {
-    this.member.del(guildId + '-' + id)
-  }
+	}
 }
 
 module.exports = Redis;
