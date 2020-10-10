@@ -51,8 +51,8 @@ class Redis {
 		return result;
 	};
 
-	async getMember (id) {
-		let result = await this.member.hgetallAsync(id);
+	async getMember (guild, user) {
+		let result = await this.member.hgetallAsync(guild + '-' + user);
 		let defaults = this.client.config.defaultMemberData;
 
 		if (result === null) return defaults;
@@ -90,8 +90,8 @@ class Redis {
 		return result;
 	};
 
-	async getMemberKey (id, key) {
-		let result = await this.member.hgetAsync(id, key);
+	async getMemberKey (guild, user, key) {
+		let result = await this.member.hgetAsync(guild + '-' + user, key);
 
 		if(result === null) result = this.client.config.defaultMemberData[key];
 
@@ -120,15 +120,15 @@ class Redis {
 		return true;
 	};
 
-	async setMemberKey (id, key, newValue) {
+	async setMemberKey (guild, user, key, newValue) {
 		const def = this.client.config.defaultMemberData[key];
 
 		if (!def) return;
 		
 		if(def === newValue) {
-			await this.member.hdel(id, key);
+			await this.member.hdel(guild + '-' + user, key);
 		} else {
-			await this.member.hsetAsync(id, key, newValue);
+			await this.member.hsetAsync(guild + '-' + user, key, newValue);
 		};
 
 		return true;
