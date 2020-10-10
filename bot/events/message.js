@@ -83,24 +83,30 @@ module.exports = class {
 
     // Permission handler, for both Woomy and the user
     if (message.guild) {
-      var missingUserPerms = cmd.conf.userPerms.filter(perms => {
-        !message.channel.permissionsFor(message.author).has(perms)
+      // User
+      let missingUserPerms = new Array();
+
+      cmd.conf.userPerms.forEach((p) => {
+        if (!message.channel.permissionsFor(message.member).has(p)) missingUserPerms.push(p);
       });
 
       if (missingUserPerms.length > 0) {
         missingUserPerms = '`' + (missingUserPerms.join('`, `')) + '`'
-        return message.channel.send(`You don't have sufficient permissions to run this command! Missing: ${missingBotPerms}`);
+        return message.channel.send(`You don't have sufficient permissions to run this command! Missing: ${missingUserPerms}`);
       };
 
-      var missingBotPerms = cmd.conf.botPerms.filter(perms => {
-        !message.channel.permissionsFor(this.client.user).has(perms)
+      // Bot
+      let missingBotPerms = new Array();
+
+      cmd.conf.botPerms.forEach((p) => {
+        if (!message.channel.permissionsFor(message.guild.member(this.client.user)).has(p)) missingBotPerms.push(p);
       });
 
       if (missingBotPerms.length > 0) {
-        missingBotPerms = '`' + (missingBotPerms.join('`, `')) + '`';
-        return message.channel.send(`Failed to run this command because I am missing the following permissions: ${missingBotPerms}`);
+        missingBotPerms = '`' + (missingBotPerms.join('`, `')) + '`'
+        return message.channel.send(`I can't run this command because I'm missing these permissions: ${missingBotPerms}`);
       };
-    };
+    }
 
     // Cooldown
     if (this.client.cooldown.get(cmd.help.name).has(message.author.id)) {
