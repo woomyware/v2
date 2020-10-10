@@ -20,6 +20,8 @@ class CommandHandler {
       }
 
       this.client.commands.set(props.help.name, props);
+      
+      this.client.cooldown.set(props.help.name, new Map());
 
       props.conf.aliases.forEach(alias => {
         this.client.aliases.set(alias, props.help.name);
