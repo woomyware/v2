@@ -29,6 +29,7 @@ class Custom extends Client {
     // Create collections to store loaded commands and aliases in
     this.commands = new Collection();
     this.aliases = new Collection();
+    this.cooldown = new Collection();
 
     const handlers = require("./util/handlers");
     this.commandHandler = new handlers.CommandHandler(this);
