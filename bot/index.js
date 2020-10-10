@@ -34,9 +34,6 @@ class Custom extends Client {
     const handlers = require("./util/handlers");
     this.commandHandler = new handlers.CommandHandler(this);
     this.eventHandler = new handlers.EventHandler(this);
-
-    // Basically just an async shortcut to using a setTimeout. Nothing fancy!
-    this.wait = require("util").promisify(setTimeout);
   }
 }
 
