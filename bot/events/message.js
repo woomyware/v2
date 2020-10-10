@@ -12,9 +12,33 @@ module.exports = class {
 
     let data = new Object();
 
-    if (message.content.indexOf(this.client.config.defaultPrefix) !== 0) return;
+    data.user = await this.client.db.getUser(message.author.id);
 
-    const args = message.content.slice(this.client.config.defaultPrefix.length).trim().split(/ +/g);
+    const prefixes = [data.user.prefix]
+
+    if (message.guild) {
+      data.guild = await this.client.db.getGuild(message.guild.id);
+      data.member = await this.client.db.getMember(message.guild.id + "-" + message.author.id);
+      prefixes.push(data.guild.prefix)
+    };
+
+    prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `)
+
+    let prefix;
+
+    for (const thisPrefix of prefixes) {
+      if (message.content.startsWith(thisPrefix)) prefix = thisPrefix;
+    };
+
+    if (message.content.indexOf(prefix) !== 0) return;
+
+    if (prefix === `<@${this.client.user.id}> ` || prefix === `<@!${this.client.user.id}> `) {
+      message.prefix = '@Woomy ';
+    } else {
+      message.prefix = prefix;
+    };
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     // Cache uncached members
@@ -23,13 +47,53 @@ module.exports = class {
     const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
     if (!cmd) return;
 
+    if (message.guild) {
+      if (!message.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
+        try {
+          return message.author.send(`I don't have permission to speak in \`#${message.channel.name}\`, Please ask a moderator to give me the send messages permission!`)
+        } catch (err) {};
+      };
+
+      /* NEED A WAY TO STORE ARRAYS IN A HASH
+      if (data.guild.disabledCommands.includes(cmd.help.name)) {
+        if (data.guild.systemNotice.enabled === true) {
+          return message.channel.send('This command has been disabled in this server.');
+        };
+      };
+    
+      if (data.guild.disabledCategories.includes(cmd.help.category)) {
+        if (data.guild.systemNotice.enabled === true) {
+          return message.channel.send('The category this command is apart of has been disabled in this server.');
+        };
+      };
+      */
+    };
+
+    if (cmd && cmd.conf.enabled === false) {
+      return message.channel.send('This command has been disabled by my developers.');
+    };
+
     if (cmd && cmd.conf.devOnly && this.client.functions.isDeveloper(message.author.id) !== true) {
       return message.channel.send("devs only!");
     }
-    if (cmd && !message.guild && cmd.conf.guildOnly) {
+    if (cmd && !message.guild && cmd.conf.guildOnly === true) {
       return message.channel.send("This command is unavailable via private message. Please run this command in a guild.");
     }
 
+    // Cooldown
+    if (this.client.cooldown.get(cmd.help.name).has(message.author.id)) {
+      const init = this.client.cooldown.get(command).get(message.author.id);
+      const curr = new Date();
+      const diff = Math.round((curr - init) / 1000);
+      const time = cmd.conf.cooldown / 1000;
+      return message.reply(`this command is on cooldown! You'll be able to use it again in ${time - diff} seconds.`);
+    } else {
+      this.client.cooldown.get(cmd.help.name).set(message.author.id, new Date());
+
+      setTimeout(() => {
+        this.client.cooldown.get(cmd.help.name).delete(message.author.id);
+      }, this.client.commands.get(cmd.help.name).conf.cooldown);
+    };
 
     message.flags = [];
     while (args[0] &&args[0][0] === "-") {
