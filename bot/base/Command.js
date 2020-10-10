@@ -9,11 +9,12 @@ class Command {
     guildOnly = false,
     devOnly = false,
     aliases = new Array(),
-    permLevel = "User",
+    userPerms = new Array(),
+    botPerms = new Array (),
     cooldown = 2000
   }) {
     this.client = client;
-    this.conf = { enabled, guildOnly, devOnly, aliases, permLevel, cooldown };
+    this.conf = { enabled, guildOnly, devOnly, aliases, userPerms, botPerms, cooldown };
     this.help = { name, description, category, usage };
   }
 }

@@ -75,10 +75,32 @@ module.exports = class {
 
     if (cmd && cmd.conf.devOnly && this.client.functions.isDeveloper(message.author.id) !== true) {
       return message.channel.send("devs only!");
-    }
+    };
+
     if (cmd && !message.guild && cmd.conf.guildOnly === true) {
       return message.channel.send("This command is unavailable via private message. Please run this command in a guild.");
-    }
+    };
+
+    // Permission handler, for both Woomy and the user
+    if (message.guild) {
+      var missingUserPerms = cmd.conf.userPerms.filter(perms => {
+        !message.channel.permissionsFor(message.author).has(perms)
+      });
+
+      if (missingUserPerms.length > 0) {
+        missingUserPerms = '`' + (missingUserPerms.join('`, `')) + '`'
+        return message.channel.send(`You don't have sufficient permissions to run this command! Missing: ${missingBotPerms}`);
+      };
+
+      var missingBotPerms = cmd.conf.botPerms.filter(perms => {
+        !message.channel.permissionsFor(this.client.user).has(perms)
+      });
+
+      if (missingBotPerms.length > 0) {
+        missingBotPerms = '`' + (missingBotPerms.join('`, `')) + '`';
+        return message.channel.send(`Failed to run this command because I am missing the following permissions: ${missingBotPerms}`);
+      };
+    };
 
     // Cooldown
     if (this.client.cooldown.get(cmd.help.name).has(message.author.id)) {
