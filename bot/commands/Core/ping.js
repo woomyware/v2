@@ -3,7 +3,6 @@ const Command = require("../../base/Command.js");
 class Ping extends Command {
   constructor (client) {
     super(client, {
-      name: "ping",
       description: "Latency and API response times.",
       usage: "ping",
       aliases: ["pong"]

@@ -3,7 +3,6 @@ const Command = require("../../base/Command.js");
 class Retrieve extends Command {
   constructor (client) {
 		super(client, {
-			name: "retrieve",
 			description: "Retrieves a key's value from the Redis DB.",
 			usage: "retrieve [key]",
 			guildOnly: true
