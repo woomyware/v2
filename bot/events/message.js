@@ -38,6 +38,10 @@ module.exports = class {
       message.prefix = prefix;
     };
 
+    // Naughty users can't run commands!
+    if (message.guild && data.member.blacklisted === true) return;
+    if (data.user.blacklisted === true) return;
+
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
