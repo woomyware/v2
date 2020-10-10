@@ -9,7 +9,7 @@ class Help extends Command {
     });
   }
 
-  async run (message, args, level) { // eslint-disable-line no-unused-vars
+  async run (message, args, data) { // eslint-disable-line no-unused-vars
 
   }
 }

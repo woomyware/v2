@@ -9,7 +9,7 @@ class Retrieve extends Command {
 		});
   }
 
-  async run (message, args, level) { // eslint-disable-line no-unused-vars
+  async run (message, args, data) { // eslint-disable-line no-unused-vars
 		if (!args[0]) return message.channel.send("You didn't specify what key to retrieve!")
 
 		try {
