@@ -36,6 +36,51 @@ class Redis {
 		});
 	}
 
+	async getGuild (id) {
+		let result = await this.guild.hgetallAsync(id);
+		let defaults = this.client.config.defaultGuildData;
+
+		if (result === null) return defaults;
+		
+		for (const defaultValue in defaults) {
+			if (!result[defaultValue]) {
+				result[defaultValue] = defaults[defaultValue];
+			};
+		};
+
+		return result;
+	};
+
+	async getMember (id) {
+		let result = await this.member.hgetallAsync(id);
+		let defaults = this.client.config.defaultMemberData;
+
+		if (result === null) return defaults;
+		
+		for (const defaultValue in defaults) {
+			if (!result[defaultValue]) {
+				result[defaultValue] = defaults[defaultValue];
+			};
+		};
+
+		return result;
+	};
+
+	async getUser (id) {
+		let result = await this.user.hgetallAsync(id);
+		let defaults = this.client.config.defaultUserData;
+
+		if (result === null) return defaults;
+		
+		for (const defaultValue in defaults) {
+			if (!result[defaultValue]) {
+				result[defaultValue] = defaults[defaultValue];
+			};
+		};
+
+		return result;
+	};
+
 	async getGuildKey (id, key) {
 		let result = await this.guild.hgetAsync(id, key);
 
