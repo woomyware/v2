@@ -5,7 +5,7 @@ module.exports = class {
 
   async run () {
     await this.client.wait(1000);
-    this.client.user.setActivity('eating the rich') // lol
+    this.client.user.setActivity(`BNA | v${this.client.package.version}`, { type: "WATCHING" }) // lol
     this.client.logger.ready(`Connected to Discord as ${this.client.user.tag}`);
   }
 };
