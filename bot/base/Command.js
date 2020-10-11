@@ -5,7 +5,7 @@ class Command {
     description = "No description provided.",
     category = "Miscellaneous",
     usage = "No usage provided.",
-    examples = "No examples provided.",
+    examples = "",
     enabled = true,
     guildOnly = false,
     devOnly = false,
