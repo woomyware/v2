@@ -5,6 +5,7 @@ class Command {
     description = "No description provided.",
     category = "Miscellaneous",
     usage = "No usage provided.",
+    examples = "No examples provided.",
     enabled = true,
     guildOnly = false,
     devOnly = false,
@@ -15,7 +16,7 @@ class Command {
   }) {
     this.client = client;
     this.conf = { enabled, guildOnly, devOnly, aliases, userPerms, botPerms, cooldown };
-    this.help = { name, description, category, usage };
+    this.help = { name, description, category, usage, examples };
   }
 }
 module.exports = Command;
