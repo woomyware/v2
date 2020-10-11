@@ -13,14 +13,9 @@ module.exports = class {
     const userPrefix = await this.client.db.getUserKey(message.author.id, 'prefix');
     const userBlacklisted = await this.client.db.getUserKey(message.author.id, 'blacklisted');
 
-    let memberBlacklisted = false;
-
     const prefixes = [userPrefix];
 
-    if (message.guild) {
-      memberBlacklisted = await this.client.db.getMemberKey(message.guild.id, message.author.id, 'blacklisted');
-      prefixes.push(await this.client.db.getGuildKey(message.guild.id, 'prefix'));
-    };
+    if (message.guild) prefixes.push(await this.client.db.getGuildKey(message.guild.id, 'prefix'));
 
     prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `)
 
@@ -37,10 +32,14 @@ module.exports = class {
     } else {
       message.prefix = prefix;
     };
-
+    
     // Naughty users can't run commands!
-    if (message.guild && memberBlacklisted === true) return;
-    if (userBlacklisted === true) return;
+    if (message.guild) {
+      const check = await this.client.db.getMemberKey(message.guild.id, message.author.id, 'blacklisted')
+      if (check === true) { return };
+    };
+    
+    if (userBlacklisted) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
