@@ -5,10 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "@sentry/node": "^5.21.1",
-    "bluebird": "^3.7.2",
     "discord.js": "^12.3.1",
-    "redis": "^3.0.2",
-    "redis-async-gen": "^0.1.3",
+    "mongodb": "^3.6.2",
     "util-promisifyall": "^1.0.6",
     "winston": "^3.3.3"
   },
