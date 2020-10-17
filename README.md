@@ -7,6 +7,8 @@
 
 ## A feature-rich and configurable Discord bot built with Discord.js for music, moderation, currency and more!
 
+## PLEASE ENABLE ESLINT WHILE WORKING ON WOOMY. 
+
 **Links**
 * [Official bot invite](https://discord.com/oauth2/authorize?client_id=435961704145485835&permissions=2134240503&scope=bot)
 * [For updates and support join my Discord server!](https://discord.gg/HCF8mdv)
