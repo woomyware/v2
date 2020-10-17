@@ -1,71 +1,70 @@
-// Check that the runtime is up to date
-if (Number(process.version.slice(1).split(".")[0]) < 12) {
-  console.error(`Node v12.0.0 or higher is required. You have Node ${process.version}. Please update Node on your system.`);
-  process.exit(1);
-}
+// Copyright 2020 Emily J. / mudkipscience and contributors. Subject to the AGPLv3 license.
 
-// Load up the discord.js library
-const { Collection, Client } = require("discord.js");
-const sentry = require("@sentry/node");
+const { Client, Collection } = require('discord.js');
+const { CommandHandler, EventHandler } = require('./util/handlers');
+const Functions = require('./util/functions');
+const Database = require('./util/database');
+const logger = require('./util/logger');
+const sentry = require('@sentry/node');
+const config = require('../config.json');
+const pkg = require('../package.json');
 
-// Our custom client, extends the standard Discord client with things we will need.
-class Custom extends Client {
-  constructor (options) {
-    super(options);
+class WoomyClient extends Client {
+    constructor () {
+        super();
 
-    this.config = require("../config.json");
-    this.dev = true;
-    if (this.config.devmode === false) {
-      this.dev = false;
-      //sentry.init({ dsn: this.config.keys.sentry });
-    }
+        // Important information our bot needs to access
+        this.config = config;
+        this.path = __dirname;
+        this.version = pkg.version;
 
-    this.path = __dirname;
-    this.package = require("../package.json")
-    this.logger = require("./util/logger");
-    this.functions = new (require("./util/functions"))(this);
-    this.db = new (require("./util/redis"))(this);
-  
-    // Create collections to store loaded commands and aliases in
-    this.commands = new Collection();
-    this.aliases = new Collection();
-    this.cooldown = new Collection();
+        // dev mode, disables some features if enabled
+        this.dev = false;
+        if (this.config.devmode === true) {
+            this.dev = true;
+            // sentry.init({ dsn: this.config.keys.sentry });
+        };
 
-    const handlers = require("./util/handlers");
-    this.commandHandler = new handlers.CommandHandler(this);
-    this.eventHandler = new handlers.EventHandler(this);
-  }
-}
+        // Essential modules
+        this.logger = logger;
+        this.functions = new Functions(this);
+        this.db = new Database(this);
 
-// Initialization function, so we can use async/await
-const init = async () => {
-  // Initialize client
-  const client = new Custom();
+        // collections, to store commands, their aliases and their cooldown timers in
+        this.commands = new Collection();
+        this.aliases = new Collection();
+        this.cooldowns = new Collection();
 
-  client.logger.info(`Initializing Woomy v${client.package.version}`)
+        // Handlers, to load commands and events
+        this.commandHandler = new CommandHandler(this);
+        this.eventHandler = new EventHandler(this);
+    };  
+};
 
-  // Load all commands/events
-  await client.commandHandler.loadAll();
-  await client.eventHandler.loadAll();
+async function init() {
+    const client = new WoomyClient();
 
-  if (client.dev === true) {
-    client.logger.warn("Development mode is on. Some features (such as Sentry) are disabled.");
-    client.login(client.config.devtoken);
-  } else {
-    client.login(client.config.token);
-  }
-}
+    client.logger.info(`Initializing Woomy v${client.version}`);
+
+    await client.commandHandler.loadAll();
+    await client.eventHandler.loadAll();
+
+    if (client.dev === true) {
+        client.logger.warn('Development mode is enabled. Some features (such as Sentry) have been disabled.');
+        client.login(client.config.devtoken);
+    } else {
+        client.login(client.config.token);
+    };
+};
 
 init();
 
-// Catch exceptions/rejections and give more details on the stack trace
-process.on("uncaughtException", (err) => {
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./")
-	console.error("Uncaught Exception: ", errorMsg)
-	process.exit(1)
+process.on('uncaughtException', (err) => {
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
+	console.error('Uncaught Exception: ', errorMsg);
+	process.exit(1);
 });
 
-process.on("unhandledRejection", err => {
-	console.error("Uncaught Promise Error: ", err)
+process.on('unhandledRejection', err => {
+	console.error('Uncaught Promise Error: ', err);
 });
-
