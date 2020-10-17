@@ -2,12 +2,17 @@
 
 const { Pool } = require('pg');
 const format = require('pg-format');
+const { level } = require('winston');
 const { pgCredentials } = require('../../config.json');
 
 class Database {
     constructor (client) {
         this.client = client;
         this.pool = new Pool(pgCredentials);
+
+        this.pool.on('error', err => {
+            this.client.logger.error('Postgres error: ' + err);
+        });
     }
 
     async getGuild (id) {
@@ -26,9 +31,49 @@ class Database {
         return res.rows[0];
     }
 
+    async getGuildField (id, column) {
+        const sql = format('SELECT %I FROM guilds WHERE guild_id = $1;', column);
+        const query = {
+            text: sql,
+            values: [id],
+            rowMode: 'array'
+        };
+
+        const res = await this.pool.query(query);
+
+        return res.rows[0][0];
+    }
+
+    async getMemberField (guild_id, user_id, column) {
+        const key = guild_id + ':' + user_id;
+        const sql = format('SELECT %I FROM members WHERE member_id = $1;', column);
+        const query = {
+            text: sql,
+            values: [key],
+            rowMode: 'array'
+        };
+
+        const res = await this.pool.query(query);
+
+        return res.rows[0][0];
+    }
+
+    async getUserField (id, column) {
+        const sql = format('SELECT %I FROM users WHERE user_id = $1;', column);
+        const query = {
+            text: sql,
+            values: [id],
+            rowMode: 'array'
+        };
+
+        const res = await this.pool.query(query);
+
+        return res.rows[0][0];
+    }
+
     async updateGuild (id, column, newValue) {
         const sql = format('UPDATE guilds SET %I = $1 WHERE guild_id = $2;', column);
-        const res = await this.pool.query(sql, [newValue, id]);
+        await this.pool.query(sql, [newValue, id]);
         return;
     }
 
