@@ -1,37 +1,57 @@
 {
-  "token": "Production Token",
-  "devtoken": "Development Token",
-  "ownerIDs": ["owner","ids"],
-  "defaultPrefix": "!!",
+  "token": "",
+  "devtoken": "",
+  "ownerIDs": [],
   "devmode": false,
-  "db": "redis",
-  "redis": {
-    "host": "127.0.0.1",
-    "port": "6389",
-    "password": ""
+  "keys": {
+    "topgg": "",
+    "sentry": ""
+  },
+  "pgCredentials": {
+    "user": "",
+    "host": "",
+    "database": "",
+    "password": "",
+    "port":  
   },
   "lavalinkNodes": [
     {
-      "name": "localhost",
-      "host": "localhost",
-      "port": 2333,
+      "name": "",
+      "host": "",
+      "port": ,
       "auth": ""
     }
   ],
-  "keys": {
-    "top": "top.gg API key",
-    "sentry": "sentry.io API key"
-  },
-  "endpoints": {
-    "invidious": "invidious.snopyta.org"
+  "emoji": {
+    "success": "",
+    "error": "",
+    "denied": "",
+    "wait": "",
+    "warning": ""
   },
   "defaultUserData": {
-    "blacklisted": false
+    "blacklisted": false,
+    "prefix": "w!",
+    "experience": 0,
+    "seashells": 0,
+    "relationships": "array goes here",
+    "pronouns": null,
+    "colour": "#9d10e1"
   },
   "defaultMemberData": {
-    "blacklisted": false
+    "blacklisted": false,
+    "experience": 0
   },
   "defaultGuildData": {
-    "prefix": "~"
+    "prefix": "w!",
+    "mutedRole": null,
+    "autorole": null,
+    "welcomeChannel": null,
+    "welcomeMessage": "Hey there [[user]], and welcome to [[server]]!",
+    "leaveChannel": null,
+    "leaveMessage": "[[user]] has left [[server]]... bye [[user]] 👋",
+    "chatlogsChannel": null,
+    "modlogsChannel": null,
+    "starboardChannel": null
   }
 }
