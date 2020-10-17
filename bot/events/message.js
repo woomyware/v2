@@ -10,15 +10,33 @@ module.exports = class {
     async run (message) {
         if (message.author.bot) return;
 
-        const data = {};
-        data.user = await this.client.db.getUser(message.author.id);
+        let userPrefix;
+        let guildPrefix;
 
-        const prefixes = [data.user.prefix];
+        const prefixes = [];
+        const data = {};
+        
+        data.user = await this.client.db.getUser(message.author.id);
+        
+        // Prefix cache
+        if (this.client.prefixCache.has(message.author.id)) {
+            userPrefix = this.client.prefixCache.get(message.author.id);
+            prefixes.push(userPrefix);
+        } else {
+            userPrefix = data.user.prefix;
+            prefixes.push(userPrefix);
+        }
 
         if (message.guild) {
             data.guild = await this.client.db.getGuild(message.guild.id);
             // data.member = await this.client.db.getMember(message.guild.id, message.author.id);
-            prefixes.push(data.guild.prefix);
+            if (this.client.prefixCache.has(message.guild.id)) {
+                guildPrefix = this.client.prefixCache.get(message.guild.id);
+                prefixes.push(guildPrefix);
+            } else {
+                guildPrefix = data.guild.prefix;
+                prefixes.push(guildPrefix);
+            }
         }
 
         prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `);
@@ -31,14 +49,22 @@ module.exports = class {
 
         if (message.content.indexOf(prefix) !== 0) return;
 
+        // Prefix cache
+        if (userPrefix === prefix && !this.client.prefixCache.has(message.author.id)) {
+            this.client.prefixCache.set(message.author.id, prefix);
+        }
+
+        if (guildPrefix === prefix && !this.client.prefixCache.has(message.guild.id)) {
+            this.client.prefixCache.set(message.guild.id, prefix);
+        }
+
         if (prefix === `<@${this.client.user.id}> ` || prefix === `<@!${this.client.user.id}> `) {
             message.prefix = '@Woomy ';
         } else {
             message.prefix = prefix;
         }
         
-        // Naughty users can't run commands!
-        /* TO-DO: CREATE BLACKLIST */
+        // TO-DO: CREATE BLACKLIST
 
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
@@ -56,19 +82,7 @@ module.exports = class {
                 } catch (err) {} //eslint-disable-line no-empty
             }
 
-        /* NEED A WAY TO STORE ARRAYS IN A HASH
-        if (data.guild.disabledCommands.includes(cmd.help.name)) {
-            if (data.guild.systemNotice.enabled === true) {
-            return message.channel.send('This command has been disabled in this server.');
-            };
-        };
-        
-        if (data.guild.disabledCategories.includes(cmd.help.category)) {
-            if (data.guild.systemNotice.enabled === true) {
-            return message.channel.send('The category this command is apart of has been disabled in this server.');
-            };
-        };
-        */
+            // TO-DO: DISABLED COMMANDS / CATEGORIES
         }
 
         if (cmd && cmd.conf.enabled === false) {
@@ -83,31 +97,17 @@ module.exports = class {
             return message.channel.send('This command is unavailable via private message. Please run this command in a guild.');
         }
 
-        // Permission handler, for both Woomy and the user
+        // Permission handler
         if (message.guild) {
-        // User
-            let missingUserPerms = new Array();
-
-            cmd.conf.userPerms.forEach((p) => {
-                if (!message.channel.permissionsFor(message.member).has(p)) missingUserPerms.push(p);
-            });
-
-            if (missingUserPerms.length > 0) {
-                missingUserPerms = '`' + (missingUserPerms.join('`, `')) + '`';
-                return message.channel.send(`You don't have sufficient permissions to run this command! Missing: ${missingUserPerms}`);
-            }
-
-            // Bot
-            let missingBotPerms = [];
-
-            cmd.conf.botPerms.forEach((p) => {
-                if (!message.channel.permissionsFor(message.guild.member(this.client.user)).has(p)) missingBotPerms.push(p);
-            });
-
-            if (missingBotPerms.length > 0) {
-                missingBotPerms = '`' + (missingBotPerms.join('`, `')) + '`';
-                return message.channel.send(`I can't run this command because I'm missing these permissions: ${missingBotPerms}`);
-            }
+            const missingUserPerms = this.client.functions.checkPermissions(cmd, message, message.member);
+            if (missingUserPerms) return message.channel.send(`
+            You don't have sufficient permissions to run this command! Missing: ${missingUserPerms}
+                `);
+            
+            const missingBotPerms = this.client.functions.checkPermissions(cmd, message, message.guild.member(this.client.user));
+            if (missingBotPerms) return message.channel.send(`
+            I can't run this command because I'm missing these permissions: ${missingBotPerms}
+            `);
         }
 
         // Cooldown
@@ -130,9 +130,7 @@ module.exports = class {
             message.flags.push(args.shift().slice(1));
         }
 
-        cmd.run(message, args);
+        cmd.run(message, args, data);
         this.client.logger.cmd(`Command ran: ${message.content}`);
-
-        // TODO: Command caching if it's worth it
     }
 };

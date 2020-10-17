@@ -35,6 +35,9 @@ class WoomyClient extends Client {
         this.aliases = new Collection();
         this.cooldowns = new Collection();
 
+        // Caches
+        this.prefixCache = new Collection();
+
         // Handlers, to load commands and events
         this.commandHandler = new CommandHandler(this);
         this.eventHandler = new EventHandler(this);
@@ -42,7 +45,7 @@ class WoomyClient extends Client {
 }
 
 async function init () {
-    const client = new WoomyClient();
+    const client = new WoomyClient({ ws: {}});
 
     client.logger.info(`Initializing Woomy v${client.version}`);
 

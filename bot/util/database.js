@@ -27,7 +27,7 @@ class Database {
     }
 
     async getUser (id) {
-        const res = await this.pool.query('SELECT * FROM guilds WHERE user_id = $1;', [id]);
+        const res = await this.pool.query('SELECT * FROM users WHERE user_id = $1;', [id]);
         return res.rows[0];
     }
 
