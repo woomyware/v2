@@ -112,17 +112,17 @@ module.exports = class {
     }
 
     // Cooldown
-    if (this.client.cooldown.get(cmd.help.name).has(message.author.id)) {
-      const init = this.client.cooldown.get(command).get(message.author.id);
+    if (this.client.cooldowns.get(cmd.help.name).has(message.author.id)) {
+      const init = this.client.cooldowns.get(command).get(message.author.id);
       const curr = new Date();
       const diff = Math.round((curr - init) / 1000);
       const time = cmd.conf.cooldown / 1000;
       return message.reply(`this command is on cooldown! You'll be able to use it again in ${time - diff} seconds.`);
     } else {
-      this.client.cooldown.get(cmd.help.name).set(message.author.id, new Date());
+      this.client.cooldowns.get(cmd.help.name).set(message.author.id, new Date());
 
       setTimeout(() => {
-        this.client.cooldown.get(cmd.help.name).delete(message.author.id);
+        this.client.cooldowns.get(cmd.help.name).delete(message.author.id);
       }, this.client.commands.get(cmd.help.name).conf.cooldown);
     };
 
