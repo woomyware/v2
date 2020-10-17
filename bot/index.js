@@ -41,7 +41,7 @@ class WoomyClient extends Client {
     }
 }
 
-async function init() {
+async function init () {
     const client = new WoomyClient();
 
     client.logger.info(`Initializing Woomy v${client.version}`);

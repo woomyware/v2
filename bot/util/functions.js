@@ -18,11 +18,11 @@ class Functions {
     }
 
     async getLastMessage (channel) {
-        let messages = await channel.messages.fetch({ limit: 2 });
+        const messages = await channel.messages.fetch({ limit: 2 });
         return messages.last().content;
     }
 
-    async awaitReply(message, question, limit = 60000) {
+    async awaitReply (message, question, limit = 60000) {
         const filter = (m) => m.author.id === message.author.id;
         await message.channel.send(question);
 
@@ -42,7 +42,7 @@ class Functions {
     searchForMembers (guild, query) {
         query = query.toLowerCase();
 
-        let matches = [];
+        const matches = [];
         let match;
 
         try {
@@ -67,10 +67,10 @@ class Functions {
     findRole (input, message) {
         let role;
         role = message.guild.roles.cache.find(r => r.name.toLowerCase() === input.toLowerCase());
-        if(!role) {
+        if (!role) {
             role = message.guild.roles.cache.get(input.toLowerCase());
         }
-        if(!role) return;
+        if (!role) return;
         return role;
     }
 

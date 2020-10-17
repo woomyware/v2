@@ -10,7 +10,7 @@ module.exports = class {
     async run (message) {
         if (message.author.bot) return;
 
-        let data = {};
+        const data = {};
         data.user = await this.client.db.getUser(message.author.id);
 
         const prefixes = [data.user.prefix];

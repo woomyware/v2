@@ -5,30 +5,30 @@ const format = require('pg-format');
 const { pgCredentials } = require('../../config.json');
 
 class Database {
-    constructor(client) {
+    constructor (client) {
         this.client = client;
         this.pool = new Pool(pgCredentials);
     }
 
     async getGuild (id) {
-        let res = await this.pool.query('SELECT * FROM guilds WHERE guild_id = $1;', [id]);
+        const res = await this.pool.query('SELECT * FROM guilds WHERE guild_id = $1;', [id]);
         return res.rows[0];
     }
 
     async getMember (guild_id, user_id) {
         const key = guild_id + ':' + user_id;
-        let res = await this.pool.query('SELECT * FROM members WHERE member_id = $1;', [key]);
+        const res = await this.pool.query('SELECT * FROM members WHERE member_id = $1;', [key]);
         return res.rows[0];
     }
 
     async getUser (id) {
-        let res = await this.pool.query('SELECT * FROM guilds WHERE user_id = $1;', [id]);
+        const res = await this.pool.query('SELECT * FROM guilds WHERE user_id = $1;', [id]);
         return res.rows[0];
     }
 
     async updateGuild (id, column, newValue) {
         const sql = format('UPDATE guilds SET %I = $1 WHERE guild_id = $2;', column);
-        let res = await this.pool.query(sql, [newValue, id]);
+        const res = await this.pool.query(sql, [newValue, id]);
         return;
     }
 
