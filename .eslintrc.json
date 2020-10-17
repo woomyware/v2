@@ -24,6 +24,41 @@
         "semi": [
             "error",
             "always"
+        ],
+        "no-var": [
+            "error"
+        ],
+        "no-use-before-define": [
+            "error", { 
+                "functions": true,
+                "classes": true 
+            }
+        ],
+        "keyword-spacing": [
+            "error", {
+                "before": true,
+                "after": true
+            }
+        ],
+        "space-before-blocks": [
+            "error", {
+                "functions":"always",
+                "keywords": "always",
+                "classes": "always"
+            }
+        ],
+            "space-before-function-paren": [
+            "error", {
+                "anonymous": "always",
+                "named": "always",
+                "asyncArrow": "always"
+            }
+        ],
+        "prefer-const": [
+            "error", {
+                "destructuring": "any",
+                "ignoreReadBeforeAssign": false
+            }
         ]
     }
 }
