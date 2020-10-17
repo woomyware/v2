@@ -105,16 +105,35 @@ class Database {
     async deleteGuild (id) {
         await this.pool.query('DELETE FROM guilds WHERE guild_id = $1;', [id]);
         await this.pool.query('DELETE FROM members WHERE member_id LIKE $1;', [`${id}%`]);
+        return;
     }
 
     async deleteMember (guild_id, user_id) {
         const key = guild_id + ':' + user_id;
         await this.pool.query('DELETE FROM members WHERE member_id = $1;', [key]);
+        return;
     }
 
     async deleteUser (id) {
         await this.pool.query('DELETE FROM users WHERE user_id = $1;', [id]);
         await this.pool.query('DELETE FROM members WHERE member_id LIKE $1;', [`${id}%`]);
+        return;
+    }
+
+    async createGuild (id) {
+        const res = await this.pool.query('INSERT INTO guilds (guild_id) VALUES ($1) RETURNING *;', [id]);
+        return res;
+    }
+
+    async createMember (guild_id, user_id) {
+        const key = guild_id + ':' + user_id;
+        const res = await this.pool.query('INSERT INTO members (member_id) VALUES ($1) RETURNING *;', [key]);
+        return res.rows[0];
+    }
+
+    async createUser (id) {
+        const res = await this.pool.query('INSERT INTO users (user_id) VALUES ($1) RETURNING *;', [id]);
+        return res.rows[0];
     }
 }
 

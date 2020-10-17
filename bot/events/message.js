@@ -17,6 +17,7 @@ module.exports = class {
         const data = {};
         
         data.user = await this.client.db.getUser(message.author.id);
+        if (!data.user) data.user = await this.client.db.createUser(message.author.id);
         
         // Prefix cache
         if (this.client.prefixCache.has(message.author.id)) {
@@ -29,7 +30,11 @@ module.exports = class {
 
         if (message.guild) {
             data.guild = await this.client.db.getGuild(message.guild.id);
+            if (!data.guild) data.guild = await this.client.db.createGuild(message.guild.id);
+
             // data.member = await this.client.db.getMember(message.guild.id, message.author.id);
+            // if (!data.member) data.member = await this.client.db.createMember(message.guild.id, message.author.id)
+            
             if (this.client.prefixCache.has(message.guild.id)) {
                 guildPrefix = this.client.prefixCache.get(message.guild.id);
                 prefixes.push(guildPrefix);
