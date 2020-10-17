@@ -34,7 +34,7 @@
     "prefix": "w!",
     "experience": 0,
     "seashells": 0,
-    "relationships": "array goes here",
+    "relationships": [],
     "pronouns": null,
     "colour": "#9d10e1"
   },
