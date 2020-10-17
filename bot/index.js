@@ -5,7 +5,7 @@ const { CommandHandler, EventHandler } = require('./util/handlers');
 const Functions = require('./util/functions');
 const Database = require('./util/database');
 const logger = require('./util/logger');
-const sentry = require('@sentry/node');
+const sentry = require('@sentry/node'); // eslint-disable-line no-unused-vars 
 const config = require('../config.json');
 const pkg = require('../package.json');
 
@@ -23,7 +23,7 @@ class WoomyClient extends Client {
         if (this.config.devmode === true) {
             this.dev = true;
             // sentry.init({ dsn: this.config.keys.sentry });
-        };
+        }
 
         // Essential modules
         this.logger = logger;
@@ -38,8 +38,8 @@ class WoomyClient extends Client {
         // Handlers, to load commands and events
         this.commandHandler = new CommandHandler(this);
         this.eventHandler = new EventHandler(this);
-    };  
-};
+    }
+}
 
 async function init() {
     const client = new WoomyClient();
@@ -54,17 +54,17 @@ async function init() {
         client.login(client.config.devtoken);
     } else {
         client.login(client.config.token);
-    };
-};
+    }
+}
 
 init();
 
 process.on('uncaughtException', (err) => {
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-	console.error('Uncaught Exception: ', errorMsg);
-	process.exit(1);
+    const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
+    console.error('Uncaught Exception: ', errorMsg);
+    process.exit(1);
 });
 
 process.on('unhandledRejection', err => {
-	console.error('Uncaught Promise Error: ', err);
+    console.error('Uncaught Promise Error: ', err);
 });

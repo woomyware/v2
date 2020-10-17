@@ -4,7 +4,7 @@ const { inspect, promisify } = require('util');
 class Functions {
     constructor (client) {
         this.client = client;
-    };
+    }
 
     userError (channel, cmd, error) {
         const embed = new MessageEmbed()
@@ -15,12 +15,12 @@ class Functions {
             .setFooter(`Run 'help ${cmd.help.name}' for more information.`);
 
         channel.send(embed);
-    };
+    }
 
     async getLastMessage (channel) {
         let messages = await channel.messages.fetch({ limit: 2 });
         return messages.last().content;
-    };
+    }
 
     async awaitReply(message, question, limit = 60000) {
         const filter = (m) => m.author.id === message.author.id;
@@ -48,35 +48,35 @@ class Functions {
         try {
             match = guild.members.cache.find(x => x.displayName.toLowerCase() == query);
             if (!match) guild.members.cache.find(x => x.user.username.toLowerCase() == query);
-        } catch (err) {};
+        } catch (err) {} //eslint-disable-line no-empty
 
         if (match) matches.push(match);
         guild.members.cache.forEach(member => {
-        if (
-            (member.displayName.toLowerCase().startsWith(query) ||
+            if (
+                (member.displayName.toLowerCase().startsWith(query) ||
                 member.user.tag.toLowerCase().startsWith(query)) &&
                 member.id != (match && match.id)
             ) {
                 matches.push(member);
-            };
+            }
         });
 
         return matches;
-    };
+    }
 
     findRole (input, message) {
         let role;
         role = message.guild.roles.cache.find(r => r.name.toLowerCase() === input.toLowerCase());
         if(!role) {
             role = message.guild.roles.cache.get(input.toLowerCase());
-        };
+        }
         if(!role) return;
         return role;
-    };
+    }
 
     intBetween (min, max) {
         return Math.round((Math.random() * (max - min) + min));
-    };
+    }
 
 
 
@@ -85,8 +85,8 @@ class Functions {
             return true;
         } else {
             return false;
-        };
-    };
+        }
+    }
 
     shutdown () {
         const exitQuotes = [
@@ -99,34 +99,34 @@ class Functions {
         ];
 
         this.client.db.pool.end().then(() => {
-            this.client.logger.info('Connection to database closed.')
+            this.client.logger.info('Connection to database closed.');
         });
 
         this.client.destroy();
 
         console.log(exitQuotes);
-    };
+    }
 
     async clean (text) {
         if (text && text.constructor.name === 'Promise') {
             text = await text;
-        };
+        }
 
         if (typeof text !== 'string') {
             text = inspect(text, { depth: 1});
-        };
+        }
 
         text = text
-            .replace(/`/g, "`" + String.fromCharCode(8203))
-            .replace(/@/g, "@" + String.fromCharCode(8203))
-            .replace(this.client.token, "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0");
+            .replace(/`/g, '`' + String.fromCharCode(8203))
+            .replace(/@/g, '@' + String.fromCharCode(8203))
+            .replace(this.client.token, 'mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0');
     
         return text;
-    };
+    }
 
     wait () {
         promisify(setTimeout);
-    };
-};
+    }
+}
 
 module.exports = Functions;

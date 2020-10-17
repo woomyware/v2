@@ -14,7 +14,7 @@ const customLevels = {
         error: 5
     },
 
-        colours: {
+    colours: {
         debug: 'black magentaBG',
         cmd: 'black whiteBG',
         info: 'black cyanBG',
@@ -36,14 +36,14 @@ const logger = createLogger({
 
     transports: [
         new transports.Console({
-        level: 'error',
-        format: format.combine(
-            format.timestamp({
-            format: 'YYYY-MM-DD hh:mm:ss'
-            }),
-            format.colorize(),
-            fmt
-        )
+            level: 'error',
+            format: format.combine(
+                format.timestamp({
+                    format: 'YYYY-MM-DD hh:mm:ss'
+                }),
+                format.colorize(),
+                fmt
+            )
         })
     ]
 });
