@@ -74,11 +74,26 @@ class Functions {
         return role;
     }
 
-    intBetween (min, max) {
-        return Math.round((Math.random() * (max - min) + min));
+    checkPermissions (command, message, member) {
+        const missingPerms = [];
+
+        if (member.user.bot) {
+            command.conf.botPerms.forEach(p => {
+                if (!message.channel.permissionsFor(member).has(p)) missingPerms.push(p);
+            });
+        } else {
+            command.conf.userPerms.forEach(p => {
+                if (!message.channel.permissionsFor(member).has(p)) missingPerms.push(p);
+            });
+        }
+
+        if (missingPerms.length > 0) return missingPerms;
     }
 
 
+    intBetween (min, max) {
+        return Math.round((Math.random() * (max - min) + min));
+    }
 
     isDeveloper (id) {
         if (this.client.config.ownerIDs.includes(id)) {
