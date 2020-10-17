@@ -21,7 +21,7 @@ class CommandHandler {
 
       this.client.commands.set(props.help.name, props);
       
-      this.client.cooldown.set(props.help.name, new Map());
+      this.client.cooldowns.set(props.help.name, new Map());
 
       props.conf.aliases.forEach(alias => {
         this.client.aliases.set(alias, props.help.name);
@@ -29,7 +29,7 @@ class CommandHandler {
 
       return;
     } catch (err) {
-      return `Failed to load command ${name}: ${err}`;
+      return `Failed to load command ${name}: ${err.stack}`;
     }
   }
 
