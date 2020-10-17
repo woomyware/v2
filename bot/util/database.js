@@ -1,40 +1,76 @@
-const { Pool } = require('pg');
+/* eslint-disable no-unused-vars */
 
-const credentials = require('../../config.json').pgCredentials;
+const { Pool } = require('pg');
+const format = require('pg-format');
+const { pgCredentials } = require('../../config.json');
 
 class Database {
     constructor(client) {
         this.client = client;
-        this.pool = new Pool({
-            user: credentials.user,
-            host: credentials.host,
-            database: credentials.database,
-            password: credentials.password,
-            port: credentials.port
-        });
-
-        this.pool.on('connect', () => {
-            this.client.logger.info('Connected to Postgres database.')
-        })
-    };
+        this.pool = new Pool(pgCredentials);
+    }
 
     async getGuild (id) {
-        return await this.pool.query('SELECT * FROM guilds WHERE guild_id = $1;', [id]);
-    };
+        let res = await this.pool.query('SELECT * FROM guilds WHERE guild_id = $1;', [id]);
+        return res.rows[0];
+    }
 
-    async getGuildField (id, field) {
-        let res = await this.pool.query('SELECT $1 FROM guilds WHERE guild_id = $2;', [field, id]);
-    };
-
-    async getMember (guildID, userID) {
-
-    };
+    async getMember (guild_id, user_id) {
+        const key = guild_id + ':' + user_id;
+        let res = await this.pool.query('SELECT * FROM members WHERE member_id = $1;', [key]);
+        return res.rows[0];
+    }
 
     async getUser (id) {
-        
-    };
+        let res = await this.pool.query('SELECT * FROM guilds WHERE user_id = $1;', [id]);
+        return res.rows[0];
+    }
 
+    async updateGuild (id, column, newValue) {
+        const sql = format('UPDATE guilds SET %I = $1 WHERE guild_id = $2;', column);
+        let res = await this.pool.query(sql, [newValue, id]);
+        return;
+    }
 
-};
+    async updateMember (guild_id, user_id, column, newValue) {
+        const key = guild_id + ':' + user_id;
+        const sql = format('UPDATE members SET %I = $1 WHERE member_id = $2;', column);
+        await this.pool.query(sql, [newValue, key]);
+        return;
+    }
+
+    async updateUser (id, column, newValue) {
+        const sql = format('UPDATE users SET %I = $1 WHERE user_id = $2;', column);
+        await this.pool.query(sql, [newValue, id]);
+        return;
+    }
+
+    async resetGuild (id) {
+
+    }
+
+    async resetMember (guild_id, member_id) {
+
+    }
+
+    async resetUser (id) {
+
+    }
+
+    async deleteGuild (id) {
+        await this.pool.query('DELETE FROM guilds WHERE guild_id = $1;', [id]);
+        await this.pool.query('DELETE FROM members WHERE member_id LIKE $1;', [`${id}%`]);
+    }
+
+    async deleteMember (guild_id, user_id) {
+        const key = guild_id + ':' + user_id;
+        await this.pool.query('DELETE FROM members WHERE member_id = $1;', [key]);
+    }
+
+    async deleteUser (id) {
+        await this.pool.query('DELETE FROM users WHERE user_id = $1;', [id]);
+        await this.pool.query('DELETE FROM members WHERE member_id LIKE $1;', [`${id}%`]);
+    }
+}
 
 module.exports = Database;
