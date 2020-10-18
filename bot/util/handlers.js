@@ -105,10 +105,6 @@ class EventHandler {
         }
     }
 
-    unload (name) { //eslint-disable-line no-unused-vars
-
-    }
-
     loadAll () {
         const eventFiles = fs.readdirSync(this.client.path + '/events');
         eventFiles.forEach(file => {
@@ -120,6 +116,8 @@ class EventHandler {
             }
         });
     }
+
+    // TO-DO: EVENT UNLOADING/RELOADING
 }
 
 module.exports = {
