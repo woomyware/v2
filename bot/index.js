@@ -5,7 +5,8 @@ const { CommandHandler, EventHandler } = require('./util/handlers');
 const Functions = require('./util/functions');
 const Database = require('./util/database');
 const logger = require('./util/logger');
-const sentry = require('@sentry/node'); // eslint-disable-line no-unused-vars 
+const sentry = require('@sentry/node'); // eslint-disable-line no-unused-vars
+const { readdirSync } = require('fs'); 
 const config = require('../config.json');
 const pkg = require('../package.json');
 
@@ -17,6 +18,7 @@ class WoomyClient extends Client {
         this.config = config;
         this.path = __dirname;
         this.version = pkg.version;
+        this.categories = readdirSync('./commands/');
 
         // dev mode, disables some features if enabled
         this.dev = false;
@@ -45,6 +47,8 @@ async function init () {
     const client = new WoomyClient({ ws: {}});
 
     client.logger.info(`Initializing Woomy v${client.version}`);
+
+    require('./util/prototypes');
 
     await client.commandHandler.loadAll();
     await client.eventHandler.loadAll();
