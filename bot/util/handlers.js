@@ -60,17 +60,15 @@ class CommandHandler {
             command = this.client.commands.get(this.client.aliases.get(name));
         }
 
-        if (!command) {
-            return `\`${name}\` does not exist as a command or an alias.`;
-        }
+        if (!command) return `\`${name}\` does not exist as a command or an alias.`;
 
         this.client.logger.debug(`Unloading command ${category}/${name}`);
 
-        if (command.shutdown) {
-            await command.shutdown(this.client);
-        }
+        for (const alias of command.conf.aliases) this.client.aliases.delete(alias);
+        this.client.commands.delete(command.help.name);
         delete require.cache[require.resolve(path)];
-        return false;
+
+        return;
     }
 
     unloadAll () {
