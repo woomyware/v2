@@ -49,7 +49,7 @@ class CommandHandler {
         this.client.logger.info(`Loaded a total of ${this.client.commands.size} commands.`);
     }
 
-    async unload (name, category) {
+    unload (name, category) {
         const path = this.client.path + '/commands/' + category + '/' + name + '.js';
 
         let command;
@@ -78,10 +78,8 @@ class CommandHandler {
             const commandFiles = fs.readdirSync('./commands/' + dir + '/');
             commandFiles.filter((cmd) => cmd.split('.').pop() === 'js').forEach((cmd) => {
                 cmd = cmd.substring(0, cmd.length - 3);
-                const resp = this.unload(cmd, dir);
-                if (resp) {
-                    this.client.logger.error(resp);
-                }
+                const res = this.unload(cmd, dir);
+                if (res) this.client.logger.error(res);
             });
         });
     }
