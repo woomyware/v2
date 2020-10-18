@@ -6,7 +6,8 @@ class Disable extends Command {
             description: 'Disables a command/category so they can\'t be used in this server.',
             usage: '`disable command [command]` - Disables the specified command.\n`disable category [category]` - Disables the specified category.',
             examples: '`disable command cuddle`\n`disable category music`',
-            userPerms: ['ADMINISTRATOR']
+            userPerms: ['ADMINISTRATOR'],
+            guildOnly: true
         });
     }
 

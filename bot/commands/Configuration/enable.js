@@ -6,7 +6,8 @@ class Enable extends Command {
             description: 'Re-enables a previously disabled command/category.',
             usage: '`enable command [command]` - Enables the specified command.\n`enable category [category]` - Enables the specified category.',
             examples: '`enable command cuddle`\n`enable category music`',
-            userPerms: ['ADMINISTRATOR']
+            userPerms: ['ADMINISTRATOR'],
+            guildOnly: true
         });
     }
 
