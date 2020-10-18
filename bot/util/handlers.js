@@ -79,7 +79,7 @@ class CommandHandler {
             commandFiles.filter((cmd) => cmd.split('.').pop() === 'js').forEach((cmd) => {
                 cmd = cmd.substring(0, cmd.length - 3);
                 const res = this.unload(cmd, dir);
-                if (res) this.client.logger.error(res);
+                if (res) this.client.logger.error('Command unload: ' + res);
             });
         });
     }
