@@ -90,16 +90,38 @@ class Database {
         return;
     }
 
-    async resetGuild (id) {
+    async resetGuild (id, column) {
+        const regexp = /(?<=\')(.*?)(?=\')/; //eslint-disable-line no-useless-escape
+        const res = await this.client.db.pool.query(
+            'SELECT column_default FROM information_schema.columns WHERE table_name=\'guilds\' AND column_name = $1;', [column]);
+        const def = res.rows[0].column_default.match(regexp)[0];
 
+        await this.updateGuild(id, column, def);
+
+        return;
     }
 
-    async resetMember (guild_id, member_id) {
+    async resetMember (guild_id, user_id, column) {
+        const key = guild_id + ':' + user_id;
+        const regexp = /(?<=\')(.*?)(?=\')/; //eslint-disable-line no-useless-escape
+        const res = await this.client.db.pool.query(
+            'SELECT column_default FROM information_schema.columns WHERE table_name=\'members\' AND column_name = $1;', [column]);
+        const def = res.rows[0].column_default.match(regexp)[0];
 
+        await this.updateGuild(key, column, def);
+        
+        return;
     }
 
-    async resetUser (id) {
+    async resetUser (id, column) {
+        const regexp = /(?<=\')(.*?)(?=\')/; //eslint-disable-line no-useless-escape
+        const res = await this.client.db.pool.query(
+            'SELECT column_default FROM information_schema.columns WHERE table_name=\'users\' AND column_name = $1;', [column]);
+        const def = res.rows[0].column_default.match(regexp)[0];
 
+        await this.updateGuild(id, column, def);
+
+        return;
     }
 
     async deleteGuild (id) {
