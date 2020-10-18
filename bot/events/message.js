@@ -22,10 +22,19 @@ module.exports = class {
             if (!data.guild) await this.client.db.createGuild(message.guild.id);
             prefixes.push(data.guild.prefix);
 
-            // data.member = await this.client.db.getMember(message.guild.id, message.author.id);
-            // if (!data.member) data.member = await this.client.db.createMember(message.guild.id, message.author.id)
+            data.member = await this.client.db.getMember(message.guild.id, message.author.id);
+            if (!data.member) data.member = await this.client.db.createMember(message.guild.id, message.author.id);
         }
 
+        // Blacklist
+        if (data.guild.blacklist.includes(message.author.id)) return;
+
+        // Respond with prefixes when pinged
+        if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
+            return message.channel.send(`Hi! The server prefix is \`${data.guild.prefix}\`, and your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`);
+        }
+
+        // Allow pings to be used as prefixes
         prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `);
 
         let prefix;
@@ -41,8 +50,6 @@ module.exports = class {
         } else {
             message.prefix = prefix;
         }
-        
-        // TO-DO: CREATE BLACKLIST
 
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
@@ -60,7 +67,13 @@ module.exports = class {
                 } catch (err) {} //eslint-disable-line no-empty
             }
 
-            // TO-DO: DISABLED COMMANDS / CATEGORIES
+            if (data.guild.disabledcommands.includes(cmd.help.name)) return message.channel.send(
+                'This command has been disabled by a server administrator.'
+            );
+
+            if (data.guild.disabledcategories.includes(cmd.help.category)) return message.channel.send(
+                'The category this command is apart of has been disabled by a server administrator.'
+            );
         }
 
         if (cmd && cmd.conf.enabled === false) {
