@@ -10,38 +10,20 @@ module.exports = class {
     async run (message) {
         if (message.author.bot) return;
 
-        let userPrefix;
-        let guildPrefix;
-
         const prefixes = [];
         const data = {};
         
         data.user = await this.client.db.getUser(message.author.id);
         if (!data.user) data.user = await this.client.db.createUser(message.author.id);
-        
-        // Prefix cache
-        if (this.client.prefixCache.has(message.author.id)) {
-            userPrefix = this.client.prefixCache.get(message.author.id);
-            prefixes.push(userPrefix);
-        } else {
-            userPrefix = data.user.prefix;
-            prefixes.push(userPrefix);
-        }
+        prefixes.push(data.user.prefix);
 
         if (message.guild) {
             data.guild = await this.client.db.getGuild(message.guild.id);
-            if (!data.guild) data.guild = await this.client.db.createGuild(message.guild.id);
+            if (!data.guild) await this.client.db.createGuild(message.guild.id);
+            prefixes.push(data.guild.prefix);
 
             // data.member = await this.client.db.getMember(message.guild.id, message.author.id);
             // if (!data.member) data.member = await this.client.db.createMember(message.guild.id, message.author.id)
-            
-            if (this.client.prefixCache.has(message.guild.id)) {
-                guildPrefix = this.client.prefixCache.get(message.guild.id);
-                prefixes.push(guildPrefix);
-            } else {
-                guildPrefix = data.guild.prefix;
-                prefixes.push(guildPrefix);
-            }
         }
 
         prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `);
@@ -53,15 +35,6 @@ module.exports = class {
         }
 
         if (message.content.indexOf(prefix) !== 0) return;
-
-        // Prefix cache
-        if (userPrefix === prefix && !this.client.prefixCache.has(message.author.id)) {
-            this.client.prefixCache.set(message.author.id, prefix);
-        }
-
-        if (guildPrefix === prefix && !this.client.prefixCache.has(message.guild.id)) {
-            this.client.prefixCache.set(message.guild.id, prefix);
-        }
 
         if (prefix === `<@${this.client.user.id}> ` || prefix === `<@!${this.client.user.id}> `) {
             message.prefix = '@Woomy ';

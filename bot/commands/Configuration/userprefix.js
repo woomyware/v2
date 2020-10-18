@@ -17,9 +17,6 @@ class Userprefix extends Command {
         }
 
         await this.client.db.updateUser(message.author.id, 'prefix', args[0]);
-        
-        // Update cache
-        this.client.prefixCache.set(message.author.id, args[0]);
 
         message.channel.send(`Your personal prefix has been set to: \`${args[0]}\``);
     }
