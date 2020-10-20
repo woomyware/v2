@@ -1,6 +1,6 @@
 class Ready {
-    constructor () {
-        this.wsEvent;
+    constructor (wsEvent) {
+        this.wsEvent = wsEvent;
     }
 
     async run (client) {

@@ -5,17 +5,6 @@ class EventHandler {
         this.client = client;
     }
 
-    /**
-     * doesnt work because array
-     * Collection [Map] {
-     *      [ 'ready.js', index: 6, input: 'ready/ready.js', groups: undefined ] => Ready {
-     *          wsEvent: [ 'ready', index: 0, input: 'ready/ready.js', groups: undefined ]
-     *      },
-     *      baseObject: undefined,
-     *      limit: undefined
-     *  }
-     */
-    
     handle (wsEvent, param_1, param_2) {
         switch (wsEvent) {
             case 'ready': {
