@@ -17,18 +17,23 @@ class WoomyClient extends Eris.Client {
     constructor (token, options) {
         super(token, options);
 
+        // Important information Woomy needs to access
         this.config = config;
         this.path = __dirname;
         this.version = version;
+
+        // Load up our command/event modules 
         this.commandFiles = read('./commands').filter(file => file.endsWith('.js'));
         this.eventFiles = read('./event_modules').filter(file => file.endsWith('.js'));
 
+        // Essential modules
         this.logger = Logger;
         this.db = new Database(this);
         this.helpers = new Helpers(this);
         this.eventHandler = new EventHandler(this);
         // this.messageHandler = new messageHandler(this);
 
+        // Collections to store our successfully loaded commands and events in.
         this.commands = new Eris.Collection();
         this.aliases = new Eris.Collection();
         this.cooldowns = new Eris.Collection();
@@ -126,41 +131,47 @@ class WoomyClient extends Eris.Client {
     }
 }
 
-async function init () {
-    const client = new WoomyClient(config.token, { 
-        maxShards: 'auto',
-        defaultImageFormat: 'png',
-        defaultImageSize: 2048,
-        intents: [
-            'guilds',
-            'guildMembers',
-            'guildEmojis',
-            'guildVoiceStates',
-            'guildMessages',
-            'guildMessageReactions',
-            'directMessages',
-            'directMessageReactions'
-        ]
-    });
+const client = new WoomyClient(config.token, { 
+    maxShards: 'auto',
+    defaultImageFormat: 'png',
+    defaultImageSize: 2048,
+    intents: [
+        'guilds',
+        'guildMembers',
+        'guildEmojis',
+        'guildVoiceStates',
+        'guildMessages',
+        'guildMessageReactions',
+        'directMessages',
+        'directMessageReactions'
+    ]
+});
 
-    require('./util/prototypes');
+require('./util/prototypes');
 
-    client.loadCommands();
-    client.loadEventModules();
-    client.createEventListeners();
+client.loadCommands();
+client.loadEventModules();
+client.createEventListeners();
 
-    if (client.config.devmode === true) {
-        try { 
-            // sentry.init({ dsn: client.config.keys.sentry });
-        } catch (err) { 
-            client.logger.error('SENTRY_INIT_ERROR', `Sentry failed to initialize: ${err}`); 
-        }
-    } else {
-        client.logger.warning('DEVELOPMENT_MODE', 'Running in development mode, some features have been disabled.');
+if (client.config.devmode === true) {
+    try { 
+        // sentry.init({ dsn: client.config.keys.sentry });
+    } catch (err) { 
+        client.logger.error('SENTRY_INIT_ERROR', `Sentry failed to initialize: ${err}`); 
     }
-
-    client.connect();
+} else {
+    client.logger.warning('DEVELOPMENT_MODE', 'Running in development mode, some features have been disabled.');
 }
 
-init ();
+client.connect();
 
+// Process exception/promise rejection listeners
+
+process.on('uncaughtException', (error) => {
+    const errorMsg = error.stack.replace(new RegExp(`${client.path}/`, 'g'), './');
+    client.logger.error('UNCAUGHT_EXCEPTION_ERROR', errorMsg);
+});
+
+process.on('unhandledRejection', err => {
+    client.logger.error('UNHANDLED_PROMISE_ERROR', err);
+});
