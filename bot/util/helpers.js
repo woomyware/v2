@@ -1,4 +1,3 @@
-const { MessageEmbed } = require('discord.js');
 const { inspect, promisify } = require('util');
 
 class Helpers {
@@ -6,6 +5,7 @@ class Helpers {
         this.client = client;
     }
 
+    /* Rewrite for Eris
     userError (channel, cmd, error) {
         const embed = new MessageEmbed()
             .setColor('#EF5350')
@@ -16,6 +16,7 @@ class Helpers {
 
         channel.send(embed);
     }
+    */
 
     async getLastMessage (channel) {
         const messages = await channel.messages.fetch({ limit: 2 });

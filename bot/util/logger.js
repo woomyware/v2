@@ -77,7 +77,7 @@ class Logger {
      * @returns {void}
      */
     static event (body) {
-        console.log(chalk.bold.yellow(`[ ${this._getCurrentTime()} ] [ EVENT ] `) + body);
+        console.log(chalk.bold.blue(`[ ${this._getCurrentTime()} ] [ EVENT ] `) + body);
     }
 
     /**
