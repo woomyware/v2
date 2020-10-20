@@ -63,6 +63,16 @@ class WoomyClient extends Eris.Client {
         this.logger.success('COMMAND_LOADER_SUCCESS', `Loaded ${this.commands.size}/${this.commandFiles.length} commands.`);
     }
 
+    reloadCommands () {
+        for (const file of this.commandFiles) {
+            try {
+            
+            } catch (error) {
+
+            }
+        }
+    }
+
     loadEventModules () {
         const nameRegexp = /[^/]*$/;
         const catRegexp = /.+?(?=\/)/;
@@ -75,8 +85,18 @@ class WoomyClient extends Eris.Client {
                 this.logger.error('EVENT_LOADER_ERROR', `Failed to load ${file}: ${error}`);
             }
         }
-
+        console.log(this.eventModules)
         this.logger.success('EVENT_LOADER_SUCCESS', `Loaded ${this.eventModules.size}/${this.eventFiles.length} event modules.`);
+    }
+
+    reloadEventModules () {
+        for (const file of this.eventFiles) {
+            try {
+            
+            } catch (error) {
+
+            }
+        }
     }
 
     mainEventListener (wsEvent, param_1, param_2) {
