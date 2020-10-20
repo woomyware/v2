@@ -1,0 +1,30 @@
+{
+  "name": "woomy",
+  "version": "2.0.0",
+  "description": "Made with <3 by mudkipscience",
+  "main": "index.js",
+  "dependencies": {
+    "@sentry/node": "^5.26.0",
+    "chalk": "^4.1.0",
+    "eris": "^0.13.3",
+    "eris-additions": "^1.4.1",
+    "eslint": "^7.11.0",
+    "fs-readdir-recursive": "^1.1.0",
+    "pg": "^8.4.1",
+    "pg-format": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woomyware/v2.git"
+  },
+  "author": "Emily J. (mudkipscience)",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/woomyware/v2/issues"
+  },
+  "homepage": "https://github.com/woomyware/v2#readme"
+}

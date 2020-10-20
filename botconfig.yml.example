@@ -1,0 +1,25 @@
+developmentMode: true
+token: ''
+ownerIDs: 
+  - ''
+
+postgresOptions:
+  user: ''
+  host: ''
+  database: ''
+  password: ''
+  port:
+
+lavalinkNodes:
+  - node_1:
+      name: ''
+      host: ''
+      port: 
+      auth: ''
+
+emoji:
+  success: ''
+  error: ''
+  denied: ''
+  wait: ''
+  warning: ''

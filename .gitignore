@@ -1,10 +1,6 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-node_modules
-config.json
-.vscode
+application.yml
+botconfig.yml
 Lavalink.jar
 logs
-lavalink_logs
+*.log
+node_modules
