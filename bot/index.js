@@ -51,7 +51,7 @@ class WoomyClient extends Eris.Client {
                     this.aliases.set(alias, props.help.name);
                 });
             } catch (error) {
-                this.logger.error('COMMAND_LOADER_ERROR', error);
+                this.logger.error('COMMAND_LOADER_ERROR', `Failed to load ${file}: ${error}`);
             }
         }
 
@@ -65,10 +65,10 @@ class WoomyClient extends Eris.Client {
         for (const file of this.eventFiles) {
             try {
                 const event = require(this.path + '/event_modules/' + file);
-                event.wsEvent = catRegexp.exec(file);
+                //event.wsEvent = catRegexp.exec(file);
                 this.eventModules.set(nameRegexp.exec(file), event);
             } catch (error) {
-                this.logger.error('EVENT_LOADER_ERROR', error);
+                this.logger.error('EVENT_LOADER_ERROR', `Failed to load ${file}: ${error}`);
             }
         }
 
