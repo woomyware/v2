@@ -9,4 +9,4 @@ class Ready {
     }
 }
 
-module.exports = new Ready();
+module.exports = Ready;
