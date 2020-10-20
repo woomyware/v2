@@ -128,6 +128,7 @@ class WoomyClient extends Eris.Client {
 
 async function init () {
     const client = new WoomyClient(config.token, { 
+        maxShards: 'auto',
         defaultImageFormat: 'png',
         defaultImageSize: 2048,
         intents: [
