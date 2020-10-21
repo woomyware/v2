@@ -15,6 +15,7 @@ class CommandLoader {
                 const command = new (require(this.client.path + '/commands/' + file))(name, category);
 
                 this.client.commands.set(command.name, command);
+                this.client.cooldowns.set(command.name, new Map());
                 command.aliases.forEach(alias => {
                     this.client.aliases.set(alias, command.name);
                 });
@@ -28,6 +29,7 @@ class CommandLoader {
 
     // Reloads all currently loaded commands, so we don't need to restart to apply changes
     reloadCommands () {
+        this.client.cooldowns.clear();
         this.client.commands.forEach(cmd => {
             try {
                 delete require.cache[require.resolve(`${this.client.path}/commands/${cmd.category}/${cmd.name}.js`)];
