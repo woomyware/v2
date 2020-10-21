@@ -86,7 +86,7 @@ class Logger {
      * @returns {void}
      */
     static command (body) {
-        console.log(chalk.bold.green(`[ ${this._getCurrentTime()} ] [ COMMAND ] `) + body);
+        console.log(chalk.bold.white(`[ ${this._getCurrentTime()} ] [ COMMAND ] `) + body);
     }
 }
 
