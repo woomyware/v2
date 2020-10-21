@@ -61,13 +61,16 @@ class WoomyClient extends Eris.Client {
     }
 
     reloadCommands () {
-        for (const cmd of this.commands) {
+        this.commands.forEach(cmd => {
             try {
-                
+                delete require.cache[require.resolve(`${this.path}/commands/${cmd.category}/${cmd.name}.js`)];
+                this.commands.delete(cmd.name);
             } catch (error) {
-
+                this.logger.error('COMMAND_LOADER_ERROR', `Failed to unload ${cmd}: ${error}`);
             }
-        }
+        });
+        
+        this.loadCommands();
     }
 
     loadEventModules () {
@@ -81,17 +84,21 @@ class WoomyClient extends Eris.Client {
                 this.logger.error('EVENT_LOADER_ERROR', `Failed to load ${file}: ${error}`);
             }
         }
+
         this.logger.success('EVENT_LOADER_SUCCESS', `Loaded ${this.eventModules.size}/${this.eventFiles.length} event modules.`);
     }
 
     reloadEventModules () {
-        for (const file of this.eventFiles) {
+        this.eventModules.forEach((props, event) => {
             try {
-                
+                delete require.cache[require.resolve(`${this.path}/event_modules/${props.wsEvent}/${event}.js`)];
+                this.eventModules.delete(event);
             } catch (error) {
-
+                this.logger.error('EVENT_LOADER_ERROR', `Failed to unload ${event}: ${error}`);
             }
-        }
+        });
+
+        this.loadEventModules();
     }
 
     mainEventListener (wsEvent, param_1, param_2) {
