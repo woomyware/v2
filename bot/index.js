@@ -10,6 +10,7 @@ const Database = require('./util/database');
 const Logger = require('./util/logger');
 const sentry = require('@sentry/node');
 const yaml = require('js-yaml');
+const constants = require('./constants');
 const config = yaml.safeLoad(require('fs').readFileSync('../botconfig.yml', 'utf8'));
 const version = require('../package.json').version;
 
@@ -23,6 +24,7 @@ class WoomyClient extends Eris.Client {
         this.version = version;
 
         // Essential modules
+        this.constants = constants;
         this.logger = Logger;
         this.db = new Database(this);
         this.helpers = new Helpers(this);
