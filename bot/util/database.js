@@ -15,18 +15,24 @@ class Database {
 
     async getGuild (id) {
         const res = await this.pool.query('SELECT * FROM guilds WHERE guild_id = $1;', [id]);
-        return res.rows[0];
+        let data = res.rows[0];
+        if (!data) data = await this.createGuild(id);
+        return data;
     }
 
     async getMember (guild_id, user_id) {
         const key = guild_id + ':' + user_id;
         const res = await this.pool.query('SELECT * FROM members WHERE member_id = $1;', [key]);
-        return res.rows[0];
+        let data = res.rows[0];
+        if (!data) data = await this.createMember(guild_id, user_id);
+        return data;
     }
 
     async getUser (id) {
         const res = await this.pool.query('SELECT * FROM users WHERE user_id = $1;', [id]);
-        return res.rows[0];
+        let data = res.rows[0];
+        if (!data) data = await this.createUser(id);
+        return data;
     }
 
     async getGuildField (id, column) {
