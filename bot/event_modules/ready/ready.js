@@ -4,7 +4,8 @@ module.exports = class {
     }
 
     async run (client) {
-        client.editStatus('online', { name: `Goddess of Discord! | v${client.version}`});
+        const activity = client.constants.activities.random();
+        client.editStatus('online', { name: `${activity.message} | v${client.version}`, type: activity.type});
         client.logger.event(`Woomy v${client.version} initialized and ready to accept commands!`);
     }
 };
