@@ -6,7 +6,7 @@ module.exports = class {
         this.guildOnly = false,
         this.devOnly = false,
         this.aliases = [],
-        this.userPerms = [],
+        this.userPerms = ['administrator'],
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
@@ -17,6 +17,6 @@ module.exports = class {
     }
 
     run (client, message, args, data) { // eslint-disable-line no-unused-vars
-        return client.createMessage(message.channel.id, `Hello, ${message.author}!`);
+        return message.channel.createMessage(`Hello, ${message.author.mention}!`);
     }
 };
