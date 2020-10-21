@@ -41,19 +41,16 @@ class WoomyClient extends Eris.Client {
     }
 
     loadCommands () {
-        const nameRegexp = /[^/]*$/;
-        const catRegexp = /.+?(?=\/)/;
-
         for (const file of this.commandFiles) {
             try {
-                const props = new (require(this.path + '/commands/' + file))(this);
-                props.help.name = nameRegexp.exec(file);
-                props.help.category = catRegexp.exec(file);
+                const name = file.substr(file.indexOf('/') + 1).slice(0, -3);
+                const category = file.substr(0, file.indexOf('/'));
+                const command = new (require(this.path + '/commands/' + file))(name, category);
 
-                this.commands.set(props.help.name, props);
-                this.cooldowns.set(props.help.name, new Map());
-                props.conf.aliases.forEach(alias => {
-                    this.aliases.set(alias, props.help.name);
+                this.commands.set(command.name, command);
+                this.cooldowns.set(command.name, new Map());
+                command.aliases.forEach(alias => {
+                    this.aliases.set(alias, command.name);
                 });
             } catch (error) {
                 this.logger.error('COMMAND_LOADER_ERROR', `Failed to load ${file}: ${error}`);
@@ -64,9 +61,9 @@ class WoomyClient extends Eris.Client {
     }
 
     reloadCommands () {
-        for (const file of this.commandFiles) {
+        for (const cmd of this.commands) {
             try {
-            
+                
             } catch (error) {
 
             }
@@ -74,25 +71,23 @@ class WoomyClient extends Eris.Client {
     }
 
     loadEventModules () {
-        const nameRegexp = /[^/]*$/;
-        const catRegexp = /.+?(?=\/)/;
-
         for (const file of this.eventFiles) {
             try {
-                const event = new (require(this.path + '/event_modules/' + file))(catRegexp.exec(file));
-                this.eventModules.set(nameRegexp.exec(file), event);
+                const name = file.substr(file.indexOf('/') + 1).slice(0, -3);
+                const category = file.substr(0, file.indexOf('/'));
+                const event = new (require(this.path + '/event_modules/' + file))(category);
+                this.eventModules.set(name, event);
             } catch (error) {
                 this.logger.error('EVENT_LOADER_ERROR', `Failed to load ${file}: ${error}`);
             }
         }
-        console.log(this.eventModules)
         this.logger.success('EVENT_LOADER_SUCCESS', `Loaded ${this.eventModules.size}/${this.eventFiles.length} event modules.`);
     }
 
     reloadEventModules () {
         for (const file of this.eventFiles) {
             try {
-            
+                
             } catch (error) {
 
             }
