@@ -4,14 +4,13 @@ const Eris = require('eris-additions')(require('eris'));
 const CommandLoader = require('./util/commandLoader');
 const EventLoader = require('./util/eventLoader');
 const EventHandler = require('./util/handlers/eventHandler');
-// const messageHandler = require('./util/handlers/messageHandler');
+const MessageHandler = require('./util/handlers/messageHandler');
 const Helpers = require('./util/helpers');
 const Database = require('./util/database');
 const Logger = require('./util/logger');
 const sentry = require('@sentry/node');
-const fs = require('fs');
 const yaml = require('js-yaml');
-const config = yaml.safeLoad(fs.readFileSync('../botconfig.yml', 'utf8'));
+const config = yaml.safeLoad(require('fs').readFileSync('../botconfig.yml', 'utf8'));
 const version = require('../package.json').version;
 
 class WoomyClient extends Eris.Client {
@@ -30,12 +29,13 @@ class WoomyClient extends Eris.Client {
         this.commandLoader = new CommandLoader(this);
         this.eventLoader = new EventLoader(this);
         this.eventHandler = new EventHandler(this);
-        // this.messageHandler = new messageHandler(this);
+        this.messageHandler = new MessageHandler(this);
 
-        // Collections to store our successfully loaded commands and events in.
+        // Collections to store our successfully loaded events and commands in, as well as cooldowns.
         this.commands = new Eris.Collection();
         this.aliases = new Eris.Collection();
         this.eventModules = new Eris.Collection();
+        this.cooldowns = new Eris.Collection();
     }
 
     // Listen for Eris events and pass needed information to the event handler so we can respond to them.
@@ -121,7 +121,7 @@ client.createEventListeners();
 // Development mode is set in botconfig.yml, and disables some stuff if enabled. Imagine how messy Sentry would be without this!
 if (client.config.devmode === true) {
     try { 
-        // sentry.init({ dsn: client.config.keys.sentry });
+        sentry.init({ dsn: client.config.keys.sentry });
     } catch (err) { 
         client.logger.error('SENTRY_INIT_ERROR', `Sentry failed to initialize: ${err}`); 
     }
@@ -139,5 +139,5 @@ process.on('uncaughtException', (error) => {
 });
 
 process.on('unhandledRejection', err => {
-    client.logger.error('UNHANDLED_PROMISE_ERROR', err);
+    client.logger.error('UNHANDLED_PROMISE_ERROR', err.stack);
 });
