@@ -75,16 +75,16 @@ class Helpers {
         return role;
     }
 
-    checkPermissions (command, message, member) {
+    checkPermissions (command, message) {
         const missingPerms = [];
 
-        if (member.user.bot) {
-            command.conf.botPerms.forEach(p => {
-                if (!message.channel.permissionsFor(member).has(p)) missingPerms.push(p);
+        if (message.member.bot) {
+            command.botPerms.forEach(p => {
+                if (!message.channel.permissionsOf(this.client.user.id).has(p)) missingPerms.push(p);
             });
         } else {
-            command.conf.userPerms.forEach(p => {
-                if (!message.channel.permissionsFor(member).has(p)) missingPerms.push(p);
+            command.userPerms.forEach(p => {
+                if (!message.channel.permissionsOf(message.author.id).has(p)) missingPerms.push(p);
             });
         }
 
