@@ -75,20 +75,18 @@ class Helpers {
         return role;
     }
 
-    checkPermissions (command, message) {
+    checkPermissions (channel, user_id, requiredPerms) {
+        const minimumPerms = ['readMessages', 'sendMessages', 'embedLinks'];
+        const pendingPerms = (!requiredPerms) ? minimumPerms : minimumPerms.concat(requiredPerms);
         const missingPerms = [];
 
-        if (message.member.bot) {
-            command.botPerms.forEach(p => {
-                if (!message.channel.permissionsOf(this.client.user.id).has(p)) missingPerms.push(p);
-            });
-        } else {
-            command.userPerms.forEach(p => {
-                if (!message.channel.permissionsOf(message.author.id).has(p)) missingPerms.push(p);
-            });
-        }
+        pendingPerms.forEach(p => {
+            if (!channel.permissionsOf(user_id).has(p)) missingPerms.push(p);
+        });
 
         if (missingPerms.length > 0) return missingPerms;
+
+        return;
     }
 
 

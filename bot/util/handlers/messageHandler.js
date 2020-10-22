@@ -57,14 +57,14 @@ class MessageHandler {
                 'The category this command is apart of has been disabled by a server administrator.'
             );
 
-            const missingUserPerms = this.client.helpers.checkPermissions(command, message);
+            const missingUserPerms = this.client.helpers.checkPermissions(message.channel, message.author.id, command.userPerms);
             if (missingUserPerms) return message.channel.createMessage(
                 `You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
             );
 
-            const missingBotPerms = this.client.helpers.checkPermissions(command, message);
+            const missingBotPerms = this.client.helpers.checkPermissions(message.channel, this.client.user.id, command.botPerms);
             if (missingBotPerms) return message.channel.createMessage(
-                `I can't run this command because I lack these permissions: \`${missingUserPerms.join('`, `')}\``
+                `I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
             );
         }
 
@@ -80,14 +80,15 @@ class MessageHandler {
 
         // Cooldown
         if (this.client.cooldowns.get(command.name).has(message.author.id)) {
-            const init = this.client.cooldowns.get(command.name).get(message.author.id);
-            const curr = new Date();
-            const diff = Math.round((curr - init) / 1000);
-            const time = command.cooldown / 1000;
-            return message.channel.createMessage(`${message.author.mention}, this command is on cooldown! You'll be able to use it again in ${time - diff} seconds.`);
+            const timestamp = this.client.cooldowns.get(command.name).get(message.author.id);
+            const currentTime = Date.now();
+            const cooldown = command.cooldown / 1000;
+            const timePassed = Math.floor((currentTime - timestamp) / 1000);
+            return message.channel.createMessage(
+                `⏲️ ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
+            );
         } else {
             this.client.cooldowns.get(command.name).set(message.author.id, new Date());
-
             setTimeout(() => {
                 this.client.cooldowns.get(command.name).delete(message.author.id);
             }, this.client.commands.get(command.name).cooldown);
