@@ -78,6 +78,21 @@ class MessageHandler {
             return message.channel.createMessage('This command is unavailable in DM\'s, try running it in a server instead!');
         }
 
+        // Cooldown
+        if (this.client.cooldowns.get(command.name).has(message.author.id)) {
+            const init = this.client.cooldowns.get(command.name).get(message.author.id);
+            const curr = new Date();
+            const diff = Math.round((curr - init) / 1000);
+            const time = command.cooldown / 1000;
+            return message.channel.createMessage(`${message.author.mention}, this command is on cooldown! You'll be able to use it again in ${time - diff} seconds.`);
+        } else {
+            this.client.cooldowns.get(command.name).set(message.author.id, new Date());
+
+            setTimeout(() => {
+                this.client.cooldowns.get(command.name).delete(message.author.id);
+            }, this.client.commands.get(command.name).cooldown);
+        }
+
         try {
             command.run(this.client, message, args, data);
             this.client.logger.command(`Ran ${command.name}`);
