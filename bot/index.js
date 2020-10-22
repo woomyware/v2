@@ -1,6 +1,6 @@
 // Copyright 2020 Emily J. / mudkipscience and contributors. Subject to the AGPLv3 license.
 
-const Eris = require('eris-additions')(require('eris'));
+const Eris = (require('eris'));
 const CommandLoader = require('./util/commandLoader');
 const EventLoader = require('./util/eventLoader');
 const EventHandler = require('./util/handlers/eventHandler');
