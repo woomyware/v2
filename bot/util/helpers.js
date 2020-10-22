@@ -25,7 +25,7 @@ class Helpers {
 
     async awaitReply (message, question, limit = 60000) {
         const filter = (m) => m.author.id === message.author.id;
-        await message.channel.send(question);
+        await message.channel.createMessage(question);
 
         try {
             const collected = await message.channel.awaitMessages(filter, {
@@ -40,19 +40,20 @@ class Helpers {
         }
     }
 
-    searchForMembers (guild, query) {
+    /* this is an eris feature lmao
+    findMembers (guild, query) {
         query = query.toLowerCase();
 
         const matches = [];
         let match;
 
         try {
-            match = guild.members.cache.find(x => x.displayName.toLowerCase() == query);
-            if (!match) guild.members.cache.find(x => x.user.username.toLowerCase() == query);
+            match = guild.members.find(x => x.displayName.toLowerCase() == query);
+            if (!match) guild.members.find(x => x.user.username.toLowerCase() == query);
         } catch (err) {} //eslint-disable-line no-empty
 
         if (match) matches.push(match);
-        guild.members.cache.forEach(member => {
+        guild.members.forEach(member => {
             if (
                 (member.displayName.toLowerCase().startsWith(query) ||
                 member.user.tag.toLowerCase().startsWith(query)) &&
@@ -63,13 +64,13 @@ class Helpers {
         });
 
         return matches;
-    }
+    }*/
 
     findRole (input, message) {
         let role;
-        role = message.guild.roles.cache.find(r => r.name.toLowerCase() === input.toLowerCase());
+        role = message.guild.roles.find(r => r.name.toLowerCase() === input.toLowerCase());
         if (!role) {
-            role = message.guild.roles.cache.get(input.toLowerCase());
+            role = message.guild.roles.get(input.toLowerCase());
         }
         if (!role) return;
         return role;
@@ -95,11 +96,8 @@ class Helpers {
     }
 
     isDeveloper (id) {
-        if (this.client.config.ownerIDs.includes(id)) {
-            return true;
-        } else {
-            return false;
-        }
+        if (this.client.config.ownerIDs.includes(id)) return true;
+        return false;
     }
 
     shutdown () {
@@ -112,13 +110,11 @@ class Helpers {
             'Goodbye'
         ];
 
-        this.client.db.pool.end().then(() => {
-            this.client.logger.info('Connection to database closed.');
-        });
+        this.client.disconnect();
 
-        this.client.destroy();
+        this.client.logger.success('SHUTDOWN_SUCCESS', exitQuotes.random());
 
-        console.log(exitQuotes);
+        process.exit();
     }
 
     async clean (text) {
