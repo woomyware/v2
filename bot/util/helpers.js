@@ -1,3 +1,4 @@
+const { MessageCollector } = require('eris-collector');
 const { inspect, promisify } = require('util');
 
 class Helpers {
@@ -23,9 +24,9 @@ class Helpers {
         return messages.last().content;
     }
 
-    async awaitReply (message, question, limit = 60000) {
+    async awaitReply (message, input, limit = 60000) {
         const filter = (m) => m.author.id === message.author.id;
-        await message.channel.createMessage(question);
+        await message.channel.createMessage(input);
 
         try {
             const collected = await message.channel.awaitMessages(filter, {
