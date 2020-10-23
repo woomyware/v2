@@ -3,7 +3,6 @@ module.exports = class {
         this.name = name,
         this.category = category,
         this.enabled = true,
-        this.guildOnly = false,
         this.devOnly = true,
         this.aliases = [],
         this.userPerms = [],
