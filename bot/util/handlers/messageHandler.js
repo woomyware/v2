@@ -4,35 +4,28 @@ class MessageHandler {
     }
 
     async handle (message) {
-        if (message.author.bot) return;
+        if (message.author.bot) return; // Ignore bots
+        if (!message.guild) return; // Ignore DM's
 
-        const prefixes = [];
+        // Request all the data we need from the database
         const data = {};
-
         data.user = await this.client.db.getUser(message.author.id);
-        prefixes.push(data.user.prefix);
-
-        if (message.channel.guild) {
-            if (!message.channel.permissionsOf(this.client.user.id).has('sendMessages')) return;
-            data.guild = await this.client.db.getGuild(message.channel.guild.id);
-            data.member = await this.client.db.getMember(message.channel.guild.id, message.author.id);
-            prefixes.push(data.guild.prefix);
-
-            if (data.guild.blacklist.includes(message.author.id)) return;
-
-            if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
-                return message.channel.createMessage(`Hi! The server prefix is \`${data.guild.prefix}\`, and your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`);
-            }
-        }
+        data.guild = await this.client.db.getGuild(message.channel.guild.id);
+        data.member = await this.client.db.getMember(message.channel.guild.id, message.author.id);
         
-        if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
-            return message.channel.createMessage(`Hi! Your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`);
-        }
+        if (data.guild.blacklist.includes(message.author.id)) return; // Ignore users on the guild blocklist
 
-        prefixes.push(`<@${this.client.user.id}> `, `<@!${this.client.user.id}> `);
+        // All the prefixes Woomy will respond to
+        const prefixes = [
+            data.user.prefix,
+            data.guild.prefix,
+            `<@${this.client.user.id}> `,
+            `<@!${this.client.user.id}> `
+        ];
 
         let prefix;
 
+        // Check the message content to see if there
         for (const thisPrefix of prefixes) {
             if (message.content.startsWith(thisPrefix)) {
                 prefix = thisPrefix;
