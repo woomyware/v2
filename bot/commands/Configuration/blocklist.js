@@ -1,3 +1,5 @@
+const Embed = require('../../util/embed');
+
 module.exports = class {
     constructor (name, category) {
         this.name = name,
@@ -17,6 +19,19 @@ module.exports = class {
 
     async run (client, message, [action, ...user], data) {
         if (!action || action.toLowerCase() === 'list') {
+            const list = [];
+            for (const user in data.guild.blocklist) {
+                const userObj = message.channel.guild.members.get(user.id);
+                list.push(`${userObj.username}#${userObj.discriminator}`)
+            }
+
+            console.log(list)
+            const embed = new Embed()
+                .setTitle('')
+                .setDescription('```\n' + list.join(', ') + '```');
+                
+            message.channel.createMessage({ embed: embed });
+            
             return;
         }
 
