@@ -3,6 +3,8 @@
  * Link: https://github.com/riyacchi/chariot.js/blob/master/structures/ChariotEmbed.js
  */
 
+const Colours = require('../constants/colours.json');
+
 class Embed {
     constructor (data = {}) {
         this.fields = [];
@@ -28,21 +30,21 @@ class Embed {
      * @private
      * @param {*} color Any color which can be resolved 
      */
-    _resolveColor (color) {
-        if (typeof color === 'string') {
-            if (color === 'RANDOM') return Math.floor(Math.random() * (0xFFFFFF + 1));
-            color = Colors[color.toUpperCase()] || parseInt(color.replace('#', ''), 16);
+    _resolveColour (colour) {
+        if (typeof colour === 'string') {
+            if (colour === 'RANDOM') return Math.floor(Math.random() * (0xFFFFFF + 1));
+            colour = Colours[colour.toUpperCase()] || parseInt(colour.replace('#', ''), 16);
         }
 
-        return color;
+        return colour;
     }
 
     /**
      * Set the color of this Embed
      * @param {*} color Any color resolvable by this._resolveColor 
      */
-    setColor (color) {
-        this.color = this._resolveColor(color);
+    setColour (colour) {
+        this.colour = this._resolveColour(colour);
 
         return this;
     }
