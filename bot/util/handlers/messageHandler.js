@@ -15,7 +15,7 @@ class MessageHandler {
         data.member = await this.client.db.getMember(message.channel.guild.id, message.author.id);
         
         // Ignore users on the guild blocklist
-        if (data.guild.blacklist.includes(message.author.id)) return;
+        if (data.guild.blocklist.includes(message.author.id)) return;
 
         // If a user pings Woomy, respond to them with the prefixes they can use
         if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
@@ -57,32 +57,34 @@ class MessageHandler {
 
         // Both of these blocks check if the command is disabled/in a disabled category
         if (data.guild.disabledcommands.includes(command.name)) return message.channel.createMessage(
-            'This command has been disabled by a server administrator.'
+            this.client.constants.emojis.permError + ' This command has been disabled by a server administrator.'
         );
 
         if (data.guild.disabledcategories.includes(command.category)) return message.channel.createMessage(
-            'The category this command is apart of has been disabled by a server administrator.'
+            this.client.constants.emojis.permError + ' The category this command is apart of has been disabled by a server administrator.'
         );
 
         // Both of these blocks check the permissions of the user, and reply with missing perms if any are found
         const missingUserPerms = this.client.helpers.checkPermissions(message.channel, message.author.id, command.userPerms);
         if (missingUserPerms) return message.channel.createMessage(
-            `You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
+            `${this.client.constants.emojis.permError} You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
         );
 
         const missingBotPerms = this.client.helpers.checkPermissions(message.channel, this.client.user.id, command.botPerms);
         if (missingBotPerms) return message.channel.createMessage(
-            `I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
+            `${this.client.constants.emojis.permError} I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
         );
 
         // Return if the command is disabled globally
         if (command.enabled === false) return message.channel.createMessage(
-            'This command has been disabled by my developers.'
+            this.client.constants.emojis.permError + ' This command has been disabled by my developers.'
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
         if (command.devOnly === true && this.client.helpers.isDeveloper(message.author.id) !== true) {
-            return message.channel.send('This command\'s usage is restricted to developers only. Sorry!');
+            return message.channel.send(
+                this.client.constants.emojis.permError + ' This command\'s usage is restricted to developers only. Sorry!'
+            );
         } 
 
         // Cooldown
@@ -92,7 +94,7 @@ class MessageHandler {
             const cooldown = command.cooldown / 1000;
             const timePassed = Math.floor((currentTime - timestamp) / 1000);
             return message.channel.createMessage(
-                `⏲️ ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
+                `${this.client.constants.emojis.wait} ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
             );
         } else {
             this.client.cooldowns.get(command.name).set(message.author.id, new Date());
