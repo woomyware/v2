@@ -4,8 +4,9 @@ class MessageHandler {
     }
 
     async handle (message) {
-        if (message.author.bot) return; // Ignore bots
-        if (!message.guild) return; // Ignore DM's
+        // Ignore messages from bots, and messages in DM's
+        if (message.author.bot) return;
+        if (!message.channel.guild) return;
 
         // Request all the data we need from the database
         const data = {};
@@ -13,7 +14,15 @@ class MessageHandler {
         data.guild = await this.client.db.getGuild(message.channel.guild.id);
         data.member = await this.client.db.getMember(message.channel.guild.id, message.author.id);
         
-        if (data.guild.blacklist.includes(message.author.id)) return; // Ignore users on the guild blocklist
+        // Ignore users on the guild blocklist
+        if (data.guild.blacklist.includes(message.author.id)) return;
+
+        // If a user pings Woomy, respond to them with the prefixes they can use
+        if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
+            return message.channel.createMessage(
+                `Hi! Your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`
+            );
+        }
 
         // All the prefixes Woomy will respond to
         const prefixes = [
@@ -25,7 +34,7 @@ class MessageHandler {
 
         let prefix;
 
-        // Check the message content to see if there
+        // Check the message content to see if it starts with one of our prefixes
         for (const thisPrefix of prefixes) {
             if (message.content.startsWith(thisPrefix)) {
                 prefix = thisPrefix;
@@ -33,43 +42,48 @@ class MessageHandler {
             }
         }
 
+        // Ignore the message if it doesn't start with a valid prefix
         if (!prefix) return;
 
+        // Turn the message content into an array (excluding the prefix)
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
+
+        // Find the command
         const commandName = args.shift().toLowerCase();
         const command = this.client.commands.get(commandName) || this.client.commands.get(this.client.aliases.get(commandName));
     
+        // Return if a command (or its aliases) are not found
         if (!command) return;
 
-        if (message.channel.guild) {
-            if (data.guild.disabledcommands.includes(command.name)) return message.channel.createMessage(
-                'This command has been disabled by a server administrator.'
-            );
+        // Both of these blocks check if the command is disabled/in a disabled category
+        if (data.guild.disabledcommands.includes(command.name)) return message.channel.createMessage(
+            'This command has been disabled by a server administrator.'
+        );
 
-            if (data.guild.disabledcategories.includes(command.category)) return message.channel.createMessage(
-                'The category this command is apart of has been disabled by a server administrator.'
-            );
+        if (data.guild.disabledcategories.includes(command.category)) return message.channel.createMessage(
+            'The category this command is apart of has been disabled by a server administrator.'
+        );
 
-            const missingUserPerms = this.client.helpers.checkPermissions(message.channel, message.author.id, command.userPerms);
-            if (missingUserPerms) return message.channel.createMessage(
-                `You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
-            );
+        // Both of these blocks check the permissions of the user, and reply with missing perms if any are found
+        const missingUserPerms = this.client.helpers.checkPermissions(message.channel, message.author.id, command.userPerms);
+        if (missingUserPerms) return message.channel.createMessage(
+            `You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
+        );
 
-            const missingBotPerms = this.client.helpers.checkPermissions(message.channel, this.client.user.id, command.botPerms);
-            if (missingBotPerms) return message.channel.createMessage(
-                `I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
-            );
-        }
+        const missingBotPerms = this.client.helpers.checkPermissions(message.channel, this.client.user.id, command.botPerms);
+        if (missingBotPerms) return message.channel.createMessage(
+            `I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
+        );
 
-        if (command.enabled === false) return message.channel.createMessage('This command has been disabled by my developers.');
+        // Return if the command is disabled globally
+        if (command.enabled === false) return message.channel.createMessage(
+            'This command has been disabled by my developers.'
+        );
         
+        // Return if the command is restricted to developers (and the user is not a developer)
         if (command.devOnly === true && this.client.helpers.isDeveloper(message.author.id) !== true) {
             return message.channel.send('This command\'s usage is restricted to developers only. Sorry!');
         } 
-
-        if (command.guildOnly === true && !message.channel.guild) {
-            return message.channel.createMessage('This command is unavailable in DM\'s, try running it in a server instead!');
-        }
 
         // Cooldown
         if (this.client.cooldowns.get(command.name).has(message.author.id)) {
