@@ -9,7 +9,7 @@ module.exports = class {
         this.botPerms = [],
         this.cooldown = 5000,
         this.help = {
-            description: 'Sets your own personal prefix for woomy, that works in all servers and DM\'s.',
+            description: 'Sets your own personal prefix for woomy, that works across all the servers you\'re in!',
             usage: 'userprefix` <new prefix>',
             examples: 'userprefix w! - sets your personal prefix to woomy'
         };
@@ -24,6 +24,8 @@ module.exports = class {
 
         await client.db.updateUser(message.author.id, 'prefix', args[0]);
 
-        message.channel.createMessage(`Your personal prefix has been set to: \`${args[0]}\``);
+        message.channel.createMessage(
+            `${client.constants.emojis.success} Your personal prefix has been set to: \`${args[0]}\``
+        );
     }
 };
