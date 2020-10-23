@@ -3,12 +3,11 @@ module.exports = class {
         this.name = name,
         this.category = category,
         this.enabled = true,
-        this.guildOnly = false,
         this.devOnly = false,
         this.aliases = [],
         this.userPerms = [],
         this.botPerms = [],
-        this.cooldown = 10000,
+        this.cooldown = 5000,
         this.help = {
             description: 'Sets your own personal prefix for woomy, that works in all servers and DM\'s.',
             usage: 'userprefix` <new prefix>',
