@@ -6,19 +6,6 @@ class Helpers {
         this.client = client;
     }
 
-    /* Rewrite for Eris
-    userError (channel, cmd, error) {
-        const embed = new MessageEmbed()
-            .setColor('#EF5350')
-            .setTitle(`${cmd.help.name}:${cmd.help.category.toLowerCase()}`)
-            .setDescription(error)
-            .addField('**Usage**', cmd.help.usage)
-            .setFooter(`Run 'help ${cmd.help.name}' for more information.`);
-
-        channel.send(embed);
-    }
-    */
-
     async getLastMessage (channel) {
         const messages = await channel.messages.fetch({ limit: 2 });
         return messages.last().content;
@@ -41,37 +28,24 @@ class Helpers {
         }
     }
 
-    /* this is an eris feature lmao
-    findMembers (guild, query) {
-        query = query.toLowerCase();
+    highestRole (member) {
+        if (member.roles.length === 0) return member.guild.roles.find(r => r.name === '@everyone');
 
-        const matches = [];
-        let match;
+        let highestRole;
 
-        try {
-            match = guild.members.find(x => x.displayName.toLowerCase() == query);
-            if (!match) guild.members.find(x => x.user.username.toLowerCase() == query);
-        } catch (err) {} //eslint-disable-line no-empty
+        for (const roleID of member.roles) {
+            const role = member.guild.roles.get(roleID);
+            if (!highestRole || highestRole.position < role.position) highestRole = role;
+        }
+    
+        return highestRole;
+    }
 
-        if (match) matches.push(match);
-        guild.members.forEach(member => {
-            if (
-                (member.displayName.toLowerCase().startsWith(query) ||
-                member.user.tag.toLowerCase().startsWith(query)) &&
-                member.id != (match && match.id)
-            ) {
-                matches.push(member);
-            }
-        });
-
-        return matches;
-    }*/
-
-    findRole (input, message) {
+    findRole (input, guild) {
         let role;
-        role = message.guild.roles.find(r => r.name.toLowerCase() === input.toLowerCase());
+        role = guild.roles.find(r => r.name.toLowerCase() === input.toLowerCase());
         if (!role) {
-            role = message.guild.roles.get(input.toLowerCase());
+            role = guild.roles.get(input.toLowerCase());
         }
         if (!role) return;
         return role;
