@@ -99,6 +99,8 @@ class WoomyClient extends Eris.Client {
 // Initialize our client
 const client = new WoomyClient(config.token, { 
     maxShards: 'auto',
+    restMode: true,
+    //getAllUsers: true,
     defaultImageSize: 2048,
     intents: [
         'guilds',
