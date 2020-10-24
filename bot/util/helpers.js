@@ -28,6 +28,20 @@ class Helpers {
         }
     }
 
+    async getUser (userID) {
+        let user = this.client.users.get(userID);
+        if (!user) try {
+            console.log('Accessing REST API...');
+            user = await this.client.getRESTUser(userID);
+            this.client.users.add(user, this.client);
+        } catch (err) {
+            this.client.logger.error('REST_RETRIEVAL_ERROR', `Failed to retrieve a user from the REST API with the ID ${userID} (${err})`);
+            return;
+        }
+
+        return user;
+    }
+
     highestRole (member) {
         if (member.roles.length === 0) return member.guild.roles.find(r => r.name === '@everyone');
 
