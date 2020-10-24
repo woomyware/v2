@@ -1,163 +1,162 @@
-/**
- * Custom Discord Embed builder with color resolving from the Chariot.js Client framework
- * Link: https://github.com/riyacchi/chariot.js/blob/master/structures/ChariotEmbed.js
- */
+const colours = require('../constants/colours.json');
+const HEX_REGEX = /^#?([a-fA-F0-9]{6})$/;
+const URL_REGEX = /^http(s)?:\/\/[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
 
-const Colours = require('../constants/colours.json');
-
-class Embed {
+class RichEmbed {
+    /**
+     * @param {EmbedData} data
+     */
     constructor (data = {}) {
-        this.fields = [];
-        Object.assign(this, data);
-
-        return this;
+        if (data.title) this.title = data.title;
+        if (data.description) this.description = data.description;
+        if (data.url) this.url = data.url;
+        if (data.timestamp) this.timestamp = data.timestamp;
+        if (data.color) this.color = data.color;
+        if (data.footer) this.footer = data.footer;
+        if (data.image) this.image = data.image;
+        if (data.thumbnail) this.thumbnail = data.thumbnail;
+        if (data.author) this.author = data.author;
+        this.fields = data.fields || [];
     }
 
     /**
-     * Set the author of this Embed
-     * @param {string} name Name of the Author 
-     * @param {string} icon URL of the icon that should be used
-     * @param {string} url URL of the author if clicked
-     */
-    setAuthor (name, icon, url) {
-        this.author = { name, icon_url: icon, url };
-
-        return this;
-    }
-
-    /**
-     * Resolves a color to a usable "Discord readable" color
-     * @private
-     * @param {*} color Any color which can be resolved 
-     */
-    _resolveColour (colour) {
-        if (typeof colour === 'string') {
-            if (colour === 'RANDOM') return Math.floor(Math.random() * (0xFFFFFF + 1));
-            colour = Colours[colour.toUpperCase()] || parseInt(colour.replace('#', ''), 16);
-        }
-
-        return colour;
-    }
-
-    /**
-     * Set the color of this Embed
-     * @param {*} color Any color resolvable by this._resolveColor 
-     */
-    setColour (colour) {
-        this.colour = this._resolveColour(colour);
-
-        return this;
-    }
-
-    /**
-     * Set the description of this Embed
-     * @param {string} desc A description
-     */
-    setDescription (desc) {
-        this.description = desc.toString().substring(0, 2048);
-
-        return this;
-    }
-
-    /**
-     * Add a field to the Embed
-     * @param {string} name The name (or title if you will) of the field 
-     * @param {string} value The content of the field
-     * @param {boolean} inline Whether this field should be inline or not 
-     */
-    addField (name, value, inline = false) {
-        if (this.fields.length >= 25) {
-            return this;
-        } else if (!name) {
-            return this;
-        } else if (!value) {
-            return false;
-        }
-
-        this.fields.push({ name: name.toString().substring(0, 256), value: value.toString().substring(0, 1024), inline });
-
-        return this;
-    }
-
-    /**
-     * Add a blank field to the Embed
-     * @param {boolean} inline Whether this field should be inline or not 
-     */
-    addBlankField (inline = false) {
-        return this.addField('\u200B', '\u200B', inline);
-    }
-
-    /**
-     * Attaches a file to the Embed
-     * @param {*} file The file to be attached
-     */
-    attachFile (file) {
-        this.file = file;
-
-        return this;
-    }
-
-    /**
-     * Set the footer of this Embed
-     * @param {string} text The footer's text 
-     * @param {string} icon The URL of an icon that should be used in the footer
-     */
-    setFooter (text, icon) {
-        this.footer = { text: text.toString().substring(0, 2048), icon_url: icon };
-
-        return this;
-    }
-
-    /**
-     * Set the image of this Embed
-     * @param {string} url The image url  
-     */
-    setImage (url) {
-        this.image = { url };
-
-        return this;
-    }
-
-    /**
-     * Set the timestamp of this Embed
-     * @param {*} time A time resolvable, e.g. a UTC timestamp or epoch timestamps in MS  
-     */
-    setTimestamp (time = new Date()) {
-        this.timestamp = time;
-
-        return this;
-    }
-
-    /**
-     * Set the title of this Embed
-     * @param {string} title The title this Embed should have
+     * @param {String} title
      */
     setTitle (title) {
-        this.title = title.toString().substring(0, 256);
-
+        if (typeof title !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof title}'`);
+        if (title.length > 256) throw new RangeError('Embed titles cannot exceed 256 characters');
+        this.title = title;
         return this;
     }
 
     /**
-     * Set the thumbnail of this Embed
-     * @param {string} url The thumbnail URL of this Embed 
+     * @param {String} description
      */
-    setThumbnail (url) {
-        this.thumbnail = { url };
-
+    setDescription (description) {
+        if (typeof description !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof description}'`);
+        if (description.length > 2048) throw new RangeError('Embed titles cannot exceed 2048 characters');
+        this.description = description;
         return this;
     }
 
     /**
-     * Set the URL of this Embed
-     * @param {string} url The URL of this Embed 
+     * @param {String} url
      */
-    setUrl (url) {
+    setURL (url) {
+        if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
+        if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
         this.url = url;
+        return this;
+    }
 
+    /**
+     * @param {DateConstructor} [timestamp]
+     */
+    setTimestamp (timestamp = new Date()) {
+        if (Number.isNaN(new Date(timestamp).getTime())) throw new Error('Invalid Date');
+        this.timestamp = new Date(timestamp);
+        return this;
+    }
+
+    /**
+     * @param {String|Number} color
+     */
+    setColor (color) {
+        const resolvedColor = colours[color.toUpperCase()];
+        if (resolvedColor) color = resolvedColor;
+
+        if (typeof color !== 'string' && typeof color !== 'number') throw new TypeError(`Expected types 'string' or 'number', received type ${typeof color} instead`);
+        if (typeof color === 'number') {
+            if (color > 16777215 || color < 0) throw new RangeError('Invalid color');
+            this.color = color;
+        } else {
+            const match = color.match(HEX_REGEX);
+            if (!match) throw new Error('Invalid color');
+            this.color = parseInt(match[1], 16);
+        }
+
+        return this;
+    }
+
+    /**
+     * @param {String} text
+     * @param {String} [iconURL]
+     */
+    setFooter (text, iconURL) {
+        if (typeof text !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof text}`);
+        if (text.length > 2048) throw new RangeError('Embed footer texts cannot exceed 2048 characters');
+        this.footer = { text };
+
+        if (iconURL !== undefined) {
+            if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
+            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
+            this.footer.icon_url = iconURL;
+        }
+
+        return this;
+    }
+
+    /**
+     * @param {String} imageURL
+     */
+    setImage (imageURL) {
+        if (typeof imageURL !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof imageURL}`);
+        if (!imageURL.startsWith('attachment://') && !URL_REGEX.test(imageURL)) throw new Error('Not a well formed URL');
+        this.image = { url: imageURL };
+        return this;
+    }
+
+    /**
+     * @param {String} thumbnailURL
+     */
+    setThumbnail (thumbnailURL) {
+        if (typeof thumbnailURL !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof thumbnailURL}`);
+        if (!thumbnailURL.startsWith('attachment://') && !URL_REGEX.test(thumbnailURL)) throw new Error('Not a well formed URL');
+        this.thumbnail = { url: thumbnailURL };
+        return this;
+    }
+
+    /**
+     * @param {String} name
+     * @param {String} [url]
+     * @param {String} [iconURL]
+     */
+    setAuthor (name, url, iconURL) {
+        if (typeof name !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof name}`);
+        if (name.length > 256) throw new RangeError('Embed footer texts cannot exceed 2048 characters');
+        this.author = { name };
+
+        if (url !== undefined) {
+            if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
+            if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
+            this.author.url = url;
+        }
+
+        if (iconURL !== undefined) {
+            if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
+            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
+            this.author.icon_url = iconURL;
+        }
+
+        return this;
+    }
+
+    /**
+     * @param {String} name
+     * @param {String} value
+     * @param {Boolean} [inline]
+     */
+    addField (name, value, inline = false) {
+        if (this.fields.length >= 25) throw new RangeError('Embeds cannot contain more than 25 fields');
+        if (typeof name !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof name}`);
+        if (typeof value !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof value}`);
+        if (typeof inline !== 'boolean') throw new TypeError(`Expected type 'boolean', received type ${typeof inline}`);
+        if (name.length > 256) throw new RangeError('Embed field names cannot exceed 256 characters');
+        if (value.length > 1024) throw new RangeError('Embed field names cannot exceed 256 characters');
+
+        this.fields.push({ name, value, inline });
         return this;
     }
 }
 
-module.exports = Embed;
-
+module.exports = RichEmbed;
