@@ -25,13 +25,11 @@ module.exports = class {
                 list.push(`${user.username}#${user.discriminator}`);
             }
 
-            let description = 'The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!';
-
-            if (list.length > 0) description = '```' + list.join(', ') + '```';
+            if (list.length === 0) return message.channel.createMessage('The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!');
 
             const embed = new Embed()
                 .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
-                .setDescription(description)
+                .setDescription('```' + list.join(', ') + '```')
                 .setColor('PINK');
                 
             message.channel.createMessage({ embed: embed });
@@ -39,7 +37,7 @@ module.exports = class {
             return;
         }
 
-        if (user.length === 0) return message.channel.createMessage(
+        if (!user) return message.channel.createMessage(
             `${client.constants.emojis.userError} You didn't specify a user. Usage: \`${this.help.usage}\``
         );
 
@@ -51,9 +49,9 @@ module.exports = class {
             `${client.constants.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
         );
 
-        member = message.channel.guild.members.get(member.id);
-
         action = action.toLowerCase();
+
+        member = member[0];
 
         const blocklist = data.guild.blocklist;
 
