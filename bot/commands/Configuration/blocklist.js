@@ -20,15 +20,19 @@ module.exports = class {
     async run (client, message, [action, ...user], data) {
         if (!action || action.toLowerCase() === 'list') {
             const list = [];
-            for (const user in data.guild.blocklist) {
-                const userObj = message.channel.guild.members.get(user.id);
-                list.push(`${userObj.username}#${userObj.discriminator}`)
+            for (const userID of data.guild.blocklist) {
+                const user = await client.helpers.getUser(userID);
+                list.push(`${user.username}#${user.discriminator}`);
             }
 
-            console.log(list)
+            let description = 'The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!';
+
+            if (list.length > 0) description = '```' + list.join(', ') + '```';
+
             const embed = new Embed()
-                .setTitle('')
-                .setDescription('```\n' + list.join(', ') + '```');
+                .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
+                .setDescription(description)
+                .setColor('PINK');
                 
             message.channel.createMessage({ embed: embed });
             
@@ -36,7 +40,7 @@ module.exports = class {
         }
 
         if (user.length === 0) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn\'t specify a user. Usage: \`${this.help.usage}\``
+            `${client.constants.emojis.userError} You didn't specify a user. Usage: \`${this.help.usage}\``
         );
 
         let member = message.mentions[0];
