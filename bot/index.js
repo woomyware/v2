@@ -5,7 +5,7 @@ const CommandLoader = require('./util/commandLoader');
 const EventLoader = require('./util/eventLoader');
 const EventHandler = require('./util/handlers/eventHandler');
 const MessageHandler = require('./util/handlers/messageHandler');
-const Helpers = require('./util/helpers');
+const Functions = require('./util/functions');
 const Database = require('./util/database');
 const Logger = require('./util/logger');
 const sentry = require('@sentry/node');
@@ -27,7 +27,7 @@ class WoomyClient extends Eris.Client {
         this.constants = constants;
         this.logger = Logger;
         this.db = new Database(this);
-        this.helpers = new Helpers(this);
+        this.functions = new Functions(this);
         this.commandLoader = new CommandLoader(this);
         this.eventLoader = new EventLoader(this);
         this.eventHandler = new EventHandler(this);
@@ -100,7 +100,7 @@ class WoomyClient extends Eris.Client {
 const client = new WoomyClient(config.token, { 
     maxShards: 'auto',
     restMode: true,
-    getAllUsers: true,
+    //getAllUsers: true,
     defaultImageSize: 2048,
     intents: [
         'guilds',

@@ -19,14 +19,14 @@ module.exports = class {
         const code = args.join(' ');
         try {
             const evaled = eval(code);
-            const clean = await client.helpers.clean(evaled);
+            const clean = await client.functions.clean(evaled);
             const MAX_CHARS = 3 + 2 + clean.length + 3;
             if (MAX_CHARS > 2000) {
-                return message.channel.createMessage(undefined, { file: Buffer.from(clean), name:  'EVAL_SUCCESS.txt' });
+                return message.channel.createMessage(undefined, { file: Buffer.from(clean), name:  'EVAL_SUCCESS.js' });
             }
             message.channel.createMessage(`\`\`\`js\n${clean}\n\`\`\``);
         } catch (err) {
-            const e = await client.helpers.clean(err);
+            const e = await client.functions.clean(err);
             const MAX_CHARS = 3 + 2 + e.length + 3;
             if (MAX_CHARS > 2000) {
                 return message.channel.createMessage(undefined, { file: Buffer.from(e), name: 'EVAL_ERROR.txt' });

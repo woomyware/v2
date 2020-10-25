@@ -21,7 +21,7 @@ module.exports = class {
         if (!action || action.toLowerCase() === 'list') {
             const list = [];
             for (const userID of data.guild.blocklist) {
-                const user = await client.helpers.getUser(userID);
+                const user = await client.functions.getUser(userID);
                 list.push(`${user.username}#${user.discriminator}`);
             }
 
@@ -60,7 +60,7 @@ module.exports = class {
                 `${client.constants.emojis.userError} You can't block the owner, silly!`
             );
             
-            if (client.helpers.highestRole(member).position >= client.helpers.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
+            if (client.functions.highestRole(member).position >= client.functions.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
                 return message.channel.createMessage(`${client.constants.emojis.userError} This user has a higher role than you, you can't add them to the blocklist!`);
             }
 
@@ -81,7 +81,7 @@ module.exports = class {
         }
 
         if (action === 'remove') {            
-            if (client.helpers.highestRole(member).position >= client.helpers.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
+            if (client.functions.highestRole(member).position >= client.functions.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
                 return message.channel.createMessage(`${client.constants.emojis.userError} This user has a higher role than you, you can't remove them to the blocklist!`);
             }
 

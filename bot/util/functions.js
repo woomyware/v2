@@ -1,7 +1,7 @@
 // const { MessageCollector } = require('eris-collector');
 const { inspect, promisify } = require('util');
 
-class Helpers {
+class Functions {
     constructor (client) {
         this.client = client;
     }
@@ -144,4 +144,4 @@ class Helpers {
     }
 }
 
-module.exports = Helpers;
+module.exports = Functions;

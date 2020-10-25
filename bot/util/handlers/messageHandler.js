@@ -65,12 +65,12 @@ class MessageHandler {
         );
 
         // Both of these blocks check the permissions of the user, and reply with missing perms if any are found
-        const missingUserPerms = this.client.helpers.checkPermissions(message.channel, message.author.id, command.userPerms);
+        const missingUserPerms = this.client.functions.checkPermissions(message.channel, message.author.id, command.userPerms);
         if (missingUserPerms) return message.channel.createMessage(
             `${this.client.constants.emojis.permError} You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
         );
 
-        const missingBotPerms = this.client.helpers.checkPermissions(message.channel, this.client.user.id, command.botPerms);
+        const missingBotPerms = this.client.functions.checkPermissions(message.channel, this.client.user.id, command.botPerms);
         if (missingBotPerms) return message.channel.createMessage(
             `${this.client.constants.emojis.permError} I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
         );
@@ -81,7 +81,7 @@ class MessageHandler {
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
-        if (command.devOnly === true && this.client.helpers.isDeveloper(message.author.id) !== true) {
+        if (command.devOnly === true && this.client.functions.isDeveloper(message.author.id) !== true) {
             return message.channel.createMessage(
                 this.client.constants.emojis.permError + ' This command\'s usage is restricted to developers only. Sorry!'
             );
