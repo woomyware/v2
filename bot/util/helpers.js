@@ -1,4 +1,4 @@
-const { MessageCollector } = require('eris-collector');
+// const { MessageCollector } = require('eris-collector');
 const { inspect, promisify } = require('util');
 
 class Helpers {
@@ -26,20 +26,6 @@ class Helpers {
         } catch (err) {
             return false;
         }
-    }
-
-    async getUser (userID) {
-        let user = this.client.users.get(userID);
-        if (!user) try {
-            console.log('Accessing REST API...');
-            user = await this.client.getRESTUser(userID);
-            this.client.users.add(user, this.client);
-        } catch (err) {
-            this.client.logger.error('REST_RETRIEVAL_ERROR', `Failed to retrieve a user from the REST API with the ID ${userID} (${err})`);
-            return;
-        }
-
-        return user;
     }
 
     highestRole (member) {
@@ -104,6 +90,36 @@ class Helpers {
         this.client.logger.success('SHUTDOWN_SUCCESS', exitQuotes.random());
 
         process.exit();
+    }
+
+    async getUser (id) {
+        if (this.client.users.has(id)) return this.client.users.get(id);
+        this.client.logger.debug('REST_FETCH_USER', 'Accessing rest API...');
+        const user = await this.client.getRESTUser(id).catch(err => {
+            this.client.logger.error('USER_FETCH_ERROR', err);
+        });
+        
+        if (user) {
+            this.client.users.set(id, user);
+            return user;
+        }
+
+        return;
+    }
+    
+    async getGuild (id) {
+        if (this.client.guilds.has(id)) return this.client.guilds.get(id);
+        this.client.logger.debug('REST_FETCH_GUILD', 'Accessing rest API...');
+        const guild = await this.client.getRESTGuild(id).catch(err => {
+            this.client.logger.error('GUILD_FETCH_ERROR', err);
+        });
+        
+        if (guild) {
+            this.client.guilds.set(id, guild);
+            return guild;
+        }
+
+        return;
     }
 
     async clean (text) {
