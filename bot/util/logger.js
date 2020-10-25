@@ -1,6 +1,7 @@
 /**
  * Colorful logger class from the Chariot.js Client framework featuring various log levels.
  * Link: https://github.com/riyacchi/chariot.js/master/helpers/Logger.js
+ * This file is licensed under the AGPLv3 license (same as the Woomy project)
  */
 
 const chalk = require('chalk');
