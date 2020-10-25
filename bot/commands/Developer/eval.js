@@ -22,7 +22,7 @@ module.exports = class {
             const clean = await client.helpers.clean(evaled);
             const MAX_CHARS = 3 + 2 + clean.length + 3;
             if (MAX_CHARS > 2000) {
-                message.channel.createMessage(undefined, { file: Buffer.from(clean), name:  'EVAL_SUCCESS.txt' });
+                return message.channel.createMessage(undefined, { file: Buffer.from(clean), name:  'EVAL_SUCCESS.txt' });
             }
             message.channel.createMessage(`\`\`\`js\n${clean}\n\`\`\``);
         } catch (err) {
