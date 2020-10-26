@@ -20,7 +20,7 @@ class MessageHandler {
         // If a user pings Woomy, respond to them with the prefixes they can use
         if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
             return message.channel.createMessage(
-                `Hi! Your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`
+                `Hi! The prefix for this server is \`${data.guild.prefix}\`, and your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`
             );
         }
 
@@ -81,7 +81,7 @@ class MessageHandler {
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
-        if (command.devOnly === true && this.client.functions.isDeveloper(message.author.id) === true) {
+        if (command.devOnly === true && this.client.functions.isDeveloper(message.author.id) !== true) {
             return message.channel.createMessage(
                 `${this.client.constants.emojis.permError} ${message.author.username} is not in the sudoers file. This incident will be reported.`
             );
