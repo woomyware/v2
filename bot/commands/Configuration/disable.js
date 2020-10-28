@@ -4,8 +4,8 @@ module.exports = class {
         this.category = category,
         this.enabled = true,
         this.devOnly = false,
-        this.aliases = [],
-        this.userPerms = [],
+        this.aliases = ['disabled'],
+        this.userPerms = ['administrator'],
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
@@ -15,58 +15,80 @@ module.exports = class {
         };
     }
 
-    async run (client, message, [action, ...toDisable], data) {
+    async run (client, message, args, data) {
         const essential = {
             categories: ['Configuration', 'Developer'],
             commands: ['help']
         };
 
-        if (!action || action.toLowerCase() === 'list') {
+        if (!args[0] || args[0].toLowerCase() === 'list') {
             return;
         }
 
-        if (!toDisable) return message.channel.createMessage(
+        if (!args[1]) return message.channel.createMessage(
             `${client.constants.emojis.userError} You didn't specify what command/category to disable. Usage: \`${this.help.usage}\``
         );
 
-        if (action.toLowerCase() === 'command' || action.toLowerCase() === 'cmd') {
+        if (args[0].toLowerCase() === 'command' || args[0].toLowerCase() === 'cmd') {
             const disabled = data.guild.disabledcommands;
-            const notFound = [];
-            const alreadyDisabled = [];
-            const cannotDisable = [];
 
-            for (let cmd of toDisable) {
-                cmd = cmd.toLowerCase();
-                let command;
+            let command;
 
-                if (client.commands.has(cmd)) {
-                    command = client.commands.get(cmd);
-                } else if (client.aliases.has(cmd)) {
-                    command = client.commands.get(client.aliases.get(cmd));
-                }
-                
-                if (!command) {
-                    notFound.push(cmd);
-                    toDisable.remove(cmd);
-                }
-
-                if (essential.commands.includes(command.name) || essential.categories.includes(command.category)) {
-                    cannotDisable.push(cmd);
-                    toDisable.remove(cmd);
-                }
-
-                if (disabled.includes(cmd)) {
-                    alreadyDisabled.push(cmd);
-                    toDisable.remove(cmd);
-                }
+            if (client.commands.has(args[1])) {
+                command = client.commands.get(args[1]);
+            } else if (client.aliases.has(args[1])) {
+                command = client.commands.get(client.aliases.get(args[1]));
             }
-            
-            if (toDisable.length > 0) {
-                const push = disabled.concat(toDisable);
-                await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', push);
-                
+
+            if (!command) return message.channel.createMessage(
+                `${client.constants.emojis.userError} ${args[1]} isn't a command or an alias, are you sure you spelt it correctly?`
+            );
+
+            if (essential.commands.includes(command.name) || essential.categories.includes(command.category)) {
+                return message.channel.createMessage(
+                    `${client.constants.emojis.userError} This command is essential and cannot be disabled. Sorry!`
+                );
             }
+
+            if (disabled.includes(command.name)) return message.channel.createMessage(
+                `${client.constants.emojis.userError} This command is already disabled.`  
+            );
+
+            disabled.push(command.name);
+
+            await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
+
+            return message.channel.createMessage(
+                `${client.constants.emojis.success} Added **${args[1]}** to the list of disabled commands for this server.`
+            );
+        }
+
+        if (args[0].toLowerCase() === 'category' || args[0].toLowerCase() === 'cat') {
+            const disabled = data.guild.disabledcommands;
+
+            let command;
+
+            if (client.commands.has(args[1])) {
+                command = client.commands.get(args[1]);
+            } else if (client.aliases.has(args[1])) {
+                command = client.commands.get(client.aliases.get(args[1]));
+            }
+
+            if (!command) return message.channel.createMessage(
+                `${client.constants.emojis.userError} ${args[1]} isn't a category, are you sure you spelt it correctly?`
+            );
+
+            if (!disabled.includes(command.name)) return message.channel.createMessage(
+                `${client.constants.emojis.userError} This category isn't disabled.`  
+            );
+
+            disabled.remove(command.name);
+
+            await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
             
+            return message.channel.createMessage(
+                `${client.constants.emojis.success} Added **${args[1]}** to the list of disabled category for this server!`
+            );
         }
     }
-}
+};
