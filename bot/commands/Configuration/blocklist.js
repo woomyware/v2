@@ -30,7 +30,7 @@ module.exports = class {
             const embed = new Embed()
                 .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
                 .setDescription('```' + list.join(', ') + '```')
-                .setColor('PINK');
+                .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
                 
             message.channel.createMessage({ embed: embed });
             

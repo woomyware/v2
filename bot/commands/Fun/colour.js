@@ -39,7 +39,7 @@ module.exports = class {
 
         const embed = new Embed()
             .setTitle(colour)
-            .setColor(colour)
+            .setColour(colour)
             .setImage(`https://fakeimg.pl/256x256/${colour.replace('#', '')}/?text=%20`);
         
         message.channel.createMessage({ embed: embed });

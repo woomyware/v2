@@ -28,7 +28,7 @@ module.exports = class {
                 .then(json => {
                     const embed = new Embed()
                         .setTitle(`${json.data.name} (No. ${json.data.number})`)
-                        .setColor(client.functions.randomColour())
+                        .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                         .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
                         .setImage(json.data.image.src);
                     message.channel.createMessage({ embed: embed });

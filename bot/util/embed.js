@@ -59,9 +59,9 @@ class RichEmbed {
     /**
      * @param {String|Number} color
      */
-    setColor (color) {
-        const resolvedColor = colours[color.toUpperCase()];
-        if (resolvedColor) color = resolvedColor;
+    setColour (color) {
+        const resolvedColour = colours[color.toUpperCase()];
+        if (resolvedColour) color = resolvedColour;
 
         if (typeof color !== 'string' && typeof color !== 'number') throw new TypeError(`Expected types 'string' or 'number', received type ${typeof color} instead`);
         if (typeof color === 'number') {
