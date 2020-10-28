@@ -4,14 +4,15 @@
   "description": "Made with <3 by mudkipscience",
   "main": "index.js",
   "dependencies": {
-    "@sentry/node": "^5.26.0",
+    "@sentry/node": "^5.27.1",
     "chalk": "^4.1.0",
     "eris": "^0.13.3",
     "eris-collector": "^1.0.1",
-    "eslint": "^7.11.0",
+    "eslint": "^7.12.1",
     "fs-readdir-recursive": "^1.1.0",
     "js-yaml": "^3.14.0",
-    "pg": "^8.4.1",
+    "node-fetch": "^2.6.1",
+    "pg": "^8.4.2",
     "pg-format": "^1.0.4"
   },
   "devDependencies": {},
