@@ -1,6 +1,5 @@
 const colours = require('../constants/colours.json');
-const HEX_REGEX = /^#?([a-fA-F0-9]{6})$/;
-const URL_REGEX = /^http(s)?:\/\/[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
+const HEX_REGEX = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 class RichEmbed {
     /**
@@ -44,7 +43,6 @@ class RichEmbed {
      */
     setURL (url) {
         if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
-        if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
         this.url = url;
         return this;
     }
@@ -89,7 +87,6 @@ class RichEmbed {
 
         if (iconURL !== undefined) {
             if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
-            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
             this.footer.icon_url = iconURL;
         }
 
@@ -110,7 +107,6 @@ class RichEmbed {
      */
     setThumbnail (thumbnailURL) {
         if (typeof thumbnailURL !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof thumbnailURL}`);
-        if (!thumbnailURL.startsWith('attachment://') && !URL_REGEX.test(thumbnailURL)) throw new Error('Not a well formed URL');
         this.thumbnail = { url: thumbnailURL };
         return this;
     }
@@ -127,13 +123,11 @@ class RichEmbed {
 
         if (url !== undefined) {
             if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
-            if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
             this.author.url = url;
         }
 
         if (iconURL !== undefined) {
             if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
-            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
             this.author.icon_url = iconURL;
         }
 
