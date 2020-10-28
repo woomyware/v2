@@ -109,8 +109,7 @@ const client = new WoomyClient(config.token, {
         'guildVoiceStates',
         'guildMessages',
         'guildMessageReactions',
-        'directMessages',
-        'directMessageReactions'
+        'guildMessageTyping'
     ]
 });
 
