@@ -28,6 +28,11 @@ class Functions {
         }
     }
 
+    randomColour () {
+        const n = (Math.random() * 0xfffff * 1000000).toString(16);
+        return '#' + n.slice(0, 6);
+    }
+
     highestRole (member) {
         if (member.roles.length === 0) return member.guild.roles.find(r => r.name === '@everyone');
 
@@ -64,7 +69,6 @@ class Functions {
 
         return;
     }
-
 
     intBetween (min, max) {
         return Math.round((Math.random() * (max - min) + min));
