@@ -10,7 +10,7 @@ CREATE TABLE guilds(
     chatlogsChannel bigint DEFAULT NULL,
     modlogsChannel bigint DEFAULT NULL,
     starboardChannel bigint DEFAULT NULL,
-    blacklist bigint[] DEFAULT '{}',
+    blocklist bigint[] DEFAULT '{}',
     disabledCommands text[] DEFAULT '{}',
     disabledCategories text[] DEFAULT '{}',
     PRIMARY KEY (guild_id)
