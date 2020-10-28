@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // Don't modify the name or category variables, they are set automatically by the loaders.
 module.exports = class {
     constructor (name, category) {
@@ -19,7 +17,7 @@ module.exports = class {
     }
 
     // Main function that is called by the message handler when the command is executed
-    run (client, message, args, data) {
+    run (client, message, args, data) { //eslint-disable-line no-unused-vars
         
     }
 };
