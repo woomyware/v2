@@ -33,6 +33,21 @@ class Functions {
         return '#' + n.slice(0, 6);
     }
 
+    roleObjects (guild, roles) {
+        const roleMap = roles.map(roleID => guild.roles.get(roleID));
+        return roleMap.sort((a, b) => b.position - a.position);
+    }   
+
+    displayHexColour (guild, userID) {
+        const roles = this.roleObjects(guild, guild.members.get(userID).roles);
+        for (const object of roles) {
+            if (object.color !== 0) return '#' + object.color.toString(16);
+        }
+
+        const colours = Object.keys(this.client.constants.colours);
+        return this.client.constants.colours[colours[ colours.length * Math.random() << 0]];
+    }
+
     highestRole (member) {
         if (member.roles.length === 0) return member.guild.roles.find(r => r.name === '@everyone');
 
