@@ -35,9 +35,12 @@ module.exports = class {
             embed.setTitle('Help & Commands');
             embed.setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
             embed.setDescription(
-                `» Use \`${message.prefix}help [category]\` to get basic information on all commands in the category.   
+                `
+                » Use \`${message.prefix}help [category]\` to get basic information on all commands in the category.   
                 » Use \`${message.prefix}help [command]\` to get full information on a specific command.
-                » [Click here](https://discord.gg/HCF8mdv) to join my Discord server if you need help, or just want to hang out!`
+                » [Click here](https://discord.gg/HCF8mdv) to join my Discord server if you need help, or just want to hang out!
+                » [Click here](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=2134240503&scope=bot) to invite me to your server!
+                ‏‏‎ ‎`
             );
             categories.forEach(category => {
                 embed.addField(`${prettified[category].emoji} **${category}**`, `*${prettified[category].description}*\n${client.commands.filter(cmd => cmd.category === category).length} commands`, true);
