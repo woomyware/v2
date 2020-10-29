@@ -45,6 +45,11 @@ class MessageHandler {
         // Ignore the message if it doesn't start with a valid prefix
         if (!prefix) return;
 
+        // Save prefix so we can use it later (mostly for help command)
+        if (prefix === `<@${this.client.user.id}> ` || prefix === `<@!${this.client.user.id}> `) {
+            message.prefix = '@Woomy ';
+        } else (message.prefix = prefix);
+
         // Turn the message content into an array (excluding the prefix)
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
 
