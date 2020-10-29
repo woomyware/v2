@@ -2,17 +2,22 @@ developmentMode: true
 token: ''
 ownerIDs: 
   - ''
+  - ''
+
+keys:
+  sentry: ''
+  weather: ''
 
 postgresOptions:
   user: ''
   host: ''
   database: ''
   password: ''
-  port:
-
+  port: 
+  
 lavalinkNodes:
-  - node_1:
-      name: ''
-      host: ''
-      port: 
-      auth: ''
+  node_1:
+    name: ''
+    host: ''
+    port: 
+    auth: ''
