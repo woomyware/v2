@@ -1,0 +1,91 @@
+const Embed = require('../../util/embed');
+const prettified = require ('../../assets/constants/categories.json');
+
+module.exports = class {
+    constructor (name, category) {
+        this.name = name,
+        this.category = category,
+        this.enabled = true,
+        this.devOnly = false,
+        this.aliases = [],
+        this.userPerms = [],
+        this.botPerms = [],
+        this.cooldown = 2000,
+        this.help = {
+            description: 'meta :P',
+            arguments: '[command/category]',
+            details: 'details',
+            examples: 'examples'
+        };
+    }
+
+    run (client, message, args, data) { //eslint-disable-line no-unused-vars
+        const commands = client.commands;
+        const categories = [];
+
+        commands.forEach(cmd => {
+            if (!categories.includes(cmd.category)) {
+                if (cmd.category === 'Developer' && !client.config.ownerIDs.includes(message.author.id)) return;
+                categories.push(cmd.category);
+            } 
+        });
+
+        if (!args[0]) {
+            const embed = new Embed();
+            embed.setTitle('Help & Commands');
+            embed.setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
+            embed.setDescription(
+                `» Use \`${message.prefix}help [category]\` to get basic information on all commands in the category.   
+                » Use \`${message.prefix}help [command]\` to get full information on a specific command.
+                » [Click here](https://discord.gg/HCF8mdv) to join my Discord server if you need help, or just want to hang out!`
+            );
+            categories.forEach(category => {
+                embed.addField(`${prettified[category].emoji} **${category}**`, `*${prettified[category].description}*\n${client.commands.filter(cmd => cmd.category === category).length} commands`, true);
+            });
+            embed.setFooter('<> = required, / = either/or, [] = optional');
+
+            return message.channel.createMessage({ embed: embed });
+        }
+
+        const cat = args[0].toProperCase();
+        const cmd = args[0].toLowerCase();
+
+        if (categories.includes(cat)) {
+            let cmds = '';
+            const filteredCmds = client.commands.filter(cmd => cmd.category === cat);
+
+            filteredCmds.forEach(cmd => {
+                let params = '';
+                if (cmd.help.arguments.length > 0) params = '`' + cmd.help.arguments + '`';
+                cmds += `**${message.prefix + cmd.name}** ${params} ✦ ${cmd.help.description}\n`;
+            });
+
+            const embed = new Embed()
+                .setTitle(prettified[cat].emoji + ' ' + cat)
+                .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                .setDescription(cmds)
+                .setFooter('<> = required, / = either/or, [] = optional');
+            
+            return message.channel.createMessage({ embed: embed });
+        }
+
+        if (client.commands.has(cmd) || client.aliases.has(cmd)) {
+            const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+            const embed = new Embed()
+                .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
+                .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                .setDescription(command.help.description)
+                .addField('**Format:**', `\`${message.prefix + command.name} ${command.help.arguments}`.trim() + '`');
+            if (command.help.details.length > 0) embed.addField('**Parameters:**', command.help.details);
+            if (command.help.examples.length > 0) embed.addField('**Examples**', command.help.examples);
+            if (command.aliases.length > 0) embed.addField('**Aliases:**', '`' + command.aliases.join('`, `') + '`');
+            if (command.userPerms.length > 0) embed.addField('**User permissions:**', command.userPerms.join(', '), true);
+            if (command.botPerms.length > 0) embed.addField('**Bot permissions:', command.botPerms.join(', '), true);
+            embed.addField('**Cooldown:**', `${command.cooldown / 1000} seconds`, true);
+            embed.setFooter('<> = required, / = either/or, [] = optional');
+            return message.channel.createMessage({ embed: embed });
+        }
+
+        return message.channel.createMessage(`${client.constants.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
+    }
+};
