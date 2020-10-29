@@ -40,6 +40,8 @@ module.exports = class {
                 » Use \`${message.prefix}help [command]\` to get full information on a specific command.
                 » [Click here](https://discord.gg/HCF8mdv) to join my Discord server if you need help, or just want to hang out!
                 » [Click here](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=2134240503&scope=bot) to invite me to your server!
+                \n**News:**
+                A massive update has just been released! Lots of commands and features have been added or redone and my code has been rewritten to use lots of cool new stuff. To view the full changelog, run \`changelog\`
                 ‏‏‎ ‎`
             );
             categories.forEach(category => {
