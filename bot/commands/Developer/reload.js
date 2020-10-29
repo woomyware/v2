@@ -10,7 +10,8 @@ module.exports = class {
         this.cooldown = 0,
         this.help = {
             description: 'Reloads all commands and event modules.',
-            usage: 'reload',
+            arguments: '',
+            details: '',
             examples: undefined
         };
     }

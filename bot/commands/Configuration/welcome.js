@@ -9,13 +9,14 @@ module.exports = class {
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
-            description: 'description',
-            usage: 'usage',
-            examples: 'examples'
+            description: '',
+            arguments: '',
+            details: '',
+            examples: ''
         };
     }
 
-    run (client, message, args, data) {
+    run (client, message, args, data) { //eslint-disable-line no-unused-vars
         
     }
 };

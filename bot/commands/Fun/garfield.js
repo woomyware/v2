@@ -13,7 +13,8 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'Sends you a strip from the best comic ever',
-            usage: 'garfield <daily>',
+            arguments: '[daily]',
+            details: '',
             examples: '`garfield` - sends a random garfield comic strip\n`garfield daily` - sends the daily strip'
         };
     }
@@ -22,19 +23,18 @@ module.exports = class {
         let date = 'xxxx';
         if (args[0] && args[0].toLowerCase() === 'daily') date = new Date();
         message.channel.sendTyping();
-        try {
-            fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date)
-                .then(res => res.json())
-                .then(json => {
-                    const embed = new Embed()
-                        .setTitle(`${json.data.name} (No. ${json.data.number})`)
-                        .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
-                        .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
-                        .setImage(json.data.image.src);
-                    message.channel.createMessage({ embed: embed });
-                });
-        } catch (err) {
-            message.channel.send(`${client.constants.emojis.botError} An error has occurred: ${err}`);
-        }
+        fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date)
+            .then(res => res.json())
+            .then(json => {
+                const embed = new Embed()
+                    .setTitle(`${json.data.name} (No. ${json.data.number})`)
+                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                    .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
+                    .setImage(json.data.image.src);
+                message.channel.createMessage({ embed: embed });
+            })
+            .catch(err => {
+                message.channel.createMessage(`${client.constants.emojis.botError} An error has occurred: ${err}`);
+            });
     }
 };

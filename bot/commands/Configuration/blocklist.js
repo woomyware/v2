@@ -12,7 +12,8 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'Add, remove or list users on the blocklist for this server. User\'s on the blocklist cannot use my commands.',
-            usage: 'blocklist <add | remove | list> <user>',
+            arguments: '<add | remove | list> <user>',
+            details: '',
             examples: 'blocklist list\nblocklist add @Veemo\nblocklist remove emily'
         };
     }

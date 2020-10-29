@@ -10,13 +10,14 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'Test response time between Woomy and Discord.',
-            usage: 'ping',
-            examples: null
+            arguments: '',
+            details: '',
+            examples: ''
         };
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        message.channel.createMessage(client.constants.responses.ping.random())
+        message.channel.createMessage(client.constants.replies.ping.random())
             .then(m => {
                 m.edit(`${m.content} \`roundtrip: ${m.timestamp - message.timestamp}ms | websocket: ${message.channel.guild.shard.latency}ms\``);
             });

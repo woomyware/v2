@@ -10,7 +10,8 @@ module.exports = class {
         this.cooldown = 5000,
         this.help = {
             description: 'Sets your own personal prefix for woomy, that works across all the servers you\'re in!',
-            usage: 'userprefix` <new prefix>',
+            arguments: '[new prefix]',
+            details: '',
             examples: 'userprefix w! - sets your personal prefix to woomy'
         };
     }

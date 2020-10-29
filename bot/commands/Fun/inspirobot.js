@@ -11,8 +11,9 @@ module.exports = class {
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
-            description: 'Generates a random (and likely terrible) inspirational quote. Makes use of the Inspirobot API.',
-            usage: 'inspirobot',
+            description: 'Generates a random (and likely terrible) inspirational quote.',
+            arguments: '',
+            details: '',
             examples: null
         };
     }

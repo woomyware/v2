@@ -10,8 +10,9 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'Say hi!',
-            usage: 'hello',
-            examples: null
+            arguments: 'hello',
+            details: '',
+            examples: ''
         };
     }
 

@@ -10,7 +10,8 @@ module.exports = class {
         this.cooldown = 0,
         this.help = {
             description: 'Evalutes and executes JavaScript code.',
-            usage: 'eval <code>',
+            arguments: '<code>',
+            details: '',
             examples: 'eval this.client.deleteCapitalism()'
         };
     }

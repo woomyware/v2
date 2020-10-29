@@ -12,7 +12,8 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'Shows you colours that can be random, a hex code or generated from the words you type into the command.',
-            usage: 'colour <hexcode | text>',
+            arguments: '[hexcode/text]',
+            details: '',
             examples: '`colour` - generates a random colour\n`colour #ee79ff` - Displays the colour of this hexcode\n`colour alpaca` - Generates a colour from the word alpaca'
         };
     }

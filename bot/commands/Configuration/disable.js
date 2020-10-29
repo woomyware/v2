@@ -10,7 +10,8 @@ module.exports = class {
         this.cooldown = 2000,
         this.help = {
             description: 'description',
-            usage: 'usage',
+            arguments: '[command/category]',
+            details: '`command/category` - choose whether to disable a command or a category.',
             examples: 'examples'
         };
     }
