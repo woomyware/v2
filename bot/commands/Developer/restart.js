@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 module.exports = class {
     constructor (name, category) {
         this.name = name,
@@ -17,6 +19,15 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
+        client.logger.success('RESTART', 'Restart command recieved. ' + client.constants.exitQuotes.random());
+        client.disconnect();
+        client.functions.wait();
         
+        fetch('https://gamecp.apex.to/api/client/servers/1fc76afa-9a4d-497b-983a-a898795ab5b5/power', {
+            method: 'post',
+            body: JSON.stringify({ 'signal': 'restart' }),
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${client.config.server}` }
+        });
+        //-H 'Authorization: Bearer <snip>' -H "Content-Type: application/json" -d '{"signal": "restart"}'
     }
 };
