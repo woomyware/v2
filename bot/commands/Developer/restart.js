@@ -28,6 +28,5 @@ module.exports = class {
             body: JSON.stringify({ 'signal': 'restart' }),
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${client.config.server}` }
         });
-        //-H 'Authorization: Bearer <snip>' -H "Content-Type: application/json" -d '{"signal": "restart"}'
     }
 };
