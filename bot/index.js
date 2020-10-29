@@ -10,7 +10,7 @@ const Database = require('./util/database');
 const Logger = require('./util/logger');
 const sentry = require('@sentry/node');
 const yaml = require('js-yaml');
-const constants = require('./constants');
+const constants = require('./assets/constants');
 const config = yaml.safeLoad(require('fs').readFileSync('../botconfig.yml', 'utf8'));
 const version = require('../package.json').version;
 
