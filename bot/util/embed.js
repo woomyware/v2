@@ -1,4 +1,4 @@
-const colours = require('../constants/colours.json');
+const colours = require('../assets/constants/colours.json');
 const HEX_REGEX = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 class RichEmbed {
@@ -141,9 +141,9 @@ class RichEmbed {
      */
     addField (name, value, inline = false) {
         if (this.fields.length >= 25) throw new RangeError('Embeds cannot contain more than 25 fields');
-        if (typeof name !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof name}`);
-        if (typeof value !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof value}`);
-        if (typeof inline !== 'boolean') throw new TypeError(`Expected type 'boolean', received type ${typeof inline}`);
+        if (typeof name !== 'string') throw new TypeError(`Name field expected type 'string', received type ${typeof name}`);
+        if (typeof value !== 'string') throw new TypeError(`Value field expected type 'string', received type ${typeof value}`);
+        if (typeof inline !== 'boolean') throw new TypeError(`Inline field expected type 'boolean', received type ${typeof inline}`);
         if (name.length > 256) throw new RangeError('Embed field names cannot exceed 256 characters');
         if (value.length > 1024) throw new RangeError('Embed field names cannot exceed 256 characters');
 
