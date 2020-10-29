@@ -22,5 +22,9 @@
     "Test": {
         "emoji": "⚠️",
         "description": "aaaAAAAAaaaA"
+    },
+    "Utility": {
+        "emoji": "🔦",
+        "description": "Useful commands that don't fit in elsewhere"
     }
 }
