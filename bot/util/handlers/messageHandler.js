@@ -81,7 +81,7 @@ class MessageHandler {
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
-        if (command.devOnly === true && this.client.functions.isDeveloper(message.author.id) !== true) {
+        if (command.devOnly === true && this.client.config.ownerIDs.includes(message.author.id) !== true) {
             return message.channel.createMessage(
                 `${this.client.constants.emojis.permError} ${message.author.username} is not in the sudoers file. This incident will be reported.`
             );
