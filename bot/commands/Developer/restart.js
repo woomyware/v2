@@ -4,21 +4,19 @@ module.exports = class {
         this.category = category,
         this.enabled = true,
         this.devOnly = true,
-        this.aliases = [],
+        this.aliases = ['reboot'],
         this.userPerms = [],
         this.botPerms = [],
         this.cooldown = 0,
         this.help = {
-            description: 'Reloads all commands and event modules.',
+            description: 'Restarts Woomy.',
             arguments: '',
             details: '',
-            examples: '',
+            examples: ''
         };
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        client.commandLoader.reloadCommands();
-        client.eventLoader.reloadEventModules();
-        message.channel.createMessage('All commands and event modules have been reloaded!');
+        
     }
 };
