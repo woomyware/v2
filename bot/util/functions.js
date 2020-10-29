@@ -89,11 +89,6 @@ class Functions {
         return Math.round((Math.random() * (max - min) + min));
     }
 
-    isDeveloper (id) {
-        if (this.client.config.ownerIDs.includes(id)) return true;
-        return false;
-    }
-
     shutdown () {
         const exitQuotes = [
             'Shutting down.',
