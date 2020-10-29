@@ -1,0 +1,26 @@
+{
+    "Bot": {
+        "emoji": "🤖",
+        "description": "Commands related to Woomy, like ping, stats, etc."
+    },
+    "Configuration": {
+        "emoji": "⚙️",
+        "description": "Change settings, toggle features."
+    },
+    "Developer": {
+        "emoji": "🖥️",
+        "description": "Super dangerous commands, for Woomy developers only!"
+    },
+    "Fun": {
+        "emoji": "🎉",
+        "description": "A whole range of commands, for your entertainment."
+    },
+    "Moderation": {
+        "emoji": "🛡️",
+        "description": "Keep your community safe and easily modify server settings." 
+    },
+    "Test": {
+        "emoji": "⚠️",
+        "description": "aaaAAAAAaaaA"
+    }
+}
