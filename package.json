@@ -13,7 +13,8 @@
     "js-yaml": "^3.14.0",
     "node-fetch": "^2.6.1",
     "pg": "^8.4.2",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "windrose": "^2.1.0"
   },
   "devDependencies": {},
   "scripts": {
