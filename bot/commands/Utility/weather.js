@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const windrose = require('windrose');
+const ISO2 = require('../../assets/constants/ISO2.json');
 const Embed = require('../../util/embed');
 
 module.exports = class {
@@ -13,10 +14,10 @@ module.exports = class {
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
-            description: '',
-            arguments: '',
-            details: '',
-            examples: ''
+            description: 'Gives you the weather for the specified city. You can also specify a country code with a comma.',
+            arguments: '<city>, [code]',
+            details: '`<city>` - name of a city\n`[code]` - country code (USA = US, Australia = AU, etc.)',
+            examples: 'w!weather Minneapolis\nw!weather Melbourne, AU'
         };
     }
 
@@ -24,14 +25,17 @@ module.exports = class {
         if (!args[0]) return;
         
         let city = args.join(' ').toProperCase();
-        let countryCode = '';
-        let location;
+        let countryCode = ',';
 
         if (args.join(' ').indexOf(',') > -1) {
             const params = city.split(',');
             city = params[0].trim().toProperCase();
-            countryCode += ',' + params[1].trim().toUpperCase();
-            location = `${city}, ${countryCode.substr(1)}`;
+            if (ISO2.country[params[1].toProperCase().trim()]) {
+                countryCode += ISO2.country[params[1].toProperCase().trim()];
+            } else {
+                countryCode += params[1].trim();
+            }
+            console.log(countryCode);
         }
 
         message.channel.sendTyping();
@@ -52,11 +56,9 @@ module.exports = class {
                     } else {
                         embedColour = '#ff614f';
                     }
-    
-                    if (!location) location = city + ', ' + json.sys.country;
 
                     const embed = new Embed()
-                        .setTitle(`Weather for ${location}`)
+                        .setTitle(`Weather for ${city + ', ' + ISO2.code[json.sys.country]}`)
                         .setThumbnail(`https://openweathermap.org/img/wn/${json.weather[0].icon}@4x.png`)
                         .setColour(embedColour)
                         .addField('**Condition:**', json.weather[0].main, true)
@@ -72,10 +74,13 @@ module.exports = class {
                     return message.channel.createMessage({ embed:embed });
                 } else {
                     if (json.message && json.message === 'city not found') {
-                        return message.channel.createMessage(`${client.constants.emojis.userError} You provided an invalid city name or country code. Maybe check your spelling?`);
+                        return message.channel.createMessage(`${client.constants.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
                     }
                     return message.channel.createMessage(`${client.constants.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
                 }
+            })
+            .catch(err => {
+                return message.channel.createMessage(`${client.constants.emojis.botError} An error has occured: \`${err.stack}\``);
             });
     }
 };
