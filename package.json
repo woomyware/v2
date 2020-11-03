@@ -4,7 +4,7 @@
   "description": "Made with <3 by mudkipscience",
   "main": "index.js",
   "dependencies": {
-    "@sentry/node": "^5.27.1",
+    "@sentry/node": "^5.27.2",
     "chalk": "^4.1.0",
     "eris": "^0.13.3",
     "eris-collector": "^1.0.1",
