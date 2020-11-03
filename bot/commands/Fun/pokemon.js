@@ -162,15 +162,3 @@ module.exports = class {
         return abilities;
     }
 };
-
-/**
- *                 const embed = new Embed()
-                    .setTitle(pokemon.info.name.toProperCase())
-                    .setThumbnail(sprite)
-                    .setDescription(description.replace('\n', ''))
-                    .addField('**Types:**', typeArray.join(', '), true)
-                    .addField('**Abilities:**', abilityArray.join(', '), true);
-            if (evoArray.length > 1) embed.addField('**Evolution Chain:**', evoArray.join(' → ').replace(pokemon.species.name.toProperCase(), `**${pokemon.species.name.toProperCase()}**`));
-            embed.addField('**Base Stats:**', `**HP:** ${pokemon.info.stats[0].base_stat} **Atk:** ${pokemon.info.stats[1].base_stat} **Def:** ${pokemon.info.stats[2].base_stat} **SpA:** ${pokemon.info.stats[3].base_stat} **SpD:** ${pokemon.info.stats[4].base_stat} **Spe:** ${pokemon.info.stats[5].base_stat}`);
-            message.channel.createMessage({ embed: embed });
- */
