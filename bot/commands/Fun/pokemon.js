@@ -22,9 +22,7 @@ module.exports = class {
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
 
-        
-        let query = args.join(' ');
-        query = query.trim();
+        const query = args.join(' ');
 
         fetch('https://graphqlpokemon.favware.tech/', {
             method: 'POST',
@@ -33,7 +31,7 @@ module.exports = class {
             },
             body: JSON.stringify({ query: `
                 {
-                    getPokemonDetails(pokemon: ${query}) {
+                    getPokemonDetailsByFuzzy(pokemon: "${query}") {
                         num
                         species
                         types
@@ -62,7 +60,7 @@ module.exports = class {
         })
             .then((res) => res.json())
             .then((json) => {
-                const pokemon = json.data.getPokemonDetails;
+                const pokemon = json.data.getPokemonDetailsByFuzzy;
                 const evoChain = this.parseEvoChain(pokemon);
                 const genderRatio = this.parseGenderRatio(pokemon.gender);
                 const abilities = this.parseAbilities(pokemon.abilities);
