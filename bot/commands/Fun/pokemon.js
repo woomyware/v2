@@ -21,8 +21,11 @@ module.exports = class {
     }
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
+        if (!args[0]) return message.channel.createMessage(
+            `${client.constants.emojis.userError} You didn't give me a pokemon to look up!`
+        );
 
-        const query = args.join(' ');
+        const query = args.join(' ').toLowerCase();
 
         fetch('https://graphqlpokemon.favware.tech/', {
             method: 'POST',
@@ -60,6 +63,21 @@ module.exports = class {
         })
             .then((res) => res.json())
             .then((json) => {
+                if (json.errors) {
+                    console.log(json.errors)
+                    for (const error in json.errors) {
+                        console.log(error);
+                        if (error.message.startsWith('No Pokémon found')) {
+                            message.channel.createMessage(
+                                `${client.constants.emojis.userError} I tried really hard, but I couldn't find any Pokemon called \`${query}\``
+                            );
+                        } else {
+                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                        }
+                    }
+                    return;
+                }
+
                 const pokemon = json.data.getPokemonDetailsByFuzzy;
                 const evoChain = this.parseEvoChain(pokemon);
                 const genderRatio = this.parseGenderRatio(pokemon.gender);
