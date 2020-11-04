@@ -64,17 +64,16 @@ module.exports = class {
             .then((res) => res.json())
             .then((json) => {
                 if (json.errors) {
-                    console.log(json.errors)
-                    for (const error in json.errors) {
-                        console.log(error);
+                    json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I tried really hard, but I couldn't find any Pokemon called \`${query}\``
+                                `${client.constants.emojis.userError} I couldn't find any Pokemon called ${query}c`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
                         }
-                    }
+                    });
+
                     return;
                 }
 
