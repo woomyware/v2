@@ -69,7 +69,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any Pokemon called ${query}`
+                                `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);

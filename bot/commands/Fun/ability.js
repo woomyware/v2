@@ -51,7 +51,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for ability')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any ability called ${query}`
+                                `${client.constants.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
