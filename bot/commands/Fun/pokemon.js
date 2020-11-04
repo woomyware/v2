@@ -11,12 +11,12 @@ module.exports = class {
         this.aliases = ['pokedex', 'dex'],
         this.userPerms = [],
         this.botPerms = [],
-        this.cooldown = 2000,
+        this.cooldown = 5000,
         this.help = {
-            description: '',
-            arguments: '',
+            description: 'Get useful data on any pokemon you ask me to!',
+            arguments: '<pokemon>',
             details: '',
-            examples: ''
+            examples: '`pokemon mudkip`\n`pokemon giratina-origin`'
         };
     }
 
@@ -24,6 +24,8 @@ module.exports = class {
         if (!args[0]) return message.channel.createMessage(
             `${client.constants.emojis.userError} You didn't give me a pokemon to look up!`
         );
+
+        message.channel.sendTyping();
 
         const query = args.join(' ').toLowerCase();
 
@@ -67,7 +69,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any Pokemon called ${query}c`
+                                `${client.constants.emojis.userError} I couldn't find any Pokemon called ${query}`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
