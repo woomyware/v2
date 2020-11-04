@@ -67,6 +67,8 @@ module.exports = class {
 
                 const pokemon = json.data.getPokemonDetailsByFuzzy;
 
+                console.log(pokemon.types)
+
                 fetch('https://graphqlpokemon.favware.tech/', {
                     method: 'POST',
                     headers: {
@@ -74,21 +76,15 @@ module.exports = class {
                     },
                     body: JSON.stringify({ query: `
                         {
-                            getPokemonDetailsByFuzzy(pokemon: "${query}") {
-                                num
-                                species
-                                types
-                                sprite
-                                shinySprite
-                                bulbapediaPage
-                                serebiiPage
-                                smogonPage
+                            getTypeMatchup(types: [water]) {
+                                attacking { doubleEffectiveTypes effectiveTypes resistedTypes doubleResistedTypes effectlessTypes }
                             }
                         }
                     `})
                 })
                     .then(res => res.json())
                     .then(json => {
+                        console.log(json)
                         if (json.errors) {
                             json.errors.forEach(error => {
                                 client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -98,18 +94,19 @@ module.exports = class {
                         }
 
                         console.log(json.data)
-                        const typeMatchup = json.data.getTypeMatchup.attacking;
+                        const typeMatchup = json.data.getTypeMatchup;
 
                         let doubleEffective = '';
-                        if (typeMatchup.doubleEffectiveTypes.length > 0) {
-                            doubleEffective = '**' + typeMatchup.doubleEffectiveTypes.join('** **') + '**';
-                            doubleEffective = doubleEffective.split(' ');
+                        if (typeMatchup.doubleEffectiveTypes && typeMatchup.doubleEffectiveTypes.length > 0) {
+                            doubleEffective = '**' + typeMatchup.doubleEffectiveTypes.join('**, **') + '**';
+                            doubleEffective = doubleEffective.concat(typeMatchup.effectiveTypes).join(', ');
                         }
 
                         let doubleResists = '';
-                        if (typeMatchup.doubleResistedTypes.length > 0) {
+                        if (typeMatchup.doubleResistedTypes &&  typeMatchup.doubleResistedTypes.length > 0) {
                             doubleResists = '**' + typeMatchup.doubleResistedTypes.join('** **') + '**';
                             doubleResists = doubleResists.split(' ');
+                            doubleResists = doubleResists.concat(typeMatchup.resistedTypes).join(', ');
                         }
 
 
@@ -118,8 +115,8 @@ module.exports = class {
                             .setTitle(`${pokemon.species.toProperCase()} (No. ${pokemon.num})`)
                             .setThumbnail(pokemon.sprite)
                             .addField('**Types:**', pokemon.types.join(', '), true)
-                            .addField('**Weak to:**', doubleEffective.concat(typeMatchup.effectiveTypes).join(', '))
-                            .addField('**Strong against:**', doubleResists.concat(typeMatchup.resistedTypes).join(', '))
+                            .addField('**Weak to:**', doubleEffective)
+                            .addField('**Strong against:**', doubleResists)
                             .addField('**Immune to:**', typeMatchup.effectlessTypes.join(' '))
                             .addField('**External Resources:**', `[Bulbapedia](${pokemon.bulbapediaPage}) | [Serebii](${pokemon.serebiiPage}) | [Smogon](${pokemon.smogonPage})`);
                         message.channel.createMessage({ embed: embed });
