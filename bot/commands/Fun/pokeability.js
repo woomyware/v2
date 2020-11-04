@@ -12,10 +12,10 @@ module.exports = class {
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
-            description: '',
-            arguments: '',
+            description: 'Get data on a Pokemon ability.',
+            arguments: '<ability>',
             details: '',
-            examples: ''
+            examples: '`ability intimidate`\n`ability moxie`'
         };
     }
 
@@ -62,6 +62,9 @@ module.exports = class {
                 }
 
                 const ability = json.data.getAbilityDetailsByFuzzy;
+                if (!ability.desc) return message.channel.createMessage(
+                    `${client.constants.emojis.botError} I'm missing data for this ability so I can't show it to you, sorry! ;w;`
+                )
                 const embed = new Embed()
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setTitle(ability.name.toProperCase())
