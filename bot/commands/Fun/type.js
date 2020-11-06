@@ -8,15 +8,15 @@ module.exports = class {
         this.category = category,
         this.enabled = true,
         this.devOnly = false,
-        this.aliases = ['type'],
+        this.aliases = ['type', 'typematchup'],
         this.userPerms = [],
         this.botPerms = [],
         this.cooldown = 5000,
         this.help = {
-            description: 'Get useful data on any pokemon you ask me to!',
-            arguments: '<pokemon>',
-            details: '',
-            examples: '`pokemon mudkip`\n`pokemon giratina origin`'
+            description: 'Get the strengths and weaknesses of a pokemon type/type combination',
+            arguments: '<pokemon/type> [type2]',
+            details: 'The type2 argument is only needed if you are submitting two types, not a pokemon or singular type.',
+            examples: '`effective ghost dragon`\n`effective ribombee`'
         };
     }
 
