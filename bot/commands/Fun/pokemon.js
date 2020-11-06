@@ -1,5 +1,5 @@
 const Embed = require('../../util/embed');
-const colours = require('../../assets/constants/typeColours.json');
+const { colours } = require('../../assets/constants/pokemon.json');
 const fetch = require('node-fetch');
 
 module.exports = class {
@@ -85,7 +85,7 @@ module.exports = class {
                 const abilities = this.parseAbilities(pokemon.abilities);
                 let sprite = pokemon.sprite;
                 if (Math.floor((Math.random() * 100) + 1) === 69) sprite = pokemon.shinySprite;
-                let formes = '(No Alternate Formes)';
+                let formes;
                 if (pokemon.otherFormes) {
                     formes = pokemon.otherFormes.join(', ');
                     if (pokemon.cosmeticFormes) {
@@ -95,19 +95,19 @@ module.exports = class {
                 const embed = new Embed()
                     .setColour(colours[pokemon.types[0]])
                     .setTitle(`${pokemon.species.toProperCase()} (No. ${pokemon.num})`)
-                    .setDescription(pokemon.flavorTexts[0].flavor)
+                    .setDescription(`\`${pokemon.flavorTexts[0].game}\` ${pokemon.flavorTexts[0].flavor}`)
                     .setThumbnail(sprite)
-                    .addField('**Types:**', pokemon.types.join(', '), true)
-                    .addField('**Abilities:**', abilities.join(', '), true)
-                    .addField('**Gender Ratio:**', genderRatio, true)
-                    .addField('**Base Stats:**', `**HP:** ${pokemon.baseStats.hp} **Atk:** ${pokemon.baseStats.attack} **Def:** ${pokemon.baseStats.defense} **SpA:** ${pokemon.baseStats.specialattack} **SpD:** ${pokemon.baseStats.specialdefense} **Spe:** ${pokemon.baseStats.speed} **BST:** ${pokemon.baseStatsTotal}`)
-                    .addField('**Evolution Chain:**', evoChain)
-                    .addField('**Other Formes:**', formes)
-                    .addField('**Height:**', `${pokemon.height}m`, true)
-                    .addField('**Weight:**', `${pokemon.weight}kg`, true)
-                    .addField('**Egg Groups:**', pokemon.eggGroups.join(', '), true)
-                    .addField('**Smogon Tier:**', pokemon.smogonTier, true)
-                    .addField('**External Resources:**', `[Bulbapedia](${pokemon.bulbapediaPage}) | [Serebii](${pokemon.serebiiPage}) | [Smogon](${pokemon.smogonPage})`);
+                    .addField('Types:', pokemon.types.join(', '), true)
+                    .addField('Abilities:', abilities.join(', '), true)
+                    .addField('Gender Ratio:', genderRatio, true)
+                    .addField('Base Stats:', `HP: ${pokemon.baseStats.hp} Atk: ${pokemon.baseStats.attack} Def: ${pokemon.baseStats.defense} SpA: ${pokemon.baseStats.specialattack} SpD: ${pokemon.baseStats.specialdefense} Spe: ${pokemon.baseStats.speed} BST: ${pokemon.baseStatsTotal}`);
+                if (evoChain) embed.addField('Evolution Chain:', evoChain);
+                if (formes) embed.addField('Other Formes:', formes);
+                embed.addField('Height:', `${pokemon.height}m`, true);
+                embed.addField('Weight:', `${pokemon.weight}kg`, true);
+                embed.addField('Egg Groups:', pokemon.eggGroups.join(', '), true);
+                embed.addField('Smogon Tier:', pokemon.smogonTier, true);
+                embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) | [Serebii](${pokemon.serebiiPage}) | [Smogon](${pokemon.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));
@@ -124,7 +124,7 @@ module.exports = class {
         // Set evochain if there are no evolutions
         let evoChain = `**${pokeDetails.species.toProperCase()} ${pokeDetails.evolutionLevel ? `(${pokeDetails.evolutionLevel})` : ''}**`;
         if (!pokeDetails.evolutions && !pokeDetails.preevolutions) {
-            evoChain += ' (No Evolutions)';
+            evoChain = null;
         }
 
         // Parse pre-evolutions and add to evochain
