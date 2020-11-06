@@ -8,7 +8,7 @@ module.exports = class {
         this.category = category,
         this.enabled = true,
         this.devOnly = false,
-        this.aliases = ['pokedex', 'dex'],
+        this.aliases = ['type'],
         this.userPerms = [],
         this.botPerms = [],
         this.cooldown = 5000,
@@ -94,25 +94,55 @@ module.exports = class {
                 }
 
                 const typeMatchup = json.data.getTypeMatchup;
-                            
+
+                let effectless = '';
+                if (typeMatchup.attacking.effectlessTypes.length > 0) effectless = `
+                **Doesn't effect:**
+                ${typeMatchup.attacking.effectlessTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
+                `;
+
+                let immune = '';
+                if (typeMatchup.defending.effectlessTypes.length > 0) immune = `
+                **Immune to:**
+                ${typeMatchup.defending.effectlessTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
+                `;
+
+                console.log(this.parseEffectiveTypes(typeMatchup.attacking.effectiveTypes, typeMatchup.attacking.doubleEffectiveTypes));    
                 const embed = new Embed()
-                    .setTitle('Offensive')
-                    .addField('Weak to:', typeMatchup.attacking.effectiveTypes.join(', '))
-                    .addField('Strong against:', typeMatchup.attacking.resistedTypes.join(', '));
-                    //.addField('Immune to:', typeMatchup.effectlessTypes.join(' '));
-                    //.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) | [Serebii](${pokemon.serebiiPage}) | [Smogon](${pokemon.smogonPage})`);
+                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                    .setTitle('Type effectiveness of ' + types.split(',').join(' and').toProperCase())
+                    .addField('Offensive:', `
+                        **Super-effective:**
+                        ${this.parseEffectiveTypes(typeMatchup.attacking.effectiveTypes, typeMatchup.attacking.doubleEffectiveTypes)} 
+                        **Normal damage:**
+                        ${typeMatchup.attacking.normalTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
+                        **Not very effective:**
+                        ${this.parseResistedTypes(typeMatchup.attacking.resistedTypes, typeMatchup.attacking.doubleResistedTypes)}${effectless} 
+                    `)
+                    .addField('Defensive:', `
+                    **Vulnerable to:**
+                    ${this.parseEffectiveTypes(typeMatchup.defending.effectiveTypes, typeMatchup.defending.doubleEffectiveTypes)} 
+                    **Normal damage:**
+                    ${typeMatchup.defending.normalTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
+                    **Resists:**
+                    ${this.parseResistedTypes(typeMatchup.defending.resistedTypes, typeMatchup.defending.doubleResistedTypes)}${immune}
+                `);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => client.logger.error('TYPEMATCHUP_CMD_ERROR', err.stack));
     }
 
     parseEffectiveTypes (effective, doubleEffective) {
-
+        return doubleEffective
+            .map(type => `\`${type.toProperCase()} (x4)\``)
+            .concat(effective.map(type => `\`${type.toProperCase()} (x2)\``))
+            .join(' ');
     }
 
-    parseResistedTtypes (resisted, doubleResisted) {
-
+    parseResistedTypes (resisted, doubleResisted) {
+        return doubleResisted
+            .map(type => `\`${type.toProperCase()} (x0.25)\``)
+            .concat(resisted.map(type => `\`${type.toProperCase()} (x0.5)\``))
+            .join(' ');
     }
-
-
 };
