@@ -45,7 +45,7 @@ module.exports = class {
                 ‏‏‎ ‎`
             );
             categories.forEach(category => {
-                embed.addField(`${prettified[category].emoji} **${category}**`, `*${prettified[category].description}*\n${client.commands.filter(cmd => cmd.category === category).length} commands`, true);
+                embed.addField(`${prettified[category].emoji} ${category}`, `*${prettified[category].description}*\n${client.commands.filter(cmd => cmd.category === category).length} commands`, true);
             });
             embed.setFooter('<> = required, / = either/or, [] = optional');
 
@@ -80,13 +80,13 @@ module.exports = class {
                 .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                 .setDescription(command.help.description)
-                .addField('**Format:**', `\`${message.prefix + command.name} ${command.help.arguments}`.trim() + '`');
-            if (command.help.details.length > 0) embed.addField('**Parameters:**', command.help.details);
-            if (command.help.examples.length > 0) embed.addField('**Examples**', command.help.examples);
-            if (command.aliases.length > 0) embed.addField('**Aliases:**', '`' + command.aliases.join('`, `') + '`');
-            if (command.userPerms.length > 0) embed.addField('**User permissions:**', command.userPerms.join(', '), true);
-            if (command.botPerms.length > 0) embed.addField('**Bot permissions:', command.botPerms.join(', '), true);
-            embed.addField('**Cooldown:**', `${command.cooldown / 1000} seconds`, true);
+                .addField('Format:', `\`${message.prefix + command.name} ${command.help.arguments}`.trim() + '`');
+            if (command.help.details.length > 0) embed.addField('Parameters:', command.help.details);
+            if (command.help.examples.length > 0) embed.addField('Examples', command.help.examples);
+            if (command.aliases.length > 0) embed.addField('Aliases:', '`' + command.aliases.join('`, `') + '`');
+            if (command.userPerms.length > 0) embed.addField('User permissions:', command.userPerms.join(', '), true);
+            if (command.botPerms.length > 0) embed.addField('Bot permissions:', command.botPerms.join(', '), true);
+            embed.addField('Cooldown:', `${command.cooldown / 1000} seconds`, true);
             embed.setFooter('<> = required, / = either/or, [] = optional');
             return message.channel.createMessage({ embed: embed });
         }

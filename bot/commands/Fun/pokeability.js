@@ -69,7 +69,7 @@ module.exports = class {
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setTitle(ability.name.toProperCase())
                     .setDescription(ability.desc)
-                    .addField('**External Resources:**', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
+                    .addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));

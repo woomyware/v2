@@ -61,15 +61,15 @@ module.exports = class {
                         .setTitle(`Weather for ${city + ', ' + ISO2.code[json.sys.country]}`)
                         .setThumbnail(`https://openweathermap.org/img/wn/${json.weather[0].icon}@4x.png`)
                         .setColour(embedColour)
-                        .addField('**Condition:**', json.weather[0].main, true)
-                        .addField('**Temperature:**', `${tempCelcius}°C | ${Math.round(json.main.temp * 9/5 - 459.67)}°F`, true)
-                        .addField('**Min/Max**:', `
+                        .addField('Condition:', json.weather[0].main, true)
+                        .addField('Temperature:', `${tempCelcius}°C | ${Math.round(json.main.temp * 9/5 - 459.67)}°F`, true)
+                        .addField('Min/Max:', `
                             ${Math.round(json.main.temp_min - 273.15)}°C - ${Math.round(json.main.temp_max - 273.15)}°C
                             ${Math.round(json.main.temp_min * 9/5 - 459.67)}°F - ${Math.round(json.main.temp_max * 9/5 - 459.67)}°F
                         `, true)
-                        .addField('**Humidity:**', `${json.main.humidity}%`, true)
-                        .addField('**Wind Speed:**', `${Math.round(json.wind.speed * 10) / 10}km/h | ${Math.round(json.wind.speed * 10 / 1.609344)}mi/h`, true)
-                        .addField('**Wind Direction:**', windrose.getPoint(json.wind.deg).name, true)
+                        .addField('Humidity:', `${json.main.humidity}%`, true)
+                        .addField('Wind Speed:', `${Math.round(json.wind.speed * 10) / 10}km/h | ${Math.round(json.wind.speed * 10 / 1.609344)}mi/h`, true)
+                        .addField('Wind Direction:', windrose.getPoint(json.wind.deg).name, true)
                         .setFooter('Powered by openweathermap.org');
                     return message.channel.createMessage({ embed:embed });
                 } else {
