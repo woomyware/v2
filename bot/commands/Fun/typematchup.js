@@ -48,19 +48,18 @@ module.exports = class {
                 json.errors.forEach(error => {
                     if (error.message.startsWith('No Pokémon found')) {
                         message.channel.createMessage(
-                            `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
+                            `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
                         );
                     } else {
-                        client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                        client.logger.error('MATCHUP_FETCH_ERROR', error.message);
                     }
                 });
 
                 return;
             }
-            console.log(json)
-            types = json.data.getPokemonDetailsByFuzzy.types.join(', ').toLowerCase();
+            types = json.data.getPokemonDetailsByFuzzy.types.map(type => type.toLowerCase());
         } else {
-            types = args.join(', ').toLowerCase();
+            types = args.map(type => type.toLowerCase());
         }
 
         fetch('https://graphqlpokemon.favware.tech/', {
@@ -70,7 +69,7 @@ module.exports = class {
             },
             body: JSON.stringify({ query: `
                 {
-                    getTypeMatchup(types: [${types}]) {
+                    getTypeMatchup(types: [${types.join(', ')}]) {
                         attacking { doubleEffectiveTypes effectiveTypes normalTypes resistedTypes doubleResistedTypes effectlessTypes }
                         defending { doubleEffectiveTypes effectiveTypes normalTypes resistedTypes doubleResistedTypes effectlessTypes }
                     }
@@ -79,15 +78,14 @@ module.exports = class {
         })
             .then(res => res.json())
             .then(json => {
-                console.log(json.data)
                 if (json.errors) {
                     json.errors.forEach(error => {
-                        if (error.message.startsWith('No Pokémon found')) {
+                        if (error.message.includes('does not exist in "Types')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.constants.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
                             );
                         } else {
-                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                            client.logger.error('MATCHUP_FETCH_ERROR', error.message);
                         }
                     });
                     return;
@@ -103,33 +101,27 @@ module.exports = class {
 
                 let immune = '';
                 if (typeMatchup.defending.effectlessTypes.length > 0) immune = `
-                **Immune to:**
+                **Immunities:**
                 ${typeMatchup.defending.effectlessTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
                 `;
 
-                console.log(this.parseEffectiveTypes(typeMatchup.attacking.effectiveTypes, typeMatchup.attacking.doubleEffectiveTypes));    
                 const embed = new Embed()
-                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
-                    .setTitle('Type effectiveness of ' + types.split(',').join(' and').toProperCase())
+                    .setColour(colours[types[0].toProperCase()])
+                    .setTitle('Type effectiveness of ' + types.map(type => type.toProperCase()).join(' and '))
                     .addField('Offensive:', `
                         **Super-effective:**
                         ${this.parseEffectiveTypes(typeMatchup.attacking.effectiveTypes, typeMatchup.attacking.doubleEffectiveTypes)} 
-                        **Normal damage:**
-                        ${typeMatchup.attacking.normalTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
                         **Not very effective:**
                         ${this.parseResistedTypes(typeMatchup.attacking.resistedTypes, typeMatchup.attacking.doubleResistedTypes)}${effectless} 
                     `)
                     .addField('Defensive:', `
-                    **Vulnerable to:**
+                    **Weaknesses:**
                     ${this.parseEffectiveTypes(typeMatchup.defending.effectiveTypes, typeMatchup.defending.doubleEffectiveTypes)} 
-                    **Normal damage:**
-                    ${typeMatchup.defending.normalTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
-                    **Resists:**
+                    **Resistances:**
                     ${this.parseResistedTypes(typeMatchup.defending.resistedTypes, typeMatchup.defending.doubleResistedTypes)}${immune}
                 `);
                 message.channel.createMessage({ embed: embed });
-            })
-            .catch(err => client.logger.error('TYPEMATCHUP_CMD_ERROR', err.stack));
+            });
     }
 
     parseEffectiveTypes (effective, doubleEffective) {
