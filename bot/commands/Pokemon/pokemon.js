@@ -16,7 +16,7 @@ module.exports = class {
             description: 'Get useful data on any pokemon you ask me to!',
             arguments: '<pokemon>',
             details: '',
-            examples: '`pokemon mudkip`\n`pokemon giratina-origin`'
+            examples: '`pokemon mudkip`\n`pokemon alolan ninetales`'
         };
     }
 

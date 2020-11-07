@@ -38,6 +38,7 @@ module.exports = class {
                     getAbilityDetailsByFuzzy(ability: "${query}") {
                         name
                         desc
+                        shortDesc
                         bulbapediaPage
                         serebiiPage
                         smogonPage
@@ -62,14 +63,15 @@ module.exports = class {
                 }
 
                 const ability = json.data.getAbilityDetailsByFuzzy;
-                if (!ability.desc) return message.channel.createMessage(
-                    `${client.constants.emojis.botError} I'm missing data for this ability so I can't show it to you, sorry! ;w;`
-                )
                 const embed = new Embed()
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
-                    .setTitle(ability.name.toProperCase())
-                    .setDescription(ability.desc)
-                    .addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
+                    .setTitle(ability.name.toProperCase());
+                if (ability.desc) {
+                    embed.setDescription(ability.desc);
+                } else {
+                    embed.setDescription(ability.shortDesc);
+                }
+                embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));
