@@ -4,9 +4,9 @@
   "description": "Made with <3 by mudkipscience",
   "main": "index.js",
   "dependencies": {
-    "@sentry/node": "^5.27.2",
+    "@sentry/node": "^5.27.3",
     "chalk": "^4.1.0",
-    "eris": "^0.13.3",
+    "eris": "^0.14.0",
     "eris-collector": "^1.0.1",
     "eslint": "^7.12.1",
     "fs-readdir-recursive": "^1.1.0",
