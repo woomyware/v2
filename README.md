@@ -17,16 +17,6 @@
 
 The easiest and recommended way to use Woomy is to invite the official version to your server, which is hosted 24/7 and gets the newest updates as soon as they come out. The invite can be found above, under links. You can also self-host, but no support will be provided to you if you decide to do this.
 
-## Contributors
-
-Thanks to the following people who have contributed to Woomy:
-
-* [@mudkipscience](https://github.com/mudkipscience/) - Creator and primary developer of Woomy
-* [@FLGX](https://github.com/FLGX06/) - Developer
-* [@TheCakeChicken](https://github.com/TheCakeChicken/) - Developer
-
-And a few other people as well. Check out the [Contributors](https://github.com/mudkipscience/woomy/graphs/contributors) tab!
-
 ## Legal stuff
 
 ### Using our code
