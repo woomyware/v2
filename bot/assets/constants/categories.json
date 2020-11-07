@@ -19,9 +19,9 @@
         "emoji": "🛡️",
         "description": "Keep your community safe and easily modify server settings." 
     },
-    "Test": {
-        "emoji": "⚠️",
-        "description": "aaaAAAAAaaaA"
+    "Pokemon": {
+        "emoji": "<:pokeball:774420367108210688>",
+        "description": "Look up info on pokemon, type combos, moves, items and more!"
     },
     "Utility": {
         "emoji": "🔦",
