@@ -31,6 +31,7 @@ Copyrights licensed under the GNU AGPLv3 License, unless otherwise specified. Se
 ## Contributors
 
 A big thanks to everyone below, who have contributed to Woomy over the years. We appreciate all contributions <3
+
 <a href="https://github.com/woomyware/v2/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=woomyware/v2" />
 </a>
