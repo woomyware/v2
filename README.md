@@ -1,9 +1,9 @@
 # Woomy
-![Status](https://top.gg/api/widget/status/435961704145485835.svg)
-![Servers](https://top.gg/api/widget/servers/435961704145485835.svg)
-![Discord](https://img.shields.io/discord/410990517841690625)
-![Version](https://img.shields.io/github/package-json/v/woomyware/v2)
-![License](https://img.shields.io/github/license/woomyware/v2)
+![Status](https://top.gg/api/widget/status/435961704145485835.svgno?avatar=true)
+![Servers](https://top.gg/api/widget/servers/435961704145485835.svg?noavatar=true)
+![Discord](https://discord.com/api/guilds/410990517841690625/embed.png)
+![Version](https://img.shields.io/github/package-json/v/woomyware/v2?color=blueviolet)
+![License](https://img.shields.io/github/license/woomyware/v2?color=blueviolet)
 
 ## A feature-rich and configurable Discord bot built with Eris for music, moderation, currency and more!
 
