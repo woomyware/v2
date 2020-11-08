@@ -29,7 +29,6 @@ Copyright (C) 2018-2020 Emily J. / mudkipscience and contributors.
 Copyrights licensed under the GNU AGPLv3 License, unless otherwise specified. See the accompanying LICENSE file for details.
 
 ## Contributors
-
 <a href="https://github.com/woomyware/v2/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=woomyware/v2" />
 </a>
