@@ -1,7 +1,7 @@
 # Woomy
+![Discord](https://discord.com/api/guilds/410990517841690625/embed.png)
 ![Status](https://top.gg/api/widget/status/435961704145485835.svg?noavatar=true)
 ![Servers](https://top.gg/api/widget/servers/435961704145485835.svg?noavatar=true)
-![Discord](https://discord.com/api/guilds/410990517841690625/embed.png)
 ![Version](https://img.shields.io/github/package-json/v/woomyware/v2?color=blueviolet)
 ![License](https://img.shields.io/github/license/woomyware/v2?color=blueviolet)
 
