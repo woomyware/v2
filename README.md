@@ -27,3 +27,13 @@ If you wish to use our code in your project, please credit us! We don't mind you
 Copyright (C) 2018-2020 Emily J. / mudkipscience and contributors.
 
 Copyrights licensed under the GNU AGPLv3 License, unless otherwise specified. See the accompanying LICENSE file for details.
+
+## Contributors
+
+A big thanks to everyone below, who have contributed to Woomy over the years. We appreciate all contributions <3
+
+<a href="https://github.com/woomyware/v2/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=woomyware/v2" />
+</a>
+
+Made with [contributors-img](https://contributors-img.web.app).
