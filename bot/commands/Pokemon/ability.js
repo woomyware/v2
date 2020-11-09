@@ -71,7 +71,7 @@ module.exports = class {
                 } else {
                     embed.setDescription(ability.shortDesc);
                 }
-                embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
+                embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) • [Serebii](${ability.serebiiPage}) • [Smogon](${ability.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));

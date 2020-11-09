@@ -107,7 +107,7 @@ module.exports = class {
                 embed.addField('Weight:', `${pokemon.weight}kg`, true);
                 embed.addField('Egg Groups:', pokemon.eggGroups.join(', '), true);
                 embed.addField('Smogon Tier:', pokemon.smogonTier, true);
-                embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) | [Serebii](${pokemon.serebiiPage}) | [Smogon](${pokemon.smogonPage})`);
+                embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) • [Serebii](${pokemon.serebiiPage}) • [Smogon](${pokemon.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));
