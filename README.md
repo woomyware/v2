@@ -1,9 +1,9 @@
 # Woomy
-![Status](https://top.gg/api/widget/status/435961704145485835.svg)
-![Servers](https://top.gg/api/widget/servers/435961704145485835.svg)
-![Discord](https://img.shields.io/discord/410990517841690625)
-![Version](https://img.shields.io/github/package-json/v/woomyware/v2)
-![License](https://img.shields.io/github/license/woomyware/v2)
+![Discord](https://discord.com/api/guilds/410990517841690625/embed.png)
+![Status](https://top.gg/api/widget/status/435961704145485835.svg?noavatar=true)
+![Servers](https://top.gg/api/widget/servers/435961704145485835.svg?noavatar=true)
+![Version](https://img.shields.io/github/package-json/v/woomyware/v2?color=blueviolet)
+![License](https://img.shields.io/github/license/woomyware/v2?color=blueviolet)
 
 ## A feature-rich and configurable Discord bot built with Eris for music, moderation, currency and more!
 
@@ -26,4 +26,12 @@ If you wish to use our code in your project, please credit us! We don't mind you
 
 Copyright (C) 2018-2020 Emily J. / mudkipscience and contributors.
 
-Copyrights licensed under the GNU AGPLv3 License, unless otherwise specified. See the accompanying LICENSE file for details.
+Copyrights licensed under the [GNU AGPLv3 License](LICENSE), unless otherwise specified.
+
+## Contributors
+
+<a href="https://github.com/woomyware/v2/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=woomyware/v2" />
+</a>
+
+Made with [contributors-img](https://contributors-img.web.app).
