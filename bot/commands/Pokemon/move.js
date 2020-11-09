@@ -49,9 +49,9 @@ module.exports = class {
                         accuracy
                         priority
                         target
-                        contestType
                         isZ
                         isGMax
+                        contestType
                         bulbapediaPage
                         serebiiPage
                         smogonPage
@@ -61,12 +61,11 @@ module.exports = class {
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
                 if (json.errors) {
                     json.errors.forEach(error => {
-                        if (error.message.startsWith('Failed to get data for ability')) {
+                        if (error.message.startsWith('Failed to get data for move')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.constants.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -76,16 +75,40 @@ module.exports = class {
                     return;
                 }
 
-                const ability = json.data.getAbilityDetailsByFuzzy;
-                const embed = new Embed()
-                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
-                    .setTitle(ability.name.toProperCase());
-                if (ability.desc) {
-                    embed.setDescription(ability.desc);
-                } else {
-                    embed.setDescription(ability.shortDesc);
+                const move = json.data.getMoveDetailsByFuzzy;
+                
+                let suffix = '';
+
+                if (move.isZ) {
+                    suffix = ' (Z-Move)';
+                } else if (!move.maxMovePower) {
+                    suffix = ' (Max Move)';
+                } else if (move.isGMax) {
+                    suffix = ' (G-Max Move)';
                 }
-                embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) | [Serebii](${ability.serebiiPage}) | [Smogon](${ability.smogonPage})`);
+
+                const embed = new Embed()
+                    .setColour(colours[move.type])
+                    .setTitle(move.name.toProperCase() + suffix);
+                if (move.desc) {
+                    embed.setDescription(move.desc);
+                } else {
+                    embed.setDescription(move.shortDesc);
+                }
+
+                embed.addField('Type:', move.type, true);
+                embed.addField('Category:', move.category, true);
+                embed.addField('Target:', move.target, true);
+                if (!move.isZ || move.maxMovePower) embed.addField('Base Power:', move.basePower.toString(), true);
+                if (!move.isZ || move.maxMovePower) embed.addField('Z Power:', move.zMovePower.toString(), true);
+                if (move.maxMovePower) embed.addField('Max Power:', move.maxMovePower.toString(), true);
+                if (!move.isZ) embed.addField('Base PP:', move.pp.toString(), true);
+                embed.addField('Accuracy:', move.accuracy.toString(), true);
+                embed.addField('Priority:', move.priority.toString(), true);
+                if (move.isZ) embed.addField('Z-Crystal:', move.isZ, true);
+                if (move.isGMax) embed.addField('G-Max Pokemon:', move.isGMax, true);
+                if (move.contestType !== null) embed.addField('Contest Type', move.contestType, true);
+                embed.addField('External Resources:', `[Bulbapedia](${move.bulbapediaPage}) • [Serebii](${move.serebiiPage}) • [Smogon](${move.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => console.log(err));
