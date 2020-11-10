@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const windrose = require('windrose');
-const ISO2 = require('../../assets/constants/ISO2.json');
-const Embed = require('../../util/embed');
+const ISO2 = require('../../assets/ISO2.json');
+
 
 module.exports = class {
     constructor (name, category) {
@@ -57,7 +57,7 @@ module.exports = class {
                         embedColour = '#ff614f';
                     }
 
-                    const embed = new Embed()
+                    const embed = new client.RichEmbed()
                         .setTitle(`Weather for ${city + ', ' + ISO2.code[json.sys.country]}`)
                         .setThumbnail(`https://openweathermap.org/img/wn/${json.weather[0].icon}@4x.png`)
                         .setColour(embedColour)
@@ -74,13 +74,13 @@ module.exports = class {
                     return message.channel.createMessage({ embed:embed });
                 } else {
                     if (json.message && json.message === 'city not found') {
-                        return message.channel.createMessage(`${client.constants.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
+                        return message.channel.createMessage(`${client.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
                     }
-                    return message.channel.createMessage(`${client.constants.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
+                    return message.channel.createMessage(`${client.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
                 }
             })
             .catch(err => {
-                return message.channel.createMessage(`${client.constants.emojis.botError} An error has occured: \`${err.stack}\``);
+                return message.channel.createMessage(`${client.emojis.botError} An error has occured: \`${err.stack}\``);
             });
     }
 };

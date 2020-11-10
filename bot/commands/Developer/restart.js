@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const exitQuotes = require('../../assets/exitQuotes.json');
 
 module.exports = class {
     constructor (name, category) {
@@ -19,7 +20,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        client.logger.success('RESTART', 'Restart command recieved. ' + client.constants.exitQuotes.random());
+        client.logger.success('RESTART', 'Restart command recieved. ' + exitQuotes.random());
         client.disconnect();
         client.functions.wait();
         

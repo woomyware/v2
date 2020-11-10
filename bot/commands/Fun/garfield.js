@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const Embed = require('../../util/embed');
 
 module.exports = class {
     constructor (name, category) {
@@ -26,7 +25,7 @@ module.exports = class {
         fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date)
             .then(res => res.json())
             .then(json => {
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setTitle(`${json.data.name} (No. ${json.data.number})`)
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
@@ -34,7 +33,7 @@ module.exports = class {
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => {
-                message.channel.createMessage(`${client.constants.emojis.botError} An error has occurred: ${err}`);
+                message.channel.createMessage(`${client.emojis.botError} An error has occurred: ${err}`);
             });
     }
 };

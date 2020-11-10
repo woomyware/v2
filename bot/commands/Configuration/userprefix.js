@@ -26,7 +26,7 @@ module.exports = class {
         await client.db.updateUser(message.author.id, 'prefix', args[0]);
 
         message.channel.createMessage(
-            `${client.constants.emojis.success} Your personal prefix has been set to: \`${args[0]}\``
+            `${client.emojis.success} Your personal prefix has been set to: \`${args[0]}\``
         );
     }
 };

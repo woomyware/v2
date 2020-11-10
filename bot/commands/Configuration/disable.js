@@ -27,7 +27,7 @@ module.exports = class {
         }
 
         if (!args[1]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't specify what command/category to disable. Usage: \`${this.help.usage}\``
+            `${client.emojis.userError} You didn't specify what command/category to disable. Usage: \`${this.help.usage}\``
         );
 
         if (args[0].toLowerCase() === 'command' || args[0].toLowerCase() === 'cmd') {
@@ -42,17 +42,17 @@ module.exports = class {
             }
 
             if (!command) return message.channel.createMessage(
-                `${client.constants.emojis.userError} ${args[1]} isn't a command or an alias, are you sure you spelt it correctly?`
+                `${client.emojis.userError} ${args[1]} isn't a command or an alias, are you sure you spelt it correctly?`
             );
 
             if (essential.commands.includes(command.name) || essential.categories.includes(command.category)) {
                 return message.channel.createMessage(
-                    `${client.constants.emojis.userError} This command is essential and cannot be disabled. Sorry!`
+                    `${client.emojis.userError} This command is essential and cannot be disabled. Sorry!`
                 );
             }
 
             if (disabled.includes(command.name)) return message.channel.createMessage(
-                `${client.constants.emojis.userError} This command is already disabled.`  
+                `${client.emojis.userError} This command is already disabled.`  
             );
 
             disabled.push(command.name);
@@ -60,7 +60,7 @@ module.exports = class {
             await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
 
             return message.channel.createMessage(
-                `${client.constants.emojis.success} Added **${args[1]}** to the list of disabled commands for this server.`
+                `${client.emojis.success} Added **${args[1]}** to the list of disabled commands for this server.`
             );
         }
 
@@ -76,11 +76,11 @@ module.exports = class {
             }
 
             if (!command) return message.channel.createMessage(
-                `${client.constants.emojis.userError} ${args[1]} isn't a category, are you sure you spelt it correctly?`
+                `${client.emojis.userError} ${args[1]} isn't a category, are you sure you spelt it correctly?`
             );
 
             if (!disabled.includes(command.name)) return message.channel.createMessage(
-                `${client.constants.emojis.userError} This category isn't disabled.`  
+                `${client.emojis.userError} This category isn't disabled.`  
             );
 
             disabled.remove(command.name);
@@ -88,7 +88,7 @@ module.exports = class {
             await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
             
             return message.channel.createMessage(
-                `${client.constants.emojis.success} Added **${args[1]}** to the list of disabled category for this server!`
+                `${client.emojis.success} Added **${args[1]}** to the list of disabled category for this server!`
             );
         }
     }

@@ -1,4 +1,4 @@
-const colours = require('../assets/constants/colours.json');
+const colours = require('../assets/colours.json');
 const HEX_REGEX = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 class RichEmbed {

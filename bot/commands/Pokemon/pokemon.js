@@ -1,5 +1,4 @@
-const Embed = require('../../util/embed');
-const { colours } = require('../../assets/constants/pokemon.json');
+const { colours } = require('../../assets/pokemon.json');
 const fetch = require('node-fetch');
 
 module.exports = class {
@@ -22,7 +21,7 @@ module.exports = class {
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't give me a pokemon to look up!`
+            `${client.emojis.userError} You didn't give me a pokemon to look up!`
         );
 
         message.channel.sendTyping();
@@ -69,7 +68,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -92,7 +91,7 @@ module.exports = class {
                         formes = formes.split().concat(pokemon.cosmeticFormes);
                     }
                 }
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setColour(colours[pokemon.types[0]])
                     .setTitle(`${pokemon.species.toProperCase()} (No. ${pokemon.num})`)
                     .setDescription(pokemon.flavorTexts[0].flavor)

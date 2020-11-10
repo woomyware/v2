@@ -1,5 +1,3 @@
-const Embed = require('../../util/embed');
-
 module.exports = class {
     constructor (name, category) {
         this.name = name,
@@ -38,7 +36,7 @@ module.exports = class {
             }
         }
 
-        const embed = new Embed()
+        const embed = new client.RichEmbed()
             .setTitle(colour)
             .setColour(colour)
             .setImage(`https://fakeimg.pl/256x256/${colour.replace('#', '')}/?text=%20`);

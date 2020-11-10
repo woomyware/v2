@@ -1,5 +1,6 @@
 // const { MessageCollector } = require('eris-collector');
 const { inspect, promisify } = require('util');
+const colours = require('../assets/colours.json');
 
 class Functions {
     constructor (client) {
@@ -44,8 +45,8 @@ class Functions {
             if (object.color !== 0) return '#' + object.color.toString(16);
         }
 
-        const colours = Object.keys(this.client.constants.colours);
-        return this.client.constants.colours[colours[ colours.length * Math.random() << 0]];
+        const colourKeys = Object.keys(colours);
+        return colours[colourKeys[ colours.length * Math.random() << 0]];
     }
 
     highestRole (member) {

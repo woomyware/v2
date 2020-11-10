@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const Embed = require('../../util/embed');
 
 module.exports = class {
     constructor (name, category) {
@@ -21,7 +20,7 @@ module.exports = class {
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't give me an item to look up!`
+            `${client.emojis.userError} You didn't give me an item to look up!`
         );
 
         message.channel.sendTyping();
@@ -54,7 +53,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for item')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -66,7 +65,7 @@ module.exports = class {
 
                 const item = json.data.getItemDetailsByFuzzy;
 
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setTitle(item.name)
                     .setThumbnail(item.sprite)

@@ -1,5 +1,4 @@
-const Embed = require('../../util/embed');
-const { typeArray, colours } = require('../../assets/constants/pokemon.json');
+const { typeArray, colours } = require('../../assets/pokemon.json');
 const fetch = require('node-fetch');
 
 module.exports = class {
@@ -22,7 +21,7 @@ module.exports = class {
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
+            `${client.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
         );
 
         message.channel.sendTyping();
@@ -48,7 +47,7 @@ module.exports = class {
                 json.errors.forEach(error => {
                     if (error.message.startsWith('No Pokémon found')) {
                         message.channel.createMessage(
-                            `${client.constants.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
+                            `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
                         );
                     } else {
                         client.logger.error('MATCHUP_FETCH_ERROR', error.message);
@@ -82,7 +81,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.includes('does not exist in "Types')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
+                                `${client.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('MATCHUP_FETCH_ERROR', error.message);
@@ -105,7 +104,7 @@ module.exports = class {
                 ${typeMatchup.defending.effectlessTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
                 `;
 
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setColour(colours[types[0].toProperCase()])
                     .setTitle('Type effectiveness of ' + types.map(type => type.toProperCase()).join(' and '))
                     .addField('Offensive:', `

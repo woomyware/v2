@@ -1,5 +1,3 @@
-const Embed = require('../../util/embed');
-
 module.exports = class {
     constructor (name, category) {
         this.name = name,
@@ -28,7 +26,7 @@ module.exports = class {
 
             if (list.length === 0) return message.channel.createMessage('The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!');
 
-            const embed = new Embed()
+            const embed = new client.RichEmbed()
                 .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
                 .setDescription('```' + list.join(', ') + '```')
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
@@ -39,7 +37,7 @@ module.exports = class {
         }
 
         if (!user) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't specify a user. Usage: \`${this.help.usage}\``
+            `${client.emojis.userError} You didn't specify a user. Usage: \`${this.help.usage}\``
         );
 
         let member = message.mentions[0];
@@ -47,7 +45,7 @@ module.exports = class {
         if (!member) member = await message.channel.guild.searchMembers(user.join(' '), 2);
 
         if (member.length > 1) return message.channel.createMessage(
-            `${client.constants.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
+            `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
         );
 
         action = action.toLowerCase();
@@ -58,24 +56,24 @@ module.exports = class {
 
         if (action === 'add') {
             if (member.id === message.channel.guild.ownerID) return message.channel.createMessage(
-                `${client.constants.emojis.userError} You can't block the owner, silly!`
+                `${client.emojis.userError} You can't block the owner, silly!`
             );
             
             if (client.functions.highestRole(member).position >= client.functions.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
-                return message.channel.createMessage(`${client.constants.emojis.userError} This user has a higher role than you, you can't add them to the blocklist!`);
+                return message.channel.createMessage(`${client.emojis.userError} This user has a higher role than you, you can't add them to the blocklist!`);
             }
 
             if (blocklist.includes(member.id)) return message.channel.createMessage(
-                `${client.constants.emojis.userError} This user is already on the blocklist, you can't add them twice!`
+                `${client.emojis.userError} This user is already on the blocklist, you can't add them twice!`
             );
 
             blocklist.push(member.id);
 
             client.db.updateGuild(message.channel.guild.id, 'blocklist', blocklist).then(() => {
-                message.channel.createMessage(`${client.constants.emojis.success} Added \`${member.username}#${member.discriminator}\` to the blocklist.`);
+                message.channel.createMessage(`${client.emojis.success} Added \`${member.username}#${member.discriminator}\` to the blocklist.`);
             }).catch(error => {
                 client.logger.error('GUILD_UPDATE_ERROR', error);
-                message.channel.createMessage(`${client.constants.emojis.botError} An error occured while adding this user to the blocklist, please try again! **Error:** ${error}`);
+                message.channel.createMessage(`${client.emojis.botError} An error occured while adding this user to the blocklist, please try again! **Error:** ${error}`);
             }) ;
 
             return;
@@ -83,20 +81,20 @@ module.exports = class {
 
         if (action === 'remove') {            
             if (client.functions.highestRole(member).position >= client.functions.highestRole(message.member).position && message.member.id !== message.channel.guild.ownerID) {
-                return message.channel.createMessage(`${client.constants.emojis.userError} This user has a higher role than you, you can't remove them to the blocklist!`);
+                return message.channel.createMessage(`${client.emojis.userError} This user has a higher role than you, you can't remove them to the blocklist!`);
             }
 
             if (!blocklist.includes(member.id)) return message.channel.createMessage(
-                `${client.constants.emojis.userError} This user isn't on the blocklist.`
+                `${client.emojis.userError} This user isn't on the blocklist.`
             );
 
             blocklist.remove(member.id);
 
             client.db.updateGuild(message.channel.guild.id, 'blocklist', blocklist).then(() => {
-                message.channel.createMessage(`${client.constants.emojis.success} Removed \`${member.username}#${member.discriminator}\` from the blocklist.`);
+                message.channel.createMessage(`${client.emojis.success} Removed \`${member.username}#${member.discriminator}\` from the blocklist.`);
             }).catch(error => {
                 client.logger.error('GUILD_UPDATE_ERROR', error);
-                message.channel.createMessage(`${client.constants.emojis.botError} An error occured while removing this user from the blocklist, please try again! **Error:** ${error}`);
+                message.channel.createMessage(`${client.emojis.botError} An error occured while removing this user from the blocklist, please try again! **Error:** ${error}`);
             }) ;
 
             return;

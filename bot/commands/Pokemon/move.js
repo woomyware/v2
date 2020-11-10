@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
-const Embed = require('../../util/embed');
-const { colours } = require('../../assets/constants/pokemon.json');
+const { colours } = require('../../assets/pokemon.json');
 
 module.exports = class {
     constructor (name, category) {
@@ -22,7 +21,7 @@ module.exports = class {
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't give me a pokemon move to look up!`
+            `${client.emojis.userError} You didn't give me a pokemon move to look up!`
         );
 
         message.channel.sendTyping();
@@ -66,7 +65,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for move')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -91,7 +90,7 @@ module.exports = class {
                 let fieldEffects = '';
                 if (move.isFieldMove) fieldEffects = ' Outside of battle, ' + move.isFieldMove;
 
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setColour(colours[move.type])
                     .setTitle(move.name.toProperCase() + suffix);
                 if (move.desc) {

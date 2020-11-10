@@ -1,3 +1,5 @@
+const replies = require('../../assets/replies.json');
+
 module.exports = class {
     constructor (name, category) {
         this.name = name,
@@ -17,7 +19,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        message.channel.createMessage(client.constants.replies.ping.random())
+        message.channel.createMessage(replies.ping.random())
             .then(m => {
                 m.edit(`${m.content} \`roundtrip: ${m.timestamp - message.timestamp}ms | websocket: ${message.channel.guild.shard.latency}ms\``);
             });

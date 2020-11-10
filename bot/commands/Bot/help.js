@@ -1,5 +1,4 @@
-const Embed = require('../../util/embed');
-const prettified = require ('../../assets/constants/categories.json');
+const prettified = require ('../../assets/categories.json');
 
 module.exports = class {
     constructor (name, category) {
@@ -31,7 +30,7 @@ module.exports = class {
         });
 
         if (!args[0]) {
-            const embed = new Embed();
+            const embed = new client.Richclient.RichEmbed();
             embed.setTitle('Help & Commands');
             embed.setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
             embed.setDescription(
@@ -65,7 +64,7 @@ module.exports = class {
                 cmds += `**${message.prefix + cmd.name}** ${params} ✦ ${cmd.help.description}\n`;
             });
 
-            const embed = new Embed()
+            const embed = new client.Richclient.RichEmbed()
                 .setTitle(prettified[cat].emoji + ' ' + cat)
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                 .setDescription(cmds)
@@ -76,7 +75,7 @@ module.exports = class {
 
         if (client.commands.has(cmd) || client.aliases.has(cmd)) {
             const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
-            const embed = new Embed()
+            const embed = new client.Richclient.RichEmbed()
                 .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                 .setDescription(command.help.description)
@@ -91,6 +90,6 @@ module.exports = class {
             return message.channel.createMessage({ embed: embed });
         }
 
-        return message.channel.createMessage(`${client.constants.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
+        return message.channel.createMessage(`${client.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
     }
 };

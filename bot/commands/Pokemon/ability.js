@@ -1,4 +1,3 @@
-const Embed = require('../../util/embed');
 const fetch = require('node-fetch');
 
 module.exports = class {
@@ -21,7 +20,7 @@ module.exports = class {
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.constants.emojis.userError} You didn't give me an ability to look up!`
+            `${client.emojis.userError} You didn't give me an ability to look up!`
         );
         
         message.channel.sendTyping();
@@ -53,7 +52,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for ability')) {
                             message.channel.createMessage(
-                                `${client.constants.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_FETCH_ERROR', error.message);
@@ -70,7 +69,7 @@ module.exports = class {
                     fieldEffects = ` Outside of battle, ${ability.isFieldAbility}`;
                 }
 
-                const embed = new Embed()
+                const embed = new client.RichEmbed()
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setTitle(ability.name.toProperCase());
                 if (ability.desc) {
