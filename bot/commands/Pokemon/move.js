@@ -55,6 +55,7 @@ module.exports = class {
                         bulbapediaPage
                         serebiiPage
                         smogonPage
+                        isFieldMove
                     }
                 }
             `})
@@ -81,19 +82,22 @@ module.exports = class {
 
                 if (move.isZ) {
                     suffix = ' (Z-Move)';
-                } else if (!move.maxMovePower) {
+                } else if (!move.maxMovePower && move.basePower > 0) {
                     suffix = ' (Max Move)';
                 } else if (move.isGMax) {
                     suffix = ' (G-Max Move)';
                 }
 
+                let fieldEffects = '';
+                if (move.isFieldMove) fieldEffects = ' Outside of battle, ' + move.isFieldMove;
+
                 const embed = new Embed()
                     .setColour(colours[move.type])
                     .setTitle(move.name.toProperCase() + suffix);
                 if (move.desc) {
-                    embed.setDescription(move.desc);
+                    embed.setDescription(move.desc + fieldEffects);
                 } else {
-                    embed.setDescription(move.shortDesc);
+                    embed.setDescription(move.shortDesc + fieldEffects);
                 }
 
                 embed.addField('Type:', move.type, true);

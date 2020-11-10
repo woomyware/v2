@@ -42,6 +42,7 @@ module.exports = class {
                         bulbapediaPage
                         serebiiPage
                         smogonPage
+                        isFieldAbility
                     }
                 }
             `})
@@ -63,13 +64,19 @@ module.exports = class {
                 }
 
                 const ability = json.data.getAbilityDetailsByFuzzy;
+
+                let fieldEffects = '';
+                if (ability.isFieldAbility) {
+                    fieldEffects = ` Outside of battle, ${ability.isFieldAbility}`;
+                }
+
                 const embed = new Embed()
                     .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                     .setTitle(ability.name.toProperCase());
                 if (ability.desc) {
-                    embed.setDescription(ability.desc);
+                    embed.setDescription(ability.desc + fieldEffects);
                 } else {
-                    embed.setDescription(ability.shortDesc);
+                    embed.setDescription(ability.shortDesc + fieldEffects);
                 }
                 embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) • [Serebii](${ability.serebiiPage}) • [Smogon](${ability.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
