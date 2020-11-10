@@ -8,9 +8,10 @@ const MessageHandler = require('./util/handlers/messageHandler');
 const Functions = require('./util/functions');
 const Database = require('./util/database');
 const Logger = require('./util/logger');
+const RichEmbed = require('./util/embed');
 const sentry = require('@sentry/node');
 const yaml = require('js-yaml');
-const constants = require('./assets/constants');
+const emojis = require('./assets/emojis.json');
 const config = yaml.safeLoad(require('fs').readFileSync('../botconfig.yml', 'utf8'));
 const version = require('../package.json').version;
 
@@ -24,8 +25,9 @@ class WoomyClient extends Eris.Client {
         this.version = version;
 
         // Essential modules
-        this.constants = constants;
+        this.emojis = emojis;
         this.logger = Logger;
+        this.RichEmbed = RichEmbed;
         this.db = new Database(this);
         this.functions = new Functions(this);
         this.commandLoader = new CommandLoader(this);
