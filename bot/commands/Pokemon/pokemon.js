@@ -71,7 +71,7 @@ module.exports = class {
                                 `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
-                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                            client.logger.error('POKEMON_API_ERROR', error.message);
                         }
                     });
 
@@ -108,8 +108,7 @@ module.exports = class {
                 embed.addField('Smogon Tier:', pokemon.smogonTier, true);
                 embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) • [Serebii](${pokemon.serebiiPage}) • [Smogon](${pokemon.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
-            })
-            .catch(err => console.log(err));
+            });
     }
 
     constructEvoLink (species, level, evoChain, isEvo = true) {

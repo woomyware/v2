@@ -55,7 +55,7 @@ module.exports = class {
                                 `${client.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
-                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                            client.logger.error('POKEMON_API_ERROR', error.message);
                         }
                     });
 
@@ -79,7 +79,6 @@ module.exports = class {
                 }
                 embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) • [Serebii](${ability.serebiiPage}) • [Smogon](${ability.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
-            })
-            .catch(err => console.log(err));
+            });
     }
 };

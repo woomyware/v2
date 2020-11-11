@@ -56,7 +56,7 @@ module.exports = class {
                                 `${client.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
-                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                            client.logger.error('POKEMON_API_ERROR', error.message);
                         }
                     });
 

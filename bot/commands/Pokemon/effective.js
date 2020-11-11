@@ -50,7 +50,7 @@ module.exports = class {
                             `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
                         );
                     } else {
-                        client.logger.error('MATCHUP_FETCH_ERROR', error.message);
+                        client.logger.error('MATCHUP_API_ERROR', error.message);
                     }
                 });
 

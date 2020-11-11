@@ -68,7 +68,7 @@ module.exports = class {
                                 `${client.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
-                            client.logger.error('POKEMON_FETCH_ERROR', error.message);
+                            client.logger.error('POKEMON_API_ERROR', error.message);
                         }
                     });
 
@@ -113,7 +113,6 @@ module.exports = class {
                 if (move.contestType !== null) embed.addField('Contest Type', move.contestType, true);
                 embed.addField('External Resources:', `[Bulbapedia](${move.bulbapediaPage}) • [Serebii](${move.serebiiPage}) • [Smogon](${move.smogonPage})`);
                 message.channel.createMessage({ embed: embed });
-            })
-            .catch(err => console.log(err));
+            });
     }
 };
