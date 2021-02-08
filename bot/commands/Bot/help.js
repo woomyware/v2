@@ -30,7 +30,7 @@ module.exports = class {
         });
 
         if (!args[0]) {
-            const embed = new client.Richclient.RichEmbed();
+            const embed = new client.RichEmbed();
             embed.setTitle('Help & Commands');
             embed.setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
             embed.setDescription(
@@ -64,7 +64,7 @@ module.exports = class {
                 cmds += `**${message.prefix + cmd.name}** ${params} ✦ ${cmd.help.description}\n`;
             });
 
-            const embed = new client.Richclient.RichEmbed()
+            const embed = new client.RichEmbed()
                 .setTitle(prettified[cat].emoji + ' ' + cat)
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                 .setDescription(cmds)
@@ -75,7 +75,7 @@ module.exports = class {
 
         if (client.commands.has(cmd) || client.aliases.has(cmd)) {
             const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
-            const embed = new client.Richclient.RichEmbed()
+            const embed = new client.RichEmbed()
                 .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
                 .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
                 .setDescription(command.help.description)
