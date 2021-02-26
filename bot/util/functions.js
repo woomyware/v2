@@ -86,22 +86,6 @@ class Functions {
         return;
     }
 
-    epochDifference (difference) {
-        const secondsInMiliseconds = 1000;
-        const minutesInMiliseconds = 60 * secondsInMiliseconds;
-        const hoursInMiliseconds = 60 * minutesInMiliseconds;
-    
-        const differenceInHours = difference / hoursInMiliseconds;
-        const differenceInMinutes = differenceInHours     % 1 * 60;
-        const differenceInSeconds = differenceInMinutes   % 1 * 60;
-
-        return {
-            'h'   : Math.floor(differenceInHours),
-            'm' : Math.floor(differenceInMinutes),
-            's' : Math.floor(differenceInSeconds)
-        };
-    }
-    
     intBetween (min, max) {
         return Math.round((Math.random() * (max - min) + min));
     }
