@@ -7,16 +7,15 @@
     "@sentry/node": "^5.27.3",
     "chalk": "^4.1.0",
     "eris": "^0.14.0",
-    "eris-collector": "^1.0.1",
     "eslint": "^7.12.1",
     "fs-readdir-recursive": "^1.1.0",
     "js-yaml": "^3.14.0",
     "node-fetch": "^2.6.1",
     "pg": "^8.4.2",
     "pg-format": "^1.0.4",
+    "pretty-ms": "^7.0.1",
     "windrose": "^2.1.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
   },
