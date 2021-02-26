@@ -39,7 +39,7 @@ module.exports = class {
         }
 
         message.channel.sendTyping();
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city + countryCode}&appid=${client.config.keys.weather}`)
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city + countryCode}&appid=${client.config.keys.weather}`, { headers: { 'User-Agent': client.config.userAgent }})
             .then(res => res.json())
             .then(json => {
                 if (json.cod >= 200 && json.cod <= 299) {
