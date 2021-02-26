@@ -27,7 +27,7 @@ module.exports = class {
         fetch('https://gamecp.apex.to/api/client/servers/1fc76afa-9a4d-497b-983a-a898795ab5b5/power', {
             method: 'post',
             body: JSON.stringify({ 'signal': 'restart' }),
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${client.config.server}` }
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${client.config.server}`, 'User-Agent': client.config.userAgent }
         });
     }
 };

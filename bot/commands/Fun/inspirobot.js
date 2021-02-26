@@ -21,7 +21,7 @@ module.exports = class {
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         message.channel.sendTyping();
         try {
-            fetch('http://inspirobot.me/api?generate=true')
+            fetch('http://inspirobot.me/api?generate=true', { headers: { 'User-Agent': client.config.userAgent }})
                 .then(res => res.text())
                 .then(body => message.channel.createMessage(body));
         } catch (err) {

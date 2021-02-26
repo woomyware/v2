@@ -32,7 +32,8 @@ module.exports = class {
             const res = await fetch('https://graphqlpokemon.favware.tech/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'User-Agent': client.config.userAgent
                 },
                 body: JSON.stringify({ query: `
                     {

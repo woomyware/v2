@@ -22,7 +22,7 @@ module.exports = class {
         let date = 'xxxx';
         if (args[0] && args[0].toLowerCase() === 'daily') date = new Date();
         message.channel.sendTyping();
-        fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date)
+        fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date, { headers: { 'User-Agent': client.config.userAgent }})
             .then(res => res.json())
             .then(json => {
                 const embed = new client.RichEmbed()
