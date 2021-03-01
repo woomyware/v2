@@ -146,3 +146,8 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', err => {
     client.logger.error('UNHANDLED_PROMISE_ERROR', err.stack);
 });
+
+// Shut down gracefully when SIGINT is recieved
+process.on('SIGINT', () => {
+    client.functions.shutdown();
+});
