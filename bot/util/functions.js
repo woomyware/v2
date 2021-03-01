@@ -1,4 +1,3 @@
-// const { MessageCollector } = require('eris-collector');
 const { inspect, promisify } = require('util');
 const colours = require('../assets/colours.json');
 
