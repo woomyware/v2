@@ -11,7 +11,7 @@ module.exports = class {
         this.aliases = ['splatoonmodes'],
         this.userPerms = [],
         this.botPerms = [],
-        this.cooldown = 5000,
+        this.cooldown = 30000,
         this.help = {
             description: 'Get current and upcoming maps and modes for regular, ranked and league battles.',
             arguments: '',

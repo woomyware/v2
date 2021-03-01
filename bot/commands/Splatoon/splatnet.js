@@ -11,7 +11,7 @@ module.exports = class {
         this.aliases = [],
         this.userPerms = [],
         this.botPerms = [],
-        this.cooldown = 5000,
+        this.cooldown = 30000,
         this.help = {
             description: 'See what is currently on offer in the splatnet shop',
             arguments: '',
