@@ -26,5 +26,9 @@
     "Utility": {
         "emoji": "🔦",
         "description": "Useful commands that don't fit in elsewhere"
+    },
+    "Splatoon": {
+        "emoji": "<:splatoon:815491494105448480>",
+        "description": "View current maps, modes, and splatnet gear on rotation!"
     }
 }

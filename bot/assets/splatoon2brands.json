@@ -1,0 +1,91 @@
+{
+    "Amiibo": {
+        "common": "N/A",
+        "uncommon": "N/A"
+    },
+
+    "Annaki": {
+        "common": "Main Power Up",
+        "uncommon": "Special Saver"
+    },
+
+    "Cuttlegear": {
+        "common": "N/A",
+        "uncommon": "N/A"
+    },
+
+    "Enperry": {
+        "common": "Sub Power Up",
+        "uncommon": "Ink Resistance Up"
+    },
+
+    "Firefin": {
+        "common": "Ink Saver (Sub)",
+        "uncommon": "Ink Recovery Up"
+    },
+
+    "Forge": {
+        "common": "Special Power Up",
+        "uncommon": "Ink Saver (Sub)"
+    },
+
+    "Grizzco": {
+        "common": "N/A",
+        "uncommon": "N/A"
+    },
+
+    "Inkline": {
+        "common": "Bomb Defence Up DX",
+        "uncommon": "Main Power Up"
+    },
+
+    "Krak-On": {
+        "common": "Swim Speed Up",
+        "uncommon": "Bomb Defence Up DX"
+    },
+
+    "Rockenburg": {
+        "common": "Run Speed Up",
+        "uncommon": "Swim Speed Up"
+    },
+
+    "Skalop": {
+        "common": "Quick Respawn",
+        "uncommon": "Special Saver"
+    },
+
+    "Splash Mob": {
+        "common": "Ink Saver (Main)",
+        "uncommon": "Run Speed Up"
+    },
+
+    "SquidForce": {
+        "common": "Ink Resistance Up",
+        "uncommon": "Ink Saver (Main)"
+    },
+
+    "Takoroka": {
+        "common": "Special Charge Up",
+        "uncommon": "Special Power Up"
+    },
+
+    "Tentatek": {
+        "common": "Ink Recovery Up",
+        "uncommon": "Quick Super Jump"
+    },
+
+    "ToniKensa": {
+        "common": "Main Power Up",
+        "uncommon": "Sub Power Up"
+    },
+
+    "Zekko": {
+        "common": "Special Saver",
+        "uncommon": "Special Charge Up"
+    },
+
+    "Zink": {
+        "common": "Quick Super Jump",
+        "uncommon": "Quick Respawn"
+    }
+}
