@@ -10,9 +10,8 @@ const Database = require('./util/database');
 const Logger = require('./util/logger');
 const RichEmbed = require('./util/embed');
 const sentry = require('@sentry/node');
-const yaml = require('js-yaml');
 const emojis = require('./assets/emojis.json');
-const config = yaml.safeLoad(require('fs').readFileSync('../botconfig.yml', 'utf8'));
+const config = require('../botconfig.json');
 const version = require('../package.json').version;
 
 class WoomyClient extends Eris.Client {
