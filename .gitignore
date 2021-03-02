@@ -1,5 +1,5 @@
 application.yml
-botconfig.yml
+botconfig.json
 Lavalink.jar
 logs
 *.log
