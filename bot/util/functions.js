@@ -27,6 +27,10 @@ class Functions {
             return false;
         }
     }
+    
+    intBetween (min, max) {
+        return Math.round((Math.random() * (max - min) + min));
+    }
 
     randomColour () {
         const n = (Math.random() * 0xfffff * 1000000).toString(16);
@@ -38,14 +42,14 @@ class Functions {
         return roleMap.sort((a, b) => b.position - a.position);
     }   
 
-    displayHexColour (guild, userID) {
-        const roles = this.roleObjects(guild, guild.members.get(userID).roles);
-        for (const object of roles) {
-            if (object.color !== 0) return '#' + object.color.toString(16);
+    findRole (input, guild) {
+        let role;
+        role = guild.roles.find(r => r.name.toLowerCase() === input.toLowerCase());
+        if (!role) {
+            role = guild.roles.get(input.toLowerCase());
         }
-
-        const colourKeys = Object.keys(colours);
-        return colours[colourKeys[ colours.length * Math.random() << 0]];
+        if (!role) return;
+        return role;
     }
 
     highestRole (member) {
@@ -61,14 +65,14 @@ class Functions {
         return highestRole;
     }
 
-    findRole (input, guild) {
-        let role;
-        role = guild.roles.find(r => r.name.toLowerCase() === input.toLowerCase());
-        if (!role) {
-            role = guild.roles.get(input.toLowerCase());
+    displayHexColour (guild, userID) {
+        const roles = this.roleObjects(guild, guild.members.get(userID).roles);
+        for (const object of roles) {
+            if (object.color !== 0) return '#' + object.color.toString(16);
         }
-        if (!role) return;
-        return role;
+
+        const colourKeys = Object.keys(colours);
+        return colours[colourKeys[ colours.length * Math.random() << 0]];
     }
 
     checkPermissions (channel, user_id, requiredPerms) {
@@ -83,27 +87,6 @@ class Functions {
         if (missingPerms.length > 0) return missingPerms;
 
         return;
-    }
-
-    intBetween (min, max) {
-        return Math.round((Math.random() * (max - min) + min));
-    }
-
-    shutdown () {
-        const exitQuotes = [
-            'Shutting down.',
-            'I don\'t blame you.',
-            'I don\'t hate you.',
-            'Whyyyyy',
-            'Goodnight.',
-            'Goodbye'
-        ];
-
-        this.client.disconnect();
-
-        this.client.logger.success('SHUTDOWN_SUCCESS', exitQuotes.random());
-
-        process.exit();
     }
 
     async getUser (id) {
@@ -151,6 +134,23 @@ class Functions {
             .replace(this.client.token, 'mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0');
     
         return text;
+    }
+
+    shutdown () {
+        const exitQuotes = [
+            'Shutting down.',
+            'I don\'t blame you.',
+            'I don\'t hate you.',
+            'Whyyyyy',
+            'Goodnight.',
+            'Goodbye'
+        ];
+
+        this.client.disconnect();
+
+        this.client.logger.success('SHUTDOWN_SUCCESS', exitQuotes.random());
+
+        process.exit();
     }
 
     wait () {
