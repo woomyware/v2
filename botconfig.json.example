@@ -1,0 +1,22 @@
+{
+    "developmentMode": true,
+
+    "token": "",
+
+    "userAgent": "",
+    
+    "ownerIDs": [""],
+
+    "keys": {
+        "sentry": "",
+        "weather": ""
+    },
+
+    "postgresOptions": {
+        "user": "",
+        "host": "",
+        "database": "",
+        "password": "",
+        "port": 0000
+    }
+}
