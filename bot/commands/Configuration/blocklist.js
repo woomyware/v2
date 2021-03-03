@@ -36,8 +36,12 @@ module.exports = class {
             return;
         }
 
+        if (action.toLowerCase() !== 'add' || action.toLowerCase() !== 'remove') {
+            return message.channel.createMessage(`${client.emojis.userError} You didn't specify a valid action. Usage: \`${this.help.usage}\``);
+        }
+
         if (!user) return message.channel.createMessage(
-            `${client.emojis.userError} You didn't specify a user. Usage: \`${this.help.usage}\``
+            `${client.emojis.userError} You didn't specify a user. Usage: \`${message.prefix + this.help.usage}\``
         );
 
         let member = message.mentions[0];
