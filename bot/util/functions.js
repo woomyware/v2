@@ -27,7 +27,7 @@ class Functions {
             return false;
         }
     }
-    
+
     intBetween (min, max) {
         return Math.round((Math.random() * (max - min) + min));
     }
@@ -66,6 +66,7 @@ class Functions {
     }
 
     displayHexColour (guild, userID) {
+        if (!userID) userID === this.client.user.id;
         const roles = this.roleObjects(guild, guild.members.get(userID).roles);
         for (const object of roles) {
             if (object.color !== 0) return '#' + object.color.toString(16);
