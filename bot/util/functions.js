@@ -135,8 +135,6 @@ class Functions {
         return;
     }
 
-    async 
-
     async clean (text) {
         if (text && text.constructor.name === 'Promise') {
             text = await text;
