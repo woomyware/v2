@@ -31,7 +31,7 @@ module.exports = class {
                     const embed = new client.RichEmbed()
                         .setTitle(json.merchandises[i].gear.name)
                         .setThumbnail('https://splatoon2.ink/assets/splatnet' + json.merchandises[i].gear.image)
-                        .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                        .setColour(client.functions.displayHexColour(message.channel.guild))
                         .addField('Price', (json.merchandises[i].price).toString(), true)
                         .addField('Brand', json.merchandises[i].gear.brand.name, true)
                         .addField('Ability Slots', (json.merchandises[i].gear.rarity + 1).toString(), true)

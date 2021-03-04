@@ -35,7 +35,7 @@ module.exports = class {
                             embeds.push(
                                 new client.RichEmbed()
                                     .setTitle('Upcoming Salmon Run')
-                                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                                    .setColour(client.functions.displayHexColour(message.channel.guild))
                                     .setImage('https://splatoon2.ink/assets/splatnet/'+json.details[0].stage.image)
                                     .addField('Map', json.details[0].stage.name, true)
                                     .setFooter(`Starting in ${prettifyMiliseconds(json.details[0].start_time * 1000 - Date.now(), { secondsDecimalDigits: 0 })} | Data provided by splatoon2.ink`)
@@ -44,7 +44,7 @@ module.exports = class {
                             embeds.push(
                                 new client.RichEmbed()
                                     .setTitle('Current Salmon Run')
-                                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                                    .setColour(client.functions.displayHexColour(message.channel.guild))
                                     .setThumbnail('https://splatoon2.ink/assets/splatnet'+timelineJson.coop.reward_gear.gear.image)
                                     .setImage('https://splatoon2.ink/assets/splatnet/'+json.details[0].stage.image)
                                     .addField('Map', json.details[0].stage.name, true)
@@ -57,7 +57,7 @@ module.exports = class {
                         embeds.push(
                             new client.RichEmbed()
                                 .setTitle('Upcoming Salmon Run')
-                                .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                                .setColour(client.functions.displayHexColour(message.channel.guild))
                                 .setImage('https://splatoon2.ink/assets/splatnet/'+json.details[1].stage.image)
                                 .addField('Map', json.details[1].stage.name, true)
                                 .addField('Weapons', json.details[1].weapons[1].weapon.name+', '+json.details[1].weapons[1].weapon.name+', '+json.details[1].weapons[2].weapon.name+', '+json.details[1].weapons[3].weapon.name)

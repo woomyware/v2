@@ -27,7 +27,7 @@ module.exports = class {
             .then(json => {
                 const embed = new client.RichEmbed()
                     .setTitle(`${json.data.name} (No. ${json.data.number})`)
-                    .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                    .setColour(client.functions.displayHexColour(message.channel.guild))
                     .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
                     .setImage(json.data.image.src);
                 message.channel.createMessage({ embed: embed });

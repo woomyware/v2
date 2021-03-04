@@ -29,7 +29,7 @@ module.exports = class {
                 const embeds = [
                     new client.RichEmbed()
                         .setTitle('Current Splatoon 2 Maps')
-                        .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                        .setColour(client.functions.displayHexColour(message.channel.guild))
                         .addField('<:turf_war:814651383911153692> Turf War', `${json.regular[0].stage_a.name}\n${json.regular[0].stage_b.name}`, true)
                         .addField(`<:ranked:814651402479468544> Ranked: ${json.gachi[0].rule.name}`, `${json.gachi[0].stage_a.name}\n${json.gachi[0].stage_b.name}`, true)
                         .addField(`<:league:814651415409590363> League: ${json.league[0].rule.name}`, `${json.league[0].stage_a.name}\n${json.league[0].stage_b.name}`, true)
@@ -39,7 +39,7 @@ module.exports = class {
                 for ( let i = 1; i < json.regular.length; i++ ) {
                     const embed = new client.RichEmbed()
                         .setTitle('Upcoming Splatoon 2 Maps')
-                        .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id))
+                        .setColour(client.functions.displayHexColour(message.channel.guild))
                         .addField('<:turf_war:814651383911153692> Turf War', `${json.regular[i].stage_a.name}\n${json.regular[i].stage_b.name}`, true)
                         .addField(`<:ranked:814651402479468544> Ranked: ${json.gachi[i].rule.name}`, `${json.gachi[i].stage_a.name}\n${json.gachi[i].stage_b.name}`, true)
                         .addField(`<:league:814651415409590363> League: ${json.league[i].rule.name}`, `${json.league[i].stage_a.name}\n${json.league[i].stage_b.name}`, true)

@@ -24,12 +24,12 @@ module.exports = class {
                 list.push(`${user.username}#${user.discriminator}`);
             }
 
-            if (list.length === 0) return message.channel.createMessage('The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!');
+            if (list.length === 0) return message.channel.=('The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!');
 
             const embed = new client.RichEmbed()
                 .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
                 .setDescription('```' + list.join(', ') + '```')
-                .setColour(client.functions.displayHexColour(message.channel.guild, client.user.id));
+                .setColour(client.functions.displayHexColour(message.channel.guild));
                 
             message.channel.createMessage({ embed: embed });
             
