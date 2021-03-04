@@ -113,6 +113,7 @@ class MessageHandler {
             this.client.logger.command(`Ran ${command.name}`);
         } catch (error) {
             this.client.logger.error('COMMAND_EXECUTION_ERROR', `${command.name}: ${error}`);
+            message.channel.createMessage(`${this.client.emojis.botError} An error occured when I was trying to run this command. I've sent through the details of the error to my developers.`);
         }
     }
 }
