@@ -65,9 +65,9 @@ class Functions {
         return highestRole;
     }
 
-    displayHexColour (guild, userID) {
-        if (!userID) userID === this.client.user.id;
-        const roles = this.roleObjects(guild, guild.members.get(userID).roles);
+    displayHexColour (guild, member) {
+        if (!member) member = guild.members.get(this.client.user.id);
+        const roles = this.roleObjects(guild, member.roles);
         for (const object of roles) {
             if (object.color !== 0) return '#' + object.color.toString(16);
         }
