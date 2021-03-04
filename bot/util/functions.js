@@ -92,9 +92,9 @@ class Functions {
 
     async getUser (id) {
         if (this.client.users.has(id)) return this.client.users.get(id);
-        this.client.logger.debug('REST_FETCH_USER', 'Accessing rest API...');
+        this.client.logger.debug('REST_GET_USER', 'Accessing rest API...');
         const user = await this.client.getRESTUser(id).catch(err => {
-            this.client.logger.error('USER_FETCH_ERROR', err);
+            this.client.logger.error('USER_GET_ERROR', err);
         });
         
         if (user) {
@@ -107,9 +107,9 @@ class Functions {
 
     async getMember (guild, memberID) {
         if (guild.members.has(memberID)) return guild.members.get(memberID);
-        this.client.logger.debug('REST_FETCH_MEMBER', 'Accessing rest API...');
+        this.client.logger.debug('REST_GET_MEMBER', 'Accessing rest API...');
         const member = await this.client.getRESTGuildMember(guild.id, memberID).catch(err => {
-            this.client.logger.error('MEMBER_FETCH_ERROR', err);
+            this.client.logger.error('MEMBER_GET_ERROR', err);
         });
         
         if (member) {
@@ -122,9 +122,9 @@ class Functions {
     
     async getGuild (id) {
         if (this.client.guilds.has(id)) return this.client.guilds.get(id);
-        this.client.logger.debug('REST_FETCH_GUILD', 'Accessing rest API...');
+        this.client.logger.debug('REST_GET_GUILD', 'Accessing rest API...');
         const guild = await this.client.getRESTGuild(id).catch(err => {
-            this.client.logger.error('GUILD_FETCH_ERROR', err);
+            this.client.logger.error('GUILD_GET_ERROR', err);
         });
         
         if (guild) {
@@ -134,6 +134,8 @@ class Functions {
 
         return;
     }
+
+    async 
 
     async clean (text) {
         if (text && text.constructor.name === 'Promise') {
