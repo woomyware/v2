@@ -104,6 +104,21 @@ class Functions {
 
         return;
     }
+
+    async getMember (guild, memberID) {
+        if (guild.members.has(memberID)) return guild.members.get(memberID);
+        this.client.logger.debug('REST_FETCH_MEMBER', 'Accessing rest API...');
+        const member = await this.client.getRESTGuildMember(guild.id, memberID).catch(err => {
+            this.client.logger.error('MEMBER_FETCH_ERROR', err);
+        });
+        
+        if (member) {
+            guild.members.set(memberID, member);
+            return member;
+        }
+
+        return;
+    }
     
     async getGuild (id) {
         if (this.client.guilds.has(id)) return this.client.guilds.get(id);
