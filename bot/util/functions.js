@@ -129,10 +129,19 @@ class Functions {
         
         if (guild) {
             this.client.guilds.set(id, guild);
-            return guild;
+            return guild;   
         }
 
         return;
+    }
+
+    async validateUserID (guild, ID) {
+        const valid = /[0-9]{18}/.test(ID);
+        if (valid === true) {
+            const member = await this.getMember(guild, ID);
+
+            if (member) return member;
+        }
     }
 
     async clean (text) {
