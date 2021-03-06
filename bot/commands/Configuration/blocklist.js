@@ -36,7 +36,9 @@ module.exports = class {
             return;
         }
 
-        if (action.toLowerCase() !== 'add' || action.toLowerCase() !== 'remove') {
+        action = action.toLowerCase();
+
+        if (action !== 'add' & action !== 'remove') {
             return message.channel.createMessage(`${client.emojis.userError} You didn't specify a valid action. Usage: \`${this.help.usage}\``);
         }
 
@@ -44,17 +46,27 @@ module.exports = class {
             `${client.emojis.userError} You didn't specify a user. Usage: \`${message.prefix + this.help.usage}\``
         );
 
-        let member = message.mentions[0];
+        let member;
 
-        if (!member) member = await message.channel.guild.searchMembers(user.join(' '), 2);
+        if (message.mentions.length > 0) {
+            member = await client.functions.getMember(message.channel.guild, message.mentions[0].id);
+        } else {
+            member = await client.functions.validateUserID(message.channel.guild, user[0]);
 
-        if (member.length > 1) return message.channel.createMessage(
-            `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
-        );
-
-        action = action.toLowerCase();
-
-        member = member[0];
+            if (!member) {
+                member = await message.channel.guild.searchMembers(user.join(' '), 2);
+            
+                if (member.length === 0) return message.channel.createMessage(
+                    `${client.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
+                );
+        
+                if (member.length > 1) return message.channel.createMessage(
+                    `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
+                );
+        
+                member = member[0];
+            }
+        }
 
         const blocklist = data.guild.blocklist;
 

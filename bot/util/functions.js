@@ -72,7 +72,7 @@ class Functions {
             let hexadecimal = object.color.toString(16);
             while (hexadecimal.length < 6) {
                 hexadecimal = '0' + hexadecimal;
-            };
+            }
 
             return '#' + hexadecimal;
         }

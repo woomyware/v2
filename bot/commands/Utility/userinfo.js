@@ -26,17 +26,21 @@ module.exports = class {
             if (message.mentions.length > 0) {
                 member = await client.functions.getMember(message.channel.guild, message.mentions[0].id);
             } else {
-                member = await message.channel.guild.searchMembers(args.join(' '), 2);
+                member = await client.functions.validateUserID(message.channel.guild, args[0]);
+
+                if (!member) {
+                    member = await message.channel.guild.searchMembers(args.join(' '), 2);
                 
-                if (member.length === 0) return message.channel.createMessage(
-                    `${client.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
-                );
-        
-                if (member.length > 1) return message.channel.createMessage(
-                    `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
-                );
-        
-                member = member[0];
+                    if (member.length === 0) return message.channel.createMessage(
+                        `${client.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
+                    );
+            
+                    if (member.length > 1) return message.channel.createMessage(
+                        `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
+                    );
+            
+                    member = member[0];
+                }
             }
         }
 
