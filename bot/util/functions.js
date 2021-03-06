@@ -69,7 +69,12 @@ class Functions {
         if (!member) member = guild.members.get(this.client.user.id);
         const roles = this.roleObjects(guild, member.roles);
         for (const object of roles) {
-            if (object.color !== 0) return '#' + object.color.toString(16);
+            let hexadecimal = object.color.toString(16);
+            while (hexadecimal.length < 6) {
+                hexadecimal = '0' + hexadecimal;
+            };
+
+            return '#' + hexadecimal;
         }
 
         const colourKeys = Object.keys(colours);
