@@ -7,15 +7,15 @@ module.exports = class {
         this.category = category,
         this.enabled = true,
         this.devOnly = false,
-        this.aliases = [],
+        this.aliases = ['user'],
         this.userPerms = [],
         this.botPerms = [],
         this.cooldown = 2000,
         this.help = {
-            description: '',
-            arguments: '',
+            description: 'Get information on a user.',
+            arguments: '[user]',
             details: '',
-            examples: ''
+            examples: 'userinfo\nuserinfo Octavia\nuserinfo @Animals'
         };
     }
 
