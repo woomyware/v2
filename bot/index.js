@@ -123,11 +123,11 @@ client.eventLoader.loadEventModules();
 client.createEventListeners();
 
 // Development mode is set in botconfig.yml, and disables some stuff if enabled. Imagine how messy Sentry would be without this!
-if (client.config.devmode === true) {
+if (client.config.developmentMode === false) {
     try { 
         sentry.init({ dsn: client.config.keys.sentry });
     } catch (err) { 
-        client.logger.error('SENTRY_INIT_ERROR', `Sentry failed to initialize: ${err}`); 
+        client.logger.error('SENTRY_INIT_ERROR', `Sentry failed to initialize: ${err}`);
     }
 } else {
     client.logger.warning('DEVELOPMENT_MODE', 'Running in development mode, some features have been disabled.');
