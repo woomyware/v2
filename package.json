@@ -4,17 +4,21 @@
   "description": "Made with <3 by mudkipscience",
   "main": "index.js",
   "dependencies": {
-    "@sentry/node": "^6.2.2",
+    "@sentry/node": "^6.9.0",
+    "bufferutil": "^4.0.3",
     "chalk": "^4.1.0",
-    "dayjs": "^1.10.4",
+    "dayjs": "^1.10.6",
     "discord.js": "^13.0.0-dev.1dcad05.1626134620",
-    "eslint": "^7.22.0",
+    "erlpack": "^0.1.3",
+    "eslint": "^7.30.0",
     "fs-readdir-recursive": "^1.1.0",
     "node-fetch": "^2.6.1",
     "pg": "^8.5.1",
     "pg-format": "^1.0.4",
     "pretty-ms": "^7.0.1",
-    "windrose": "^2.1.0"
+    "utf-8-validate": "^5.0.5",
+    "windrose": "^2.1.0",
+    "zlib-sync": "^0.1.7"
   },
   "scripts": {
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
