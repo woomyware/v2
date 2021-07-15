@@ -32,7 +32,7 @@ module.exports = class {
         if (!args[0]) {
             const embed = new client.RichEmbed();
             embed.setTitle('Help & Commands');
-            embed.setColour(client.functions.displayHexColour(message.channel.guild));
+            embed.setColour(client.functions.displayHexColour(message.guild));
             embed.setDescription(
                 `
                 » Use \`${message.prefix}help [category]\` to get basic information on all commands in the category.   
@@ -66,7 +66,7 @@ module.exports = class {
 
             const embed = new client.RichEmbed()
                 .setTitle(prettified[cat].emoji + ' ' + cat)
-                .setColour(client.functions.displayHexColour(message.channel.guild))
+                .setColour(client.functions.displayHexColour(message.guild))
                 .setDescription(cmds)
                 .setFooter('<> = required, / = either/or, [] = optional');
             
@@ -77,7 +77,7 @@ module.exports = class {
             const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
             const embed = new client.RichEmbed()
                 .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
-                .setColour(client.functions.displayHexColour(message.channel.guild))
+                .setColour(client.functions.displayHexColour(message.guild))
                 .setDescription(command.help.description)
                 .addField('Format:', `\`${message.prefix + command.name} ${command.help.arguments}`.trim() + '`');
             if (command.help.details.length > 0) embed.addField('Parameters:', command.help.details);

@@ -24,12 +24,12 @@ module.exports = class {
         
         if (args[0]) {
             if (message.mentions.length > 0) {
-                member = await client.functions.getMember(message.channel.guild, message.mentions[0].id);
+                member = await client.functions.getMember(message.guild, message.mentions[0].id);
             } else {
-                member = await client.functions.validateUserID(message.channel.guild, args[0]);
+                member = await client.functions.validateUserID(message.guild, args[0]);
 
                 if (!member) {
-                    member = await message.channel.guild.searchMembers(args.join(' '), 2);
+                    member = await message.guild.searchMembers(args.join(' '), 2);
                 
                     if (member.length === 0) return message.channel.send(
                         `${client.config.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
@@ -63,7 +63,7 @@ module.exports = class {
 
         const embed = new client.RichEmbed()
             .setTitle(member.user.username + '#' + member.user.discriminator)
-            .setColour(client.functions.displayHexColour(message.channel.guild, member))
+            .setColour(client.functions.displayHexColour(message.guild, member))
             .setThumbnail(member.user.avatarURL || member.user.defaultAvatarURL)
             .addField('Display Name', member.nick || member.user.username, true)
             .addField('User ID', member.id, true)

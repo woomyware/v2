@@ -17,10 +17,10 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        const guild = message.channel.guild;
+        const guild = message.guild;
         
         const embed = new client.RichEmbed()
-            .setColour(client.functions.displayHexColour(message.channel.guild))
+            .setColour(client.functions.displayHexColour(message.guild))
             .setTitle(guild.name)
             .setThumbnail(guild.iconURL)
             .addField('ID', guild.id, true)

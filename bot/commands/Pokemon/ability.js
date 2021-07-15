@@ -71,7 +71,7 @@ module.exports = class {
                 }
 
                 const embed = new client.RichEmbed()
-                    .setColour(client.functions.displayHexColour(message.channel.guild))
+                    .setColour(client.functions.displayHexColour(message.guild))
                     .setTitle(ability.name.toProperCase());
                 if (ability.desc) {
                     embed.setDescription(ability.desc + fieldEffects);

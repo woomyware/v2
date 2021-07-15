@@ -57,7 +57,7 @@ module.exports = class {
 
             disabled.push(command.name);
 
-            await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
+            await client.db.updateGuild(message.guild.id, 'disabledcommands', disabled);
 
             return message.channel.send(
                 `${client.config.emojis.success} Added **${args[1]}** to the list of disabled commands for this server.`
@@ -85,7 +85,7 @@ module.exports = class {
 
             disabled.remove(command.name);
 
-            await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
+            await client.db.updateGuild(message.guild.id, 'disabledcommands', disabled);
             
             return message.channel.send(
                 `${client.config.emojis.success} Added **${args[1]}** to the list of disabled category for this server!`

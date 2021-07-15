@@ -67,7 +67,7 @@ module.exports = class {
                 const item = json.data.getItemDetailsByFuzzy;
 
                 const embed = new client.RichEmbed()
-                    .setColour(client.functions.displayHexColour(message.channel.guild))
+                    .setColour(client.functions.displayHexColour(message.guild))
                     .setTitle(item.name)
                     .setThumbnail(item.sprite)
                     .addField('External Resources:', `[Bulbapedia](${item.bulbapediaPage}) • [Serebii](${item.serebiiPage}) • [Smogon](${item.smogonPage})`);
