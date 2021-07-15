@@ -19,4 +19,12 @@
         "password": "",
         "port": 0000
     }
+
+    "emojis": {
+        "success": "<:success:466995111885144095>",
+        "botError": "<:warning:701681841190600704>",
+        "userError": "<:error:466995152976871434>",
+        "permError": "<:denied:466995195150336020>",
+        "wait": "<:wait:467115775849922570>"
+    }
 }

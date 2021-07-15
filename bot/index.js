@@ -1,6 +1,6 @@
 // Copyright 2020 Emily J. / mudkipscience and contributors. Subject to the AGPLv3 license.
 
-const Eris = (require('eris'));
+const Discord = require('discord.js');
 const CommandLoader = require('./util/commandLoader');
 const EventLoader = require('./util/eventLoader');
 const EventHandler = require('./util/handlers/eventHandler');
@@ -8,15 +8,13 @@ const MessageHandler = require('./util/handlers/messageHandler');
 const Functions = require('./util/functions');
 const Database = require('./util/database');
 const Logger = require('./util/logger');
-const RichEmbed = require('./util/embed');
 const sentry = require('@sentry/node');
-const emojis = require('./assets/emojis.json');
 const config = require('../botconfig.json');
 const version = require('../package.json').version;
 
-class WoomyClient extends Eris.Client {
-    constructor (token, options) {
-        super(token, options);
+class WoomyClient extends Discord.Client {
+    constructor (options) {
+        super(options);
 
         // Important information Woomy needs to access
         this.config = config;
@@ -24,9 +22,7 @@ class WoomyClient extends Eris.Client {
         this.version = version;
 
         // Essential modules
-        this.emojis = emojis;
         this.logger = Logger;
-        this.RichEmbed = RichEmbed;
         this.db = new Database(this);
         this.functions = new Functions(this);
         this.commandLoader = new CommandLoader(this);
@@ -35,13 +31,13 @@ class WoomyClient extends Eris.Client {
         this.messageHandler = new MessageHandler(this);
 
         // Collections to store our successfully loaded events and commands in, as well as cooldowns.
-        this.commands = new Eris.Collection();
-        this.aliases = new Eris.Collection();
-        this.eventModules = new Eris.Collection();
-        this.cooldowns = new Eris.Collection();
+        this.commands = new Discord.Collection();
+        this.aliases = new Discord.Collection();
+        this.eventModules = new Discord.Collection();
+        this.cooldowns = new Discord.Collection();
     }
 
-    // Listen for Eris events and pass needed information to the event handler so we can respond to them.
+    // Listen for Discord events and pass needed information to the event handler so we can respond to them.
     createEventListeners () {
         this.on('ready', this.runReadyModules);
         this.on('error', this.runErrorModules);
@@ -98,26 +94,22 @@ class WoomyClient extends Eris.Client {
 }
 
 // Initialize our client
-const client = new WoomyClient(config.token, { 
-    maxShards: 'auto',
-    restMode: true,
-    //getAllUsers: true,
-    defaultImageSize: 2048,
+const client = new WoomyClient({ 
+    shards: 'auto',
     intents: [
-        'guilds',
-        'guildMembers',
-        'guildEmojis',
-        'guildVoiceStates',
-        'guildMessages',
-        'guildMessageReactions',
-        'guildMessageTyping'
+        'GUILDS',
+        'GUILD_MEMBERS',
+        'GUILD_EMOJIS',
+        'GUILD_VOICE_STATES',
+        'GUILD_MESSAGES',
+        'DIRECT_MESSAGES',
+        'GUILD_MESSAGE_REACTIONS',
     ]
 });
-
 // Extensions of native javascript types, *not good practice* but they're useful
 require('./util/prototypes');
 
-// Load commands, event modules and create listeners for Eris events (ready, errors, messages, etc)
+// Load commands, event modules and create listeners for Discord events (ready, errors, messages, etc)
 client.commandLoader.loadCommands();
 client.eventLoader.loadEventModules();
 client.createEventListeners();
@@ -134,7 +126,7 @@ if (client.config.developmentMode === false) {
 }
 
 // Login to Discord
-client.connect();
+client.login(config.token);
 
 // Process exception/promise rejection listeners
 process.on('uncaughtException', (error) => {
