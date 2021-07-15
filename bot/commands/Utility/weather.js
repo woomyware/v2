@@ -71,16 +71,16 @@ module.exports = class {
                         .addField('Wind Speed:', `${Math.round(json.wind.speed * 10) / 10}km/h | ${Math.round(json.wind.speed * 10 / 1.609344)}mi/h`, true)
                         .addField('Wind Direction:', windrose.getPoint(json.wind.deg).name, true)
                         .setFooter('Powered by openweathermap.org');
-                    return message.channel.createMessage({ embed:embed });
+                    return message.channel.send({ embed:embed });
                 } else {
                     if (json.message && json.message === 'city not found') {
-                        return message.channel.createMessage(`${client.config.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
+                        return message.channel.send(`${client.config.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
                     }
-                    return message.channel.createMessage(`${client.config.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
+                    return message.channel.send(`${client.config.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
                 }
             })
             .catch(err => {
-                return message.channel.createMessage(`${client.config.emojis.botError} An error has occured: \`${err.stack}\``);
+                return message.channel.send(`${client.config.emojis.botError} An error has occured: \`${err.stack}\``);
             });
     }
 };

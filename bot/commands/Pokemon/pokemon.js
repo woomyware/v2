@@ -20,7 +20,7 @@ module.exports = class {
     }
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        if (!args[0]) return message.channel.createMessage(
+        if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me a pokemon to look up!`
         );
 
@@ -68,7 +68,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
-                            message.channel.createMessage(
+                            message.channel.send(
                                 `${client.config.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
@@ -108,7 +108,7 @@ module.exports = class {
                 embed.addField('Egg Groups:', pokemon.eggGroups.join(', '), true);
                 embed.addField('Smogon Tier:', pokemon.smogonTier, true);
                 embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) • [Serebii](${pokemon.serebiiPage}) • [Smogon](${pokemon.smogonPage})`);
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             });
     }
 

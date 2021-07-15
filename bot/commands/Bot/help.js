@@ -48,7 +48,7 @@ module.exports = class {
             });
             embed.setFooter('<> = required, / = either/or, [] = optional');
 
-            return message.channel.createMessage({ embed: embed });
+            return message.channel.send({ embed: embed });
         }
 
         const cat = args[0].toProperCase();
@@ -70,7 +70,7 @@ module.exports = class {
                 .setDescription(cmds)
                 .setFooter('<> = required, / = either/or, [] = optional');
             
-            return message.channel.createMessage({ embed: embed });
+            return message.channel.send({ embed: embed });
         }
 
         if (client.commands.has(cmd) || client.aliases.has(cmd)) {
@@ -87,9 +87,9 @@ module.exports = class {
             if (command.botPerms.length > 0) embed.addField('Bot permissions:', command.botPerms.join(', '), true);
             embed.addField('Cooldown:', `${command.cooldown / 1000} seconds`, true);
             embed.setFooter('<> = required, / = either/or, [] = optional');
-            return message.channel.createMessage({ embed: embed });
+            return message.channel.send({ embed: embed });
         }
 
-        return message.channel.createMessage(`${client.config.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
+        return message.channel.send(`${client.config.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
     }
 };

@@ -23,9 +23,9 @@ module.exports = class {
         try {
             fetch('http://inspirobot.me/api?generate=true', { headers: { 'User-Agent': client.config.userAgent }})
                 .then(res => res.text())
-                .then(body => message.channel.createMessage(body));
+                .then(body => message.channel.send(body));
         } catch (err) {
-            message.channel.createMessage(`${client.config.emojis.botError} An error has occurred: ${err}`);
+            message.channel.send(`${client.config.emojis.botError} An error has occurred: ${err}`);
         }
     }
 };

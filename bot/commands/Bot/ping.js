@@ -19,7 +19,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        message.channel.createMessage(replies.ping.random())
+        message.channel.send(replies.ping.random())
             .then(m => {
                 m.edit(`${m.content} \`roundtrip: ${m.timestamp - message.timestamp}ms | websocket: ${message.channel.guild.shard.latency}ms\``);
             });

@@ -29,11 +29,11 @@ module.exports = class {
                 if (!member) {
                     member = await message.channel.guild.searchMembers(args.join(' '), 2);
                 
-                    if (member.length === 0) return message.channel.createMessage(
+                    if (member.length === 0) return message.channel.send(
                         `${client.config.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
                     );
             
-                    if (member.length > 1) return message.channel.createMessage(
+                    if (member.length > 1) return message.channel.send(
                         `${client.config.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
                     );
             
@@ -47,6 +47,6 @@ module.exports = class {
             .setColour(client.functions.displayHexColour(message.channel.guild, member))
             .setImage(member.user.avatarURL);
 
-        message.channel.createMessage({ embed: embed });
+        message.channel.send({ embed: embed });
     }
 };

@@ -20,7 +20,7 @@ module.exports = class {
     }
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        if (!args[0]) return message.channel.createMessage(
+        if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
         );
 
@@ -47,7 +47,7 @@ module.exports = class {
             if (json.errors) {
                 json.errors.forEach(error => {
                     if (error.message.startsWith('No Pokémon found')) {
-                        message.channel.createMessage(
+                        message.channel.send(
                             `${client.config.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
                         );
                     } else {
@@ -81,7 +81,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.includes('does not exist in "Types')) {
-                            message.channel.createMessage(
+                            message.channel.send(
                                 `${client.config.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
                             );
                         } else {
@@ -120,7 +120,7 @@ module.exports = class {
                     **Resistances:**
                     ${this.parseResistedTypes(typeMatchup.defending.resistedTypes, typeMatchup.defending.doubleResistedTypes)}${immune}
                 `);
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             });
     }
 

@@ -19,7 +19,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        if (!args[0]) return message.channel.createMessage(
+        if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me an ability to look up!`
         );
         
@@ -52,7 +52,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for ability')) {
-                            message.channel.createMessage(
+                            message.channel.send(
                                 `${client.config.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
@@ -79,7 +79,7 @@ module.exports = class {
                     embed.setDescription(ability.shortDesc + fieldEffects);
                 }
                 embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) • [Serebii](${ability.serebiiPage}) • [Smogon](${ability.smogonPage})`);
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             });
     }
 };

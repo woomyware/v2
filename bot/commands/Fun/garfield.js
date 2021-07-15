@@ -30,10 +30,10 @@ module.exports = class {
                     .setColour(client.functions.displayHexColour(message.channel.guild))
                     .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
                     .setImage(json.data.image.src);
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             })
             .catch(err => {
-                message.channel.createMessage(`${client.config.emojis.botError} An error has occurred: ${err}`);
+                message.channel.send(`${client.config.emojis.botError} An error has occurred: ${err}`);
             });
     }
 };

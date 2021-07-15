@@ -19,6 +19,6 @@ module.exports = class {
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         client.commandLoader.reloadCommands();
         client.eventLoader.reloadEventModules();
-        message.channel.createMessage('All commands and event modules have been reloaded!');
+        message.channel.send('All commands and event modules have been reloaded!');
     }
 };

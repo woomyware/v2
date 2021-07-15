@@ -13,7 +13,7 @@ class Functions {
 
     async awaitReply (message, input, limit = 60000) {
         const filter = (m) => m.author.id === message.author.id;
-        await message.channel.createMessage(input);
+        await message.channel.send(input);
 
         try {
             const collected = await message.channel.awaitMessages(filter, {

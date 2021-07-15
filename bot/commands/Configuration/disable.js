@@ -26,7 +26,7 @@ module.exports = class {
             return;
         }
 
-        if (!args[1]) return message.channel.createMessage(
+        if (!args[1]) return message.channel.send(
             `${client.config.emojis.userError} You didn't specify what command/category to disable. Usage: \`${this.help.usage}\``
         );
 
@@ -41,17 +41,17 @@ module.exports = class {
                 command = client.commands.get(client.aliases.get(args[1]));
             }
 
-            if (!command) return message.channel.createMessage(
+            if (!command) return message.channel.send(
                 `${client.config.emojis.userError} ${args[1]} isn't a command or an alias, are you sure you spelt it correctly?`
             );
 
             if (essential.commands.includes(command.name) || essential.categories.includes(command.category)) {
-                return message.channel.createMessage(
+                return message.channel.send(
                     `${client.config.emojis.userError} This command is essential and cannot be disabled. Sorry!`
                 );
             }
 
-            if (disabled.includes(command.name)) return message.channel.createMessage(
+            if (disabled.includes(command.name)) return message.channel.send(
                 `${client.config.emojis.userError} This command is already disabled.`  
             );
 
@@ -59,7 +59,7 @@ module.exports = class {
 
             await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
 
-            return message.channel.createMessage(
+            return message.channel.send(
                 `${client.config.emojis.success} Added **${args[1]}** to the list of disabled commands for this server.`
             );
         }
@@ -75,11 +75,11 @@ module.exports = class {
                 command = client.commands.get(client.aliases.get(args[1]));
             }
 
-            if (!command) return message.channel.createMessage(
+            if (!command) return message.channel.send(
                 `${client.config.emojis.userError} ${args[1]} isn't a category, are you sure you spelt it correctly?`
             );
 
-            if (!disabled.includes(command.name)) return message.channel.createMessage(
+            if (!disabled.includes(command.name)) return message.channel.send(
                 `${client.config.emojis.userError} This category isn't disabled.`  
             );
 
@@ -87,7 +87,7 @@ module.exports = class {
 
             await client.db.updateGuild(message.channel.guild.id, 'disabledcommands', disabled);
             
-            return message.channel.createMessage(
+            return message.channel.send(
                 `${client.config.emojis.success} Added **${args[1]}** to the list of disabled category for this server!`
             );
         }

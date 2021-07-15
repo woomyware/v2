@@ -29,6 +29,6 @@ module.exports = class {
             .addField('Boosts', `${guild.premiumSubscriptionCount} (Level ${guild.premiumTier})`, true)
             .addField('Member Count (Approximate)', `${guild.memberCount} (${guild.memberCount - guild.members.filter(member => member.user.bot).length} humans, ${guild.members.filter(member => member.user.bot).length} bots)`, true)
             .addField('Channels', `${guild.channels.size} ()`)
-        message.channel.createMessage({ embed: embed });
+        message.channel.send({ embed: embed });
     }
 };

@@ -68,7 +68,7 @@ module.exports = class {
                     });
             })
             .catch(err => {
-                message.channel.createMessage(`${client.config.emojis.botError} An error has occurred: ${err}`);
+                message.channel.send(`${client.config.emojis.botError} An error has occurred: ${err}`);
             });    
     }
 };

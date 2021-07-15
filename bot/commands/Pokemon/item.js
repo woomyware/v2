@@ -19,7 +19,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        if (!args[0]) return message.channel.createMessage(
+        if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me an item to look up!`
         );
 
@@ -53,7 +53,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for item')) {
-                            message.channel.createMessage(
+                            message.channel.send(
                                 `${client.config.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
@@ -76,7 +76,7 @@ module.exports = class {
                 } else {
                     embed.setDescription(`${item.shortDesc} Added in Generation ${item.generationIntroduced}.`);
                 }
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             });
     }
 };

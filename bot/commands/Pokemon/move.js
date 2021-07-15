@@ -20,7 +20,7 @@ module.exports = class {
     }
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        if (!args[0]) return message.channel.createMessage(
+        if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me a pokemon move to look up!`
         );
 
@@ -65,7 +65,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for move')) {
-                            message.channel.createMessage(
+                            message.channel.send(
                                 `${client.config.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
@@ -113,7 +113,7 @@ module.exports = class {
                 if (move.isGMax) embed.addField('G-Max Pokemon:', move.isGMax, true);
                 if (move.contestType !== null) embed.addField('Contest Type', move.contestType, true);
                 embed.addField('External Resources:', `[Bulbapedia](${move.bulbapediaPage}) • [Serebii](${move.serebiiPage}) • [Smogon](${move.smogonPage})`);
-                message.channel.createMessage({ embed: embed });
+                message.channel.send({ embed: embed });
             });
     }
 };

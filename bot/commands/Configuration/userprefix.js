@@ -18,14 +18,14 @@ module.exports = class {
 
     async run (client, message, args, data) {
         if (!args[0]) {
-            return message.channel.createMessage(
+            return message.channel.send(
                 `Your prefix for Woomy is currently: \`${data.user.prefix}\``
             );
         }
 
         await client.db.updateUser(message.author.id, 'prefix', args[0]);
 
-        message.channel.createMessage(
+        message.channel.send(
             `${client.config.emojis.success} Your personal prefix has been set to: \`${args[0]}\``
         );
     }
