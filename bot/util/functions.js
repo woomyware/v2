@@ -176,7 +176,7 @@ class Functions {
             'Goodbye'
         ];
 
-        this.client.disconnect();
+        this.client.destroy();
 
         this.client.logger.success('SHUTDOWN_SUCCESS', exitQuotes.random());
 
