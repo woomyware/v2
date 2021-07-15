@@ -74,13 +74,13 @@ module.exports = class {
                     return message.channel.createMessage({ embed:embed });
                 } else {
                     if (json.message && json.message === 'city not found') {
-                        return message.channel.createMessage(`${client.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
+                        return message.channel.createMessage(`${client.config.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
                     }
-                    return message.channel.createMessage(`${client.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
+                    return message.channel.createMessage(`${client.config.emojis.botError} API error occured: \`code ${json.cod}: ${json.message}\``);
                 }
             })
             .catch(err => {
-                return message.channel.createMessage(`${client.emojis.botError} An error has occured: \`${err.stack}\``);
+                return message.channel.createMessage(`${client.config.emojis.botError} An error has occured: \`${err.stack}\``);
             });
     }
 };

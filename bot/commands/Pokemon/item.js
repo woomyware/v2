@@ -20,7 +20,7 @@ module.exports = class {
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.emojis.userError} You didn't give me an item to look up!`
+            `${client.config.emojis.userError} You didn't give me an item to look up!`
         );
 
         message.channel.sendTyping();
@@ -54,7 +54,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for item')) {
                             message.channel.createMessage(
-                                `${client.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.config.emojis.userError} I couldn't find any items with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_API_ERROR', error.message);

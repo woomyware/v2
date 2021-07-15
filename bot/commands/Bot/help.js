@@ -90,6 +90,6 @@ module.exports = class {
             return message.channel.createMessage({ embed: embed });
         }
 
-        return message.channel.createMessage(`${client.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
+        return message.channel.createMessage(`${client.config.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);
     }
 };

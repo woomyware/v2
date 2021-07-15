@@ -21,7 +21,7 @@ module.exports = class {
 
     run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.emojis.userError} You didn't give me a pokemon move to look up!`
+            `${client.config.emojis.userError} You didn't give me a pokemon move to look up!`
         );
 
         message.channel.sendTyping();
@@ -66,7 +66,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for move')) {
                             message.channel.createMessage(
-                                `${client.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.config.emojis.userError} I couldn't find any moves with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_API_ERROR', error.message);

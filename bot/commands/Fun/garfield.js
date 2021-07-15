@@ -33,7 +33,7 @@ module.exports = class {
                 message.channel.createMessage({ embed: embed });
             })
             .catch(err => {
-                message.channel.createMessage(`${client.emojis.botError} An error has occurred: ${err}`);
+                message.channel.createMessage(`${client.config.emojis.botError} An error has occurred: ${err}`);
             });
     }
 };

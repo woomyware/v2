@@ -62,33 +62,33 @@ class MessageHandler {
 
         // Both of these blocks check if the command is disabled/in a disabled category
         if (data.guild.disabledcommands.includes(command.name)) return message.channel.createMessage(
-            this.client.emojis.permError + ' This command has been disabled by a server administrator.'
+            this.client.config.emojis.permError + ' This command has been disabled by a server administrator.'
         );
 
         if (data.guild.disabledcategories.includes(command.category)) return message.channel.createMessage(
-            this.client.emojis.permError + ' The category this command is apart of has been disabled by a server administrator.'
+            this.client.config.emojis.permError + ' The category this command is apart of has been disabled by a server administrator.'
         );
 
         // Both of these blocks check the permissions of the user, and reply with missing perms if any are found
         const missingUserPerms = this.client.functions.checkPermissions(message.channel, message.author.id, command.userPerms);
         if (missingUserPerms) return message.channel.createMessage(
-            `${this.client.emojis.permError} You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
+            `${this.client.config.emojis.permError} You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
         );
 
         const missingBotPerms = this.client.functions.checkPermissions(message.channel, this.client.user.id, command.botPerms);
         if (missingBotPerms) return message.channel.createMessage(
-            `${this.client.emojis.permError} I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
+            `${this.client.config.emojis.permError} I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
         );
 
         // Return if the command is disabled globally
         if (command.enabled === false) return message.channel.createMessage(
-            this.client.emojis.permError + ' This command has been disabled by my developers.'
+            this.client.config.emojis.permError + ' This command has been disabled by my developers.'
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
         if (command.devOnly === true && this.client.config.ownerIDs.includes(message.author.id) !== true) {
             return message.channel.createMessage(
-                `${this.client.emojis.permError} ${message.author.username} is not in the sudoers file. This incident will be reported.`
+                `${this.client.config.emojis.permError} ${message.author.username} is not in the sudoers file. This incident will be reported.`
             );
         } 
 
@@ -99,7 +99,7 @@ class MessageHandler {
             const cooldown = command.cooldown / 1000;
             const timePassed = Math.floor((currentTime - timestamp) / 1000);
             return message.channel.createMessage(
-                `${this.client.emojis.wait} ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
+                `${this.client.config.emojis.wait} ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
             );
         } else {
             this.client.cooldowns.get(command.name).set(message.author.id, new Date());
@@ -113,7 +113,7 @@ class MessageHandler {
             this.client.logger.command(`Ran ${command.name}`);
         } catch (error) {
             this.client.logger.error('COMMAND_EXECUTION_ERROR', `${command.name}: ${error}`);
-            message.channel.createMessage(`${this.client.emojis.botError} An error occured when I was trying to run this command. I've sent through the details of the error to my developers.`);
+            message.channel.createMessage(`${this.client.config.emojis.botError} An error occured when I was trying to run this command. I've sent through the details of the error to my developers.`);
         }
     }
 }

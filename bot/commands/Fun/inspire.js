@@ -25,7 +25,7 @@ module.exports = class {
                 .then(res => res.text())
                 .then(body => message.channel.createMessage(body));
         } catch (err) {
-            message.channel.createMessage(`${client.emojis.botError} An error has occurred: ${err}`);
+            message.channel.createMessage(`${client.config.emojis.botError} An error has occurred: ${err}`);
         }
     }
 };

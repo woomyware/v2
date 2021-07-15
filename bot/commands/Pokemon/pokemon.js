@@ -21,7 +21,7 @@ module.exports = class {
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.emojis.userError} You didn't give me a pokemon to look up!`
+            `${client.config.emojis.userError} You didn't give me a pokemon to look up!`
         );
 
         message.channel.sendTyping();
@@ -69,7 +69,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('No Pokémon found')) {
                             message.channel.createMessage(
-                                `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
+                                `${client.config.emojis.userError} I couldn't find any Pokemon with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('POKEMON_API_ERROR', error.message);

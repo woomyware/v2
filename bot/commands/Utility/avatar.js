@@ -30,11 +30,11 @@ module.exports = class {
                     member = await message.channel.guild.searchMembers(args.join(' '), 2);
                 
                     if (member.length === 0) return message.channel.createMessage(
-                        `${client.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
+                        `${client.config.emojis.userError} No users found. Check for mispellings, or ping the user instead.`
                     );
             
                     if (member.length > 1) return message.channel.createMessage(
-                        `${client.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
+                        `${client.config.emojis.userError} Found more than one user, try refining your search or pinging the user instead.`
                     );
             
                     member = member[0];

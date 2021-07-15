@@ -21,7 +21,7 @@ module.exports = class {
 
     async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.createMessage(
-            `${client.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
+            `${client.config.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
         );
 
         message.channel.sendTyping();
@@ -48,7 +48,7 @@ module.exports = class {
                 json.errors.forEach(error => {
                     if (error.message.startsWith('No Pokémon found')) {
                         message.channel.createMessage(
-                            `${client.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
+                            `${client.config.emojis.userError} I couldn't find any Pokemon with names similar to ${args.join(' ').toLowerCase()}. Check your spelling, maybe?`
                         );
                     } else {
                         client.logger.error('MATCHUP_API_ERROR', error.message);
@@ -82,7 +82,7 @@ module.exports = class {
                     json.errors.forEach(error => {
                         if (error.message.includes('does not exist in "Types')) {
                             message.channel.createMessage(
-                                `${client.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
+                                `${client.config.emojis.userError} One or more of the types you gave me are invalid. Check your spelling, maybe?`
                             );
                         } else {
                             client.logger.error('MATCHUP_FETCH_ERROR', error.message);

@@ -7,6 +7,6 @@ module.exports = class {
 
     async run (client) {
         const activity = activities.random();
-        client.editStatus('online', { name: `${activity.message} | v${client.version}`, type: activity.type});
+        client.user.setPresence({ activities: [{ name: `${activity.message} | v${client.version}` }], status: 'online' });
     }
 };
