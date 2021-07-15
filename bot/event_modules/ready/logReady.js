@@ -4,6 +4,6 @@ module.exports = class {
     }
 
     async run (client) {
-        client.logger.event(`Logged in as ${client.user.username + '#' + client.user.discriminator} and ready to accept commands! | v${client.version}`);
+        client.logger.event(`${client.user.username + '#' + client.user.discriminator} at your service! | v${client.version}`);
     }
 };
