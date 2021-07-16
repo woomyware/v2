@@ -1,5 +1,5 @@
 const { inspect, promisify } = require('util');
-const colours = require('../assets/colours.json');
+// const colours = require('../assets/colours.json');
 
 class Functions {
     constructor (client) {
@@ -38,8 +38,7 @@ class Functions {
     }
 
     roleObjects (guild, roles) {
-        const roleMap = roles.map(roleID => guild.roles.get(roleID));
-        return roleMap.sort((a, b) => b.position - a.position);
+        return roles.sort((a, b) => b.rawPosition - a.rawPosition);
     }   
 
     findRole (input, guild) {
@@ -52,33 +51,11 @@ class Functions {
         return role;
     }
 
-    highestRole (member) {
-        if (member.roles.length === 0) return member.guild.roles.find(r => r.name === '@everyone');
-
-        let highestRole;
-
-        for (const roleID of member.roles) {
-            const role = member.guild.roles.get(roleID);
-            if (!highestRole || highestRole.position < role.position) highestRole = role;
+    embedColor (guild, member) {
+        if (!member) {
+            return guild.members.cache.get(this.client.user.id).displayHexColor;
         }
-    
-        return highestRole;
-    }
-
-    displayHexColour (guild, member) {
-        if (!member) member = guild.members.get(this.client.user.id);
-        const roles = this.roleObjects(guild, member.roles);
-        for (const object of roles) {
-            let hexadecimal = object.color.toString(16);
-            while (hexadecimal.length < 6) {
-                hexadecimal = '0' + hexadecimal;
-            }
-
-            return '#' + hexadecimal;
-        }
-
-        const colourKeys = Object.keys(colours);
-        return colours[colourKeys[ colours.length * Math.random() << 0]];
+        return guild.members.cache.get(member.id).displayHexColor;
     }
 
     checkPermissions (channel, user_id, requiredPerms) {
@@ -87,7 +64,7 @@ class Functions {
         const missingPerms = [];
 
         pendingPerms.forEach(p => {
-            if (!channel.permissionsOf(user_id).has(p)) missingPerms.push(p);
+            if (!channel.permissionsFor(user_id).has(p)) missingPerms.push(p);
         });
 
         if (missingPerms.length > 0) return missingPerms;
@@ -95,6 +72,7 @@ class Functions {
         return;
     }
 
+    /*
     async getUser (id) {
         if (this.client.users.has(id)) return this.client.users.get(id);
         this.client.logger.debug('REST_GET_USER', 'Accessing rest API...');
@@ -111,7 +89,7 @@ class Functions {
     }
 
     async getMember (guild, memberID) {
-        if (guild.members.has(memberID)) return guild.members.get(memberID);
+        if (guild.members.has(memberID)) return guild.members.cache.get(memberID);
         this.client.logger.debug('REST_GET_MEMBER', 'Accessing rest API...');
         const member = await this.client.getRESTGuildMember(guild.id, memberID).catch(err => {
             this.client.logger.error('MEMBER_GET_ERROR', err);
@@ -139,6 +117,7 @@ class Functions {
 
         return;
     }
+    */
 
     async validateUserID (guild, ID) {
         const valid = /[0-9]{18}/.test(ID);
