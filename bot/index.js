@@ -23,6 +23,7 @@ class WoomyClient extends Discord.Client {
 
         // Essential modules
         this.logger = Logger;
+        this.MessageEmbed = Discord.MessageEmbed;
         this.db = new Database(this);
         this.functions = new Functions(this);
         this.commandLoader = new CommandLoader(this);
