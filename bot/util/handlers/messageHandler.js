@@ -6,20 +6,20 @@ class MessageHandler {
     async handle (message) {
         // Ignore messages from bots, and messages in DM's
         if (message.author.bot) return;
-        if (!message.channel.guild) return;
+        if (!message.guild) return;
 
         // Request all the data we need from the database
         const data = {};
         data.user = await this.client.db.getUser(message.author.id);
-        data.guild = await this.client.db.getGuild(message.channel.guild.id);
-        data.member = await this.client.db.getMember(message.channel.guild.id, message.author.id);
+        data.guild = await this.client.db.getGuild(message.guild.id);
+        data.member = await this.client.db.getMember(message.guild.id, message.author.id);
         
         // Ignore users on the guild blocklist
         if (data.guild.blocklist.includes(message.author.id)) return;
 
         // If a user pings Woomy, respond to them with the prefixes they can use
         if (message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) {
-            return message.channel.createMessage(
+            return message.channel.send(
                 `Hi! The prefix for this server is \`${data.guild.prefix}\`, and your personal prefix is \`${data.user.prefix}\`. You can also ping me ^-^`
             );
         }
@@ -61,33 +61,33 @@ class MessageHandler {
         if (!command) return;
 
         // Both of these blocks check if the command is disabled/in a disabled category
-        if (data.guild.disabledcommands.includes(command.name)) return message.channel.createMessage(
+        if (data.guild.disabledcommands.includes(command.name)) return message.channel.send(
             this.client.config.emojis.permError + ' This command has been disabled by a server administrator.'
         );
 
-        if (data.guild.disabledcategories.includes(command.category)) return message.channel.createMessage(
+        if (data.guild.disabledcategories.includes(command.category)) return message.channel.send(
             this.client.config.emojis.permError + ' The category this command is apart of has been disabled by a server administrator.'
         );
 
         // Both of these blocks check the permissions of the user, and reply with missing perms if any are found
         const missingUserPerms = this.client.functions.checkPermissions(message.channel, message.author.id, command.userPerms);
-        if (missingUserPerms) return message.channel.createMessage(
+        if (missingUserPerms) return message.channel.send(
             `${this.client.config.emojis.permError} You can't use this command because you lack these permissions: \`${missingUserPerms.join('`, `')}\``
         );
 
         const missingBotPerms = this.client.functions.checkPermissions(message.channel, this.client.user.id, command.botPerms);
-        if (missingBotPerms) return message.channel.createMessage(
+        if (missingBotPerms) return message.channel.send(
             `${this.client.config.emojis.permError} I can't run this command because I lack these permissions: \`${missingBotPerms.join('`, `')}\``
         );
 
         // Return if the command is disabled globally
-        if (command.enabled === false) return message.channel.createMessage(
+        if (command.enabled === false) return message.channel.send(
             this.client.config.emojis.permError + ' This command has been disabled by my developers.'
         );
         
         // Return if the command is restricted to developers (and the user is not a developer)
         if (command.devOnly === true && this.client.config.ownerIDs.includes(message.author.id) !== true) {
-            return message.channel.createMessage(
+            return message.channel.send(
                 `${this.client.config.emojis.permError} ${message.author.username} is not in the sudoers file. This incident will be reported.`
             );
         } 
@@ -98,7 +98,7 @@ class MessageHandler {
             const currentTime = Date.now();
             const cooldown = command.cooldown / 1000;
             const timePassed = Math.floor((currentTime - timestamp) / 1000);
-            return message.channel.createMessage(
+            return message.channel.send(
                 `${this.client.config.emojis.wait} ${message.author.mention}, you need to wait ${cooldown - timePassed} seconds before using this command again.`
             );
         } else {
@@ -112,8 +112,8 @@ class MessageHandler {
             command.run(this.client, message, args, data);
             this.client.logger.command(`Ran ${command.name}`);
         } catch (error) {
-            this.client.logger.error('COMMAND_EXECUTION_ERROR', `${command.name}: ${error}`);
-            message.channel.createMessage(`${this.client.config.emojis.botError} An error occured when I was trying to run this command. I've sent through the details of the error to my developers.`);
+            this.client.logger.error('COMMAND_EXECUTION_ERROR', `${command.name}: ${error.stack}`);
+            message.channel.send(`${this.client.config.emojis.botError} An error occured when I was trying to run this command. I've sent through the details of the error to my developers.`);
         }
     }
 }
