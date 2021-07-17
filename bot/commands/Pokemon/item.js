@@ -18,12 +18,12 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me an item to look up!`
         );
 
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
 
         const query = args.join(' ').toLowerCase();
 
@@ -66,8 +66,8 @@ module.exports = class {
 
                 const item = json.data.getItemDetailsByFuzzy;
 
-                const embed = new client.RichEmbed()
-                    .setColour(client.functions.displayHexColour(message.guild))
+                const embed = new client.MessageEmbed()
+                    .setColor(client.functions.embedColor(message.guild))
                     .setTitle(item.name)
                     .setThumbnail(item.sprite)
                     .addField('External Resources:', `[Bulbapedia](${item.bulbapediaPage}) • [Serebii](${item.serebiiPage}) • [Smogon](${item.smogonPage})`);
@@ -76,7 +76,7 @@ module.exports = class {
                 } else {
                     embed.setDescription(`${item.shortDesc} Added in Generation ${item.generationIntroduced}.`);
                 }
-                message.channel.send({ embed: embed });
+                editMessage.edit({ content: null, embeds: [embed] });
             });
     }
 };

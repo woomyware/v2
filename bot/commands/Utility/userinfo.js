@@ -24,7 +24,7 @@ module.exports = class {
         
         if (args[0]) {
             if (message.mentions.length > 0) {
-                member = await client.functions.getMember(message.guild, message.mentions[0].id);
+                member = await message.guild.members.fetch(message.mentions[0].id)
             } else {
                 member = await client.functions.validateUserID(message.guild, args[0]);
 
@@ -61,9 +61,9 @@ module.exports = class {
             roles.push(`<@&${roleID}>`);
         }
 
-        const embed = new client.RichEmbed()
+        const embed = new client.MessageEmbed()
             .setTitle(member.user.username + '#' + member.user.discriminator)
-            .setColour(client.functions.displayHexColour(message.guild, member))
+            .setColor(client.functions.embedColor(message.guild, member))
             .setThumbnail(member.user.avatarURL || member.user.defaultAvatarURL)
             .addField('Display Name', member.nick || member.user.username, true)
             .addField('User ID', member.id, true)
@@ -73,6 +73,6 @@ module.exports = class {
             .addField('Joined Discord', `${dayjs(member.user.createdAt).format('D/M/YYYY HH:mm (UTCZ)')}\n*${dayjs().to(member.user.createdAt)}*`, true);
         if (badges.length > 0) embed.setDescription(badges.join(' '));
 
-        message.channel.send({ embed: embed });
+        message.channel.send({ embeds: [embed] });
     }
 };

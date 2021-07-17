@@ -24,7 +24,7 @@ module.exports = class {
             `${client.config.emojis.userError} You didn't give me a pokemon or type combination to look up! Usage: \`${message.prefix + this.name + ' ' + this.help.arguments}\``
         );
 
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
 
         let types;
 
@@ -105,8 +105,8 @@ module.exports = class {
                 ${typeMatchup.defending.effectlessTypes.map(type => `\`${type.toProperCase()}\``).join(' ')}
                 `;
 
-                const embed = new client.RichEmbed()
-                    .setColour(colours[types[0].toProperCase()])
+                const embed = new client.MessageEmbed()
+                    .setColor(colours[types[0].toProperCase()])
                     .setTitle('Type effectiveness of ' + types.map(type => type.toProperCase()).join(' and '))
                     .addField('Offensive:', `
                         **Super-effective:**
@@ -120,7 +120,7 @@ module.exports = class {
                     **Resistances:**
                     ${this.parseResistedTypes(typeMatchup.defending.resistedTypes, typeMatchup.defending.doubleResistedTypes)}${immune}
                 `);
-                message.channel.send({ embed: embed });
+                editMessage.edit({ content: null, embeds: [embed] });
             });
     }
 

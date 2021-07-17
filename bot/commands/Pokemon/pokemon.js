@@ -24,7 +24,7 @@ module.exports = class {
             `${client.config.emojis.userError} You didn't give me a pokemon to look up!`
         );
 
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
 
         const query = args.join(' ').toLowerCase();
 
@@ -92,8 +92,8 @@ module.exports = class {
                         formes = formes.split().concat(pokemon.cosmeticFormes);
                     }
                 }
-                const embed = new client.RichEmbed()
-                    .setColour(colours[pokemon.types[0]])
+                const embed = new client.MessageEmbed()
+                    .setColor(colours[pokemon.types[0]])
                     .setTitle(`${pokemon.species.toProperCase()} (No. ${pokemon.num})`)
                     .setDescription(pokemon.flavorTexts[0].flavor)
                     .setThumbnail(sprite)
@@ -108,7 +108,7 @@ module.exports = class {
                 embed.addField('Egg Groups:', pokemon.eggGroups.join(', '), true);
                 embed.addField('Smogon Tier:', pokemon.smogonTier, true);
                 embed.addField('External Resources:', `[Bulbapedia](${pokemon.bulbapediaPage}) • [Serebii](${pokemon.serebiiPage}) • [Smogon](${pokemon.smogonPage})`);
-                message.channel.send({ embed: embed });
+                editMessage.edit({ content: null, embeds: [embed] });
             });
     }
 

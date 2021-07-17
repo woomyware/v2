@@ -18,22 +18,22 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars   
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars   
         let date = 'xxxx';
         if (args[0] && args[0].toLowerCase() === 'daily') date = new Date();
-        message.channel.sendTyping();
-        fetch('https://garfield-comics.glitch.me/~SRoMG/?date=' + date, { headers: { 'User-Agent': client.config.userAgent }})
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
+        fetch('`https://garfield-comics.glitch.me/`~SRoMG/?date=' + date, { headers: { 'User-Agent': client.config.userAgent }})
             .then(res => res.json())
             .then(json => {
-                const embed = new client.RichEmbed()
+                const embed = new client.MessageEmbed()
                     .setTitle(`${json.data.name} (No. ${json.data.number})`)
-                    .setColour(client.functions.displayHexColour(message.guild))
+                    .setColor(client.functions.embedColor(message.guild))
                     .setURL('https://www.mezzacotta.net/garfield/?comic=' + json.data.number)
                     .setImage(json.data.image.src);
-                message.channel.send({ embed: embed });
+                editMessage.edit({ embeds: [embed] });
             })
             .catch(err => {
-                message.channel.send(`${client.config.emojis.botError} An error has occurred: ${err}`);
+                editMessage.edit(`${client.config.emojis.botError} An error has occurred: ${err}`);
             });
     }
 };

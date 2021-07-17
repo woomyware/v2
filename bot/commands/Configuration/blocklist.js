@@ -20,18 +20,18 @@ module.exports = class {
         if (!action || action.toLowerCase() === 'list') {
             const list = [];
             for (const userID of data.guild.blocklist) {
-                const user = await client.functions.getUser(userID);
+                const user = await client.users.fetch(userID);
                 list.push(`${user.username}#${user.discriminator}`);
             }
 
             if (list.length === 0) return message.channel.send('The server blocklist is currently empty. Use `blocklist add <user>` to add people to the blocklist!');
 
-            const embed = new client.RichEmbed()
+            const embed = new client.MessageEmbed()
                 .setTitle('Users on blocklist: ' + data.guild.blocklist.length)
                 .setDescription('```' + list.join(', ') + '```')
-                .setColour(client.functions.displayHexColour(message.guild));
+                .setColor(client.functions.embedColor(message.guild));
                 
-            message.channel.send({ embed: embed });
+            message.channel.send({ embeds: [embed] });
             
             return;
         }
@@ -49,7 +49,7 @@ module.exports = class {
         let member;
 
         if (message.mentions.length > 0) {
-            member = await client.functions.getMember(message.guild, message.mentions[0].id);
+            member = await message.guild.members.fetch(message.mentions[0].id);
         } else {
             member = await client.functions.validateUserID(message.guild, user[0]);
 

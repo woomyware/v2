@@ -18,14 +18,14 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars
-        message.channel.sendTyping();
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
         try {
             fetch('http://inspirobot.me/api?generate=true', { headers: { 'User-Agent': client.config.userAgent }})
                 .then(res => res.text())
-                .then(body => message.channel.send(body));
+                .then(body => editMessage.edit(body));
         } catch (err) {
-            message.channel.send(`${client.config.emojis.botError} An error has occurred: ${err}`);
+            editMessage.edit(`${client.config.emojis.botError} An error has occurred: ${err}`);
         }
     }
 };

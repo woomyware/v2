@@ -51,6 +51,10 @@ class Functions {
         return role;
     }
 
+    searchMembers (guild, input) {
+
+    }
+
     embedColor (guild, member) {
         if (!member) {
             return guild.members.cache.get(this.client.user.id).displayHexColor;

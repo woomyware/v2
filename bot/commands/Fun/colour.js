@@ -36,11 +36,11 @@ module.exports = class {
             }
         }
 
-        const embed = new client.RichEmbed()
+        const embed = new client.MessageEmbed()
             .setTitle(colour)
-            .setColour(colour)
+            .setColor(colour)
             .setImage(`https://fakeimg.pl/256x256/${colour.replace('#', '')}/?text=%20`);
         
-        message.channel.send({ embed: embed });
+        message.channel.send({ embeds: [embed] });
     }
 };

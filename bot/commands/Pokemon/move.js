@@ -19,12 +19,12 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me a pokemon move to look up!`
         );
 
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
 
         const query = args.join(' ').toLowerCase();
 
@@ -91,8 +91,8 @@ module.exports = class {
                 let fieldEffects = '';
                 if (move.isFieldMove) fieldEffects = ' Outside of battle, ' + move.isFieldMove;
 
-                const embed = new client.RichEmbed()
-                    .setColour(colours[move.type])
+                const embed = new client.MessageEmbed()
+                    .setColor(colours[move.type])
                     .setTitle(move.name.toProperCase() + suffix);
                 if (move.desc) {
                     embed.setDescription(move.desc + fieldEffects);
@@ -113,7 +113,7 @@ module.exports = class {
                 if (move.isGMax) embed.addField('G-Max Pokemon:', move.isGMax, true);
                 if (move.contestType !== null) embed.addField('Contest Type', move.contestType, true);
                 embed.addField('External Resources:', `[Bulbapedia](${move.bulbapediaPage}) • [Serebii](${move.serebiiPage}) • [Smogon](${move.smogonPage})`);
-                message.channel.send({ embed: embed });
+                editMessage.edit({ content: null, embeds: [embed] });
             });
     }
 };

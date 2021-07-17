@@ -30,9 +30,9 @@ module.exports = class {
         });
 
         if (!args[0]) {
-            const embed = new client.RichEmbed();
+            const embed = new client.MessageEmbed();
             embed.setTitle('Help & Commands');
-            embed.setColour(client.functions.displayHexColour(message.guild));
+            embed.setColor(client.functions.embedColor(message.guild));
             embed.setDescription(
                 `
                 » Use \`${message.prefix}help [category]\` to get basic information on all commands in the category.   
@@ -48,7 +48,7 @@ module.exports = class {
             });
             embed.setFooter('<> = required, / = either/or, [] = optional');
 
-            return message.channel.send({ embed: embed });
+            return message.channel.send({ embeds: [embed] });
         }
 
         const cat = args[0].toProperCase();
@@ -64,20 +64,20 @@ module.exports = class {
                 cmds += `**${message.prefix + cmd.name}** ${params} ✦ ${cmd.help.description}\n`;
             });
 
-            const embed = new client.RichEmbed()
+            const embed = new client.MessageEmbed()
                 .setTitle(prettified[cat].emoji + ' ' + cat)
-                .setColour(client.functions.displayHexColour(message.guild))
+                .setColor(client.functions.embedColor(message.guild))
                 .setDescription(cmds)
                 .setFooter('<> = required, / = either/or, [] = optional');
             
-            return message.channel.send({ embed: embed });
+            return message.channel.send({ embeds: [embed] });
         }
 
         if (client.commands.has(cmd) || client.aliases.has(cmd)) {
             const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
-            const embed = new client.RichEmbed()
+            const embed = new client.MessageEmbed()
                 .setTitle(prettified[command.category].emoji + ' ' + command.category + ' -> ' + command.name.toProperCase())
-                .setColour(client.functions.displayHexColour(message.guild))
+                .setColor(client.functions.embedColor(message.guild))
                 .setDescription(command.help.description)
                 .addField('Format:', `\`${message.prefix + command.name} ${command.help.arguments}`.trim() + '`');
             if (command.help.details.length > 0) embed.addField('Parameters:', command.help.details);
@@ -87,7 +87,7 @@ module.exports = class {
             if (command.botPerms.length > 0) embed.addField('Bot permissions:', command.botPerms.join(', '), true);
             embed.addField('Cooldown:', `${command.cooldown / 1000} seconds`, true);
             embed.setFooter('<> = required, / = either/or, [] = optional');
-            return message.channel.send({ embed: embed });
+            return message.channel.send({ embeds: [embed] });
         }
 
         return message.channel.send(`${client.config.emojis.userError} ${cmd} doesn't appear to be a command, alias, or category. Are you sure you spelt it right?`);

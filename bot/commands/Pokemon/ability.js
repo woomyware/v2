@@ -18,12 +18,12 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return message.channel.send(
             `${client.config.emojis.userError} You didn't give me an ability to look up!`
         );
         
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
 
         const query = args.join(' ').toLowerCase();
 
@@ -52,7 +52,7 @@ module.exports = class {
                 if (json.errors) {
                     json.errors.forEach(error => {
                         if (error.message.startsWith('Failed to get data for ability')) {
-                            message.channel.send(
+                            editMessage.edit(
                                 `${client.config.emojis.userError} I couldn't find any abilities with names similar to ${query}. Check your spelling, maybe?`
                             );
                         } else {
@@ -70,8 +70,8 @@ module.exports = class {
                     fieldEffects = ` Outside of battle, ${ability.isFieldAbility}`;
                 }
 
-                const embed = new client.RichEmbed()
-                    .setColour(client.functions.displayHexColour(message.guild))
+                const embed = new client.MessageEmbed()
+                    .setColor(client.functions.embedColor(message.guild))
                     .setTitle(ability.name.toProperCase());
                 if (ability.desc) {
                     embed.setDescription(ability.desc + fieldEffects);
@@ -79,7 +79,7 @@ module.exports = class {
                     embed.setDescription(ability.shortDesc + fieldEffects);
                 }
                 embed.addField('External Resources:', `[Bulbapedia](${ability.bulbapediaPage}) • [Serebii](${ability.serebiiPage}) • [Smogon](${ability.smogonPage})`);
-                message.channel.send({ embed: embed });
+                editMessage.edit({ content: null, embeds: [embed] });
             });
     }
 };

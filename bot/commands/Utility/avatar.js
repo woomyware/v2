@@ -22,7 +22,7 @@ module.exports = class {
         
         if (args[0]) {
             if (message.mentions.length > 0) {
-                member = await client.functions.getMember(message.guild, message.mentions[0].id);
+                member = await message.guild.members.fetch(message.mentions[0].id)
             } else {
                 member = await client.functions.validateUserID(message.guild, args[0]);
 
@@ -42,11 +42,11 @@ module.exports = class {
             }
         }
 
-        const embed = new client.RichEmbed()
+        const embed = new client.MessageEmbed()
             .setTitle(member.user.username + '#' + member.user.discriminator)
-            .setColour(client.functions.displayHexColour(message.guild, member))
+            .setColor(client.functions.embedColor(message.guild, member))
             .setImage(member.user.avatarURL);
 
-        message.channel.send({ embed: embed });
+        message.channel.send({ embeds: [embed] });
     }
 };

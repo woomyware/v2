@@ -21,7 +21,7 @@ module.exports = class {
         };
     }
 
-    run (client, message, args, data) { //eslint-disable-line no-unused-vars
+    async run (client, message, args, data) { //eslint-disable-line no-unused-vars
         if (!args[0]) return;
         
         let city = args.join(' ').toProperCase();
@@ -35,10 +35,9 @@ module.exports = class {
             } else {
                 countryCode += params[1].trim();
             }
-            console.log(countryCode);
         }
 
-        message.channel.sendTyping();
+        const editMessage = await message.channel.send(`${client.config.emojis.loading} Please wait...`);
         fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city + countryCode}&appid=${client.config.keys.weather}`, { headers: { 'User-Agent': client.config.userAgent }})
             .then(res => res.json())
             .then(json => {
@@ -57,10 +56,10 @@ module.exports = class {
                         embedColour = '#ff614f';
                     }
 
-                    const embed = new client.RichEmbed()
+                    const embed = new client.MessageEmbed()
                         .setTitle(`Weather for ${city + ', ' + ISO2.code[json.sys.country]}`)
                         .setThumbnail(`https://openweathermap.org/img/wn/${json.weather[0].icon}@4x.png`)
-                        .setColour(embedColour)
+                        .setColor(embedColour)
                         .addField('Condition:', json.weather[0].main, true)
                         .addField('Temperature:', `${tempCelcius}°C | ${Math.round(json.main.temp * 9/5 - 459.67)}°F`, true)
                         .addField('Min/Max:', `
@@ -71,7 +70,7 @@ module.exports = class {
                         .addField('Wind Speed:', `${Math.round(json.wind.speed * 10) / 10}km/h | ${Math.round(json.wind.speed * 10 / 1.609344)}mi/h`, true)
                         .addField('Wind Direction:', windrose.getPoint(json.wind.deg).name, true)
                         .setFooter('Powered by openweathermap.org');
-                    return message.channel.send({ embed:embed });
+                    return editMessage.edit({ content: null, embeds: [embed] });
                 } else {
                     if (json.message && json.message === 'city not found') {
                         return message.channel.send(`${client.config.emojis.userError} You provided an invalid city name. Maybe check your spelling?`);
