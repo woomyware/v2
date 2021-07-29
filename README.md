@@ -5,6 +5,8 @@
 ![Version](https://img.shields.io/github/package-json/v/woomyware/v2?color=blueviolet)
 ![License](https://img.shields.io/github/license/woomyware/v2?color=blueviolet)
 
+# Development has moved! Find my new home [here](https://gitdab.com/embee/woomy-v2)
+
 ## A feature-rich and configurable Discord bot built with Eris for music, moderation, currency and more!
 
 # ARE YOU A DEVELOPER, OR MAKING A PULL REQUEST? **PLEASE ENABLE ESLINT!!!** 
